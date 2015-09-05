@@ -1,0 +1,10 @@
+rootProject.name = 'ERCP-7002'
+
+def subprojectMap = [
+    ':configurator'                 : 'configurator'
+]
+
+subprojectMap.each() { key, value ->
+    include key
+    project(key).name = value
+}

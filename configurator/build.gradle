@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+dependencies {
+    compile 'org.apache.logging.log4j:log4j-api:2.2'
+    compile 'org.apache.logging.log4j:log4j-core:2.2'
+	testCompile 'commons-io:commons-io:2.4'
+}
