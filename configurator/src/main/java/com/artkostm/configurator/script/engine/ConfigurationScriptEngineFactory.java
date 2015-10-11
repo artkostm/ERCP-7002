@@ -1,4 +1,4 @@
-package com.artkostm.targa.script.engine;
+package com.artkostm.configurator.script.engine;
 
 import java.util.ArrayList;
 import java.util.List;

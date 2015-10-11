@@ -1,4 +1,4 @@
-package com.artkostm.targa.model;
+package com.artkostm.configurator.model;
 
 public class Configuration {
     private String test;
