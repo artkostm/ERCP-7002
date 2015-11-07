@@ -1,14 +1,14 @@
-import com.artkostm.targa.Main.Route
+import com.artkostm.configurator.Main.Route
 msg 'Hello, world!'
-route = new Route(method:'POST', url:'/some', controller:'SomeCntrllr')
-route.with{
-    method = 'GET'
-    controller = 'NewController'
-}
-route.url = '/new'
+//route.with{
+  //  method = 'GET'
+    //controller = 'NewController'
+//}
 apply {
-    msg = 'From apply'
+    method 'GET'
+    url '/newUrl'
+    controller 'com.artkostm.config.TestController'
 }
-List num = [1, 2, 3, 4, 5]
+//List num = [1, 2, 3, 4, 5]
 show 'Sasha', 'Artsiom', 'sasa'
-num.each show
+//num.each show

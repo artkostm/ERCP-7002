@@ -1,7 +1,6 @@
 package com.artkostm.configurator;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import org.apache.commons.io.IOUtils;
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -25,7 +24,7 @@ public class Main
         Config config = new Config();
         delegating.setDelegate(config);
         delegating.run();
-        System.out.println(config);
+        //System.out.println(config);
     }
     public static class Route
     {
@@ -33,27 +32,27 @@ public class Main
         private String url;
         private String controller;
         
-        public String getMethod() {
+        public String method() {
             return method;
         }
 
-        public void setMethod(String method) {
+        public void method(String method) {
             this.method = method;
         }
 
-        public String getUrl() {
+        public String url() {
             return url;
         }
 
-        public void setUrl(String url) {
+        public void url(String url) {
             this.url = url;
         }
 
-        public String getController() {
+        public String controller() {
             return controller;
         }
 
-        public void setController(String controller) {
+        public void controller(String controller) {
             this.controller = controller;
         }
 
@@ -105,16 +104,10 @@ public class Main
             this.show = show;
         }
 
-        public void apply(Closure<?> closure)
+        public void apply(Closure<?> closure) throws IllegalArgumentException, IllegalAccessException
         {
-            closure.setDelegate(this);
-            closure.setResolveStrategy(Closure.DELEGATE_ONLY);
-            final Field[] fields = Config.class.getDeclaredFields();
-            for (Field field : fields)
-            {
-                System.out.println(closure.getProperty(field.getName()));
-            }
-            System.out.println();
+            closure.setDelegate(route);
+            closure.call();
         }
         
         public String getMsg() {
@@ -141,7 +134,7 @@ public class Main
             show = new Print(this);
         }
 
-        private Route route;
+        private Route route = new Route();
 
         @Override
         public String toString() {
