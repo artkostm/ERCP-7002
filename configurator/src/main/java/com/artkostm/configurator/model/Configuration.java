@@ -1,13 +1,24 @@
 package com.artkostm.configurator.model;
 
-public class Configuration {
-    private String test;
+import com.artkostm.configurator.util.ConfigLogger;
 
-    public String getTest() {
-        return test;
+public class Configuration implements Metadata
+{
+    private final ConfigLogger log;
+    
+    public Configuration()
+    {
+        log = new ConfigLogger(this);
+    }
+    
+    @Override
+    public Object getData()
+    {
+        return null;
     }
 
-    public void setTest(String test) {
-        this.test = test;
+    public ConfigLogger getLog()
+    {
+        return log;
     }
 }

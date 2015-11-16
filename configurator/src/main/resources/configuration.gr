@@ -1,14 +1,9 @@
-import com.artkostm.configurator.Main.Route
-msg 'Hello, world!'
-//route.with{
-  //  method = 'GET'
-    //controller = 'NewController'
-//}
-apply {
-    method 'GET'
-    url '/newUrl'
-    controller 'com.artkostm.config.TestController'
+List num = [1, 2, 3, 4, 5]
+log 'Sasha', 'Artsiom', 'sasa'
+log "Hello, $name!", num
+num.each log
+route.with{
+	method = 'GET'
+    url = '/some/url/'
+    controller = 'com.artkostm.controller'
 }
-//List num = [1, 2, 3, 4, 5]
-show 'Sasha', 'Artsiom', 'sasa'
-//num.each show

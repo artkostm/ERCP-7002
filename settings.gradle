@@ -2,7 +2,9 @@ rootProject.name = 'ERCP-7002'
 
 def subprojectMap = [
     ':configurator'                 : 'configurator',
-    ':common'                       : 'common'
+    ':common'                       : 'common',
+	':core'                         : 'core',
+	':templating'                   : 'templating'
 ]
 
 subprojectMap.each() { key, value ->
