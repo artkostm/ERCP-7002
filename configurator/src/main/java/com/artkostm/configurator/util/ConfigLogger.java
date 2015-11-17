@@ -9,7 +9,6 @@ import groovy.lang.Closure;
 
 public class ConfigLogger extends Closure<Object> implements HiddenCall
 {
-
     /**
      * 
      */
@@ -33,5 +32,11 @@ public class ConfigLogger extends Closure<Object> implements HiddenCall
             }
         }
         return Closure.DONE;
+    }
+
+    @Override
+    public String name()
+    {
+        return "log";
     }
 }

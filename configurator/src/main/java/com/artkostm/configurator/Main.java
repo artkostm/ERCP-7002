@@ -2,15 +2,16 @@ package com.artkostm.configurator;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
+import com.artkostm.configurator.fs.ScriptUtils;
 import com.artkostm.configurator.model.Configuration;
 import com.artkostm.configurator.model.Metadata;
+import com.artkostm.configurator.model.closure.PostRoutingRepository;
+import com.artkostm.configurator.util.ConfigLogger;
 
 import groovy.lang.Binding;
-import groovy.lang.Closure;
 import groovy.lang.GroovyShell;
 import groovy.util.DelegatingScript;
 
@@ -19,17 +20,20 @@ public class Main
     public static void main(String[] args) throws CompilationFailedException, IOException
     {
         Binding sharedData = new Binding(args);
-        Route r = new Route();
+        Metadata config = new Configuration();
+        ConfigLogger logger = new ConfigLogger(config);
+        PostRoutingRepository repo = new PostRoutingRepository(config);
         sharedData.setVariable("name", "Artsiom");
-        sharedData.setVariable("route", r);
+        sharedData.setVariable(repo.name(), repo);
+        sharedData.setVariable(logger.name(), logger);
         CompilerConfiguration cc = new CompilerConfiguration();
         cc.setScriptBaseClass(DelegatingScript.class.getName());
         GroovyShell shell = new GroovyShell(Main.class.getClassLoader(), sharedData, cc);
-        String script = IOUtils.toString(Main.class.getClassLoader().getResourceAsStream("configuration.gr"));
+        String script = ScriptUtils.getScript("classpath:configuration.gr");
         DelegatingScript delegating = (DelegatingScript) shell.parse(script);
-        Metadata config = new Configuration();
         delegating.setDelegate(config);
         delegating.run();
+        System.out.println(repo.getRepository());
     }
     
     public static class Route
@@ -38,6 +42,13 @@ public class Main
         private String url;
         private String controller;
         
+        public Route(String method, String url, String controller)
+        {
+            this.method = method;
+            this.url = url;
+            this.controller = controller;
+        }
+
         public String method() {
             return method;
         }

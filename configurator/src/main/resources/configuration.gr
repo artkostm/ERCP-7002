@@ -2,8 +2,4 @@ List num = [1, 2, 3, 4, 5]
 log 'Sasha', 'Artsiom', 'sasa'
 log "Hello, $name!", num
 num.each log
-route.with{
-	method = 'GET'
-    url = '/some/url/'
-    controller = 'com.artkostm.controller'
-}
+post 'some/url/path', 'com.artkostm.test.controller.TestController'
