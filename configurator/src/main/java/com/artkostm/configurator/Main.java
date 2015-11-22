@@ -8,7 +8,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import com.artkostm.configurator.fs.ScriptUtils;
 import com.artkostm.configurator.model.Configuration;
 import com.artkostm.configurator.model.Metadata;
-import com.artkostm.configurator.model.closure.PostRoutingRepository;
+import com.artkostm.configurator.model.closure.RoutingRepository;
 import com.artkostm.configurator.util.ConfigLogger;
 
 import groovy.lang.Binding;
@@ -22,10 +22,11 @@ public class Main
         Binding sharedData = new Binding(args);
         Metadata config = new Configuration();
         ConfigLogger logger = new ConfigLogger(config);
-        PostRoutingRepository repo = new PostRoutingRepository(config);
+        RoutingRepository repo = new RoutingRepository(config, RoutingRepository.POST);
         sharedData.setVariable("name", "Artsiom");
-        sharedData.setVariable(repo.name(), repo);
         sharedData.setVariable(logger.name(), logger);
+        sharedData.setVariable(repo.name(), repo);
+        
         CompilerConfiguration cc = new CompilerConfiguration();
         cc.setScriptBaseClass(DelegatingScript.class.getName());
         GroovyShell shell = new GroovyShell(Main.class.getClassLoader(), sharedData, cc);
