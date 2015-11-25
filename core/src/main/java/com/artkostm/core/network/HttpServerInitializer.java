@@ -1,5 +1,7 @@
 package com.artkostm.core.network;
 
+import com.artkostm.core.network.handler.HttpServerHandler;
+
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

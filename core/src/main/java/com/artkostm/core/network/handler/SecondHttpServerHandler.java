@@ -1,7 +1,7 @@
 package com.artkostm.core.network.handler;
 
-import com.artkostm.core.network.handler.processor.HttpMethodProcessor;
-import com.artkostm.core.network.handler.processor.HttpMethodProcessorFacade;
+import com.artkostm.core.network.handler.method.processor.HttpMethodProcessor;
+import com.artkostm.core.network.handler.method.processor.HttpMethodProcessorFacade;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

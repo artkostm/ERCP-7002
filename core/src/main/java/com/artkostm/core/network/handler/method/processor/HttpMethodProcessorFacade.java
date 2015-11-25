@@ -1,4 +1,4 @@
-package com.artkostm.core.network.handler.processor;
+package com.artkostm.core.network.handler.method.processor;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -22,11 +22,14 @@ public class HttpMethodProcessorFacade implements HttpMethodProcessor
     @Override
     public void process(Object request)
     {
-        final HttpRequest httpRequest = (HttpRequest) request;
-        final HttpMethodProcessor processor = processors.get(httpRequest.getMethod());
-        if (processor != null)
+        if (request instanceof HttpRequest)
         {
-            processor.process(httpRequest);
+            final HttpRequest httpRequest = (HttpRequest) request;
+            final HttpMethodProcessor processor = processors.get(httpRequest.getMethod());
+            if (processor != null)
+            {
+                processor.process(httpRequest);
+            }
         }
     }
 }

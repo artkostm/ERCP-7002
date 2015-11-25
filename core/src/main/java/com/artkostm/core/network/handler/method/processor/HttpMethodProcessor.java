@@ -1,4 +1,4 @@
-package com.artkostm.core.network.handler.processor;
+package com.artkostm.core.network.handler.method.processor;
 
 public interface HttpMethodProcessor
 {

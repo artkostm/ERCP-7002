@@ -22,4 +22,5 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.2'
     compile 'org.apache.logging.log4j:log4j-core:2.2'
     compile 'io.netty:netty-all:4.0.32.Final'
+    testCompile 'junit:junit:4.12'
 }
