@@ -1,7 +1,5 @@
 List num = [1, 2, 3, 4, 5]
 log 'Sasha', 'Artsiom', 'sasa'
 log "Hello, $name!", num
-post 'some/url/path',  
-        ['com.controller1.C1',
-        'com.controller2.C2']
+post 'some/url/path', 'com.artkostm.configurator.Main.index'
 num.each log

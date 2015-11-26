@@ -22,7 +22,11 @@ public class HttpRouterServer
         // request to the instance etc.
         Router<String> router = new Router<String>()
             .GET("/",             "Index page")
+            .GET("/",             "Index page2")
+            .POST("/",             "POST REQUEST1")
+            .POST("/",             "POST REQUEST2")
             .GET("/articles/:id", "Article show page")
+            .GET("/articles/:id/:format", "Format is SHOW")
             .notFound("404 Not Found");
         System.out.println(router);
 

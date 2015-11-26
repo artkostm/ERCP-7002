@@ -165,7 +165,7 @@ public class Router<T>
      *
      * A path can only point to one target. This method does nothing if the path has already been added.
      */
-    public Router<T> addRouteFirst(HttpMethod method, String path, T target)
+    public Router<T> addRouteFirst(final HttpMethod method, final String path, final T target)
     {
         getMethodlessRouter(method).addRouteFirst(path, target);
         return this;
@@ -176,7 +176,7 @@ public class Router<T>
      *
      * A path can only point to one target. This method does nothing if the path has already been added.
      */
-    public Router<T> addRoute(HttpMethod method, String path, T target)
+    public Router<T> addRoute(final HttpMethod method, final String path, final T target)
     {
         getMethodlessRouter(method).addRoute(path, target);
         return this;
@@ -187,7 +187,7 @@ public class Router<T>
      *
      * A path can only point to one target. This method does nothing if the path has already been added.
      */
-    public Router<T> addRouteLast(HttpMethod method, String path, T target)
+    public Router<T> addRouteLast(final HttpMethod method, final String path, final T target)
     {
         getMethodlessRouter(method).addRouteLast(path, target);
         return this;
@@ -196,13 +196,13 @@ public class Router<T>
     /**
      * Sets the fallback target for use when there's no match at {@link #route(HttpMethod, String)}.
      */
-    public Router<T> notFound(T target)
+    public Router<T> notFound(final T target)
     {
         this.notFound = target;
         return this;
     }
 
-    private MethodlessRouter<T> getMethodlessRouter(HttpMethod method)
+    private MethodlessRouter<T> getMethodlessRouter(final HttpMethod method)
     {
         if (method == null)
         {
@@ -222,7 +222,7 @@ public class Router<T>
     //--------------------------------------------------------------------------
 
     /** Removes the route specified by the path. */
-    public void removePath(String path)
+    public void removePath(final String path)
     {
         for (MethodlessRouter<T> r : routers.values())
         {
@@ -232,7 +232,7 @@ public class Router<T>
     }
 
     /** Removes all routes leading to the target. */
-    public void removeTarget(T target)
+    public void removeTarget(final T target)
     {
         for (MethodlessRouter<T> r : routers.values())
         {
@@ -247,10 +247,10 @@ public class Router<T>
      * If there's no match, returns the result with {@link #notFound(Object) notFound} as the target if it is set,
      * otherwise returns {@code null}.
      */
-    public RouteResult<T> route(HttpMethod method, String uri)
+    public RouteResult<T> route(final HttpMethod method, final String uri)
     {
-        QueryStringDecoder decoder = new QueryStringDecoder(uri);
-        String[] tokens = StringUtil.split(Path.removeSlashesAtBothEnds(decoder.path()), '/');
+        final QueryStringDecoder decoder = new QueryStringDecoder(uri);
+        final String[] tokens = StringUtil.split(Path.removeSlashesAtBothEnds(decoder.path()), '/');
 
         MethodlessRouter<T> router = routers.get(method);
         if (router == null)
@@ -291,23 +291,23 @@ public class Router<T>
      *
      * For {@code OPTIONS *}, use {@link #allAllowedMethods()} instead of this method.
      */
-    public Set<HttpMethod> allowedMethods(String uri)
+    public Set<HttpMethod> allowedMethods(final String uri)
     {
-        QueryStringDecoder decoder = new QueryStringDecoder(uri);
-        String[] tokens = StringUtil.split(Path.removeSlashesAtBothEnds(decoder.path()), '/');
+        final QueryStringDecoder decoder = new QueryStringDecoder(uri);
+        final String[] tokens = StringUtil.split(Path.removeSlashesAtBothEnds(decoder.path()), '/');
 
         if (anyMethodRouter.anyMatched(tokens))
         {
             return allAllowedMethods();
         }
 
-        Set<HttpMethod> ret = new HashSet<HttpMethod>(routers.size());
+        final Set<HttpMethod> ret = new HashSet<HttpMethod>(routers.size());
         for (Map.Entry<HttpMethod, MethodlessRouter<T>> entry : routers.entrySet())
         {
-            MethodlessRouter<T> router = entry.getValue();
+            final MethodlessRouter<T> router = entry.getValue();
             if (router.anyMatched(tokens))
             {
-                HttpMethod method = entry.getKey();
+                final HttpMethod method = entry.getKey();
                 ret.add(method);
             }
         }
@@ -320,7 +320,7 @@ public class Router<T>
     {
         if (anyMethodRouter.size() > 0)
         {
-            Set<HttpMethod> ret = new HashSet<HttpMethod>(9);
+            final Set<HttpMethod> ret = new HashSet<HttpMethod>(9);
             ret.add(HttpMethod.CONNECT);
             ret.add(HttpMethod.DELETE);
             ret.add(HttpMethod.GET);
@@ -348,7 +348,7 @@ public class Router<T>
      *
      * @return {@code null} if there's no match
      */
-    public String path(HttpMethod method, T target, Object... params)
+    public String path(final HttpMethod method, final T target, final Object... params)
     {
         MethodlessRouter<T> router = (method == null) ? anyMethodRouter : routers.get(method);
 
@@ -358,7 +358,7 @@ public class Router<T>
             router = anyMethodRouter;
         }
 
-        String ret = router.path(target, params);
+        final String ret = router.path(target, params);
         if (ret != null)
         {
             return ret;
@@ -376,12 +376,12 @@ public class Router<T>
      *
      * @return {@code null} if there's no match
      */
-    public String path(T target, Object... params)
+    public String path(final T target, final Object... params)
     {
-        Collection<MethodlessRouter<T>> rs = routers.values();
+        final Collection<MethodlessRouter<T>> rs = routers.values();
         for (MethodlessRouter<T> r : rs)
         {
-            String ret = r.path(target, params);
+            final String ret = r.path(target, params);
             if (ret != null)
             {
                 return ret;
@@ -397,10 +397,10 @@ public class Router<T>
     public String toString()
     {
         // Step 1/2: Dump routers and anyMethodRouter in order
-        int numRoutes = size();
-        List<String> methods = new ArrayList<String>(numRoutes);
-        List<String> paths = new ArrayList<String>(numRoutes);
-        List<String> targets = new ArrayList<String>(numRoutes);
+        final int numRoutes = size();
+        final List<String> methods = new ArrayList<String>(numRoutes);
+        final List<String> paths = new ArrayList<String>(numRoutes);
+        final List<String> targets = new ArrayList<String>(numRoutes);
 
         // For router
         for (Entry<HttpMethod, MethodlessRouter<T>> e : routers.entrySet())
@@ -443,8 +443,8 @@ public class Router<T>
 
     /** Helper for toString */
     private static <T> void aggregateRoutes(
-        String method, Map<Path, T> routes,
-        List<String> accMethods, List<String> accPaths, List<String> accTargets)
+        final String method, final Map<Path, T> routes,
+        final List<String> accMethods, final List<String> accPaths, final List<String> accTargets)
     {
         for (Map.Entry<Path, T> entry : routes.entrySet())
         {
@@ -455,7 +455,7 @@ public class Router<T>
     }
 
     /** Helper for toString */
-    private static int maxLength(List<String> coll)
+    private static int maxLength(final List<String> coll)
     {
         int max = 0;
         for (String e : coll)
@@ -473,11 +473,11 @@ public class Router<T>
      * Helper for toString; for example, returns "io.netty.example.http.router.HttpRouterServerHandler" instead of
      * "class io.netty.example.http.router.HttpRouterServerHandler"
      */
-    private static String targetToString(Object target)
+    private static String targetToString(final Object target)
     {
         if (target instanceof Class)
         {
-            String className = ((Class<?>) target).getName();
+            final String className = ((Class<?>) target).getName();
             return className;
         }
         else
@@ -488,156 +488,156 @@ public class Router<T>
 
     //--------------------------------------------------------------------------
 
-    public Router<T> CONNECT(String path, T target)
+    public Router<T> CONNECT(final String path, final T target)
     {
         return addRoute(HttpMethod.CONNECT, path, target);
     }
 
-    public Router<T> DELETE(String path, T target)
+    public Router<T> DELETE(final String path, final T target)
     {
         return addRoute(HttpMethod.DELETE, path, target);
     }
 
-    public Router<T> GET(String path, T target)
+    public Router<T> GET(final String path, final T target)
     {
         return addRoute(HttpMethod.GET, path, target);
     }
 
-    public Router<T> HEAD(String path, T target)
+    public Router<T> HEAD(final String path, final T target)
     {
         return addRoute(HttpMethod.HEAD, path, target);
     }
 
-    public Router<T> OPTIONS(String path, T target)
+    public Router<T> OPTIONS(final String path, final T target)
     {
         return addRoute(HttpMethod.OPTIONS, path, target);
     }
 
-    public Router<T> PATCH(String path, T target)
+    public Router<T> PATCH(final String path, final T target)
     {
         return addRoute(HttpMethod.PATCH, path, target);
     }
 
-    public Router<T> POST(String path, T target)
+    public Router<T> POST(final String path, final T target)
     {
         return addRoute(HttpMethod.POST, path, target);
     }
 
-    public Router<T> PUT(String path, T target)
+    public Router<T> PUT(final String path, final T target)
     {
         return addRoute(HttpMethod.PUT, path, target);
     }
 
-    public Router<T> TRACE(String path, T target)
+    public Router<T> TRACE(final String path, final T target)
     {
         return addRoute(HttpMethod.TRACE, path, target);
     }
 
-    public Router<T> ANY(String path, T target)
+    public Router<T> ANY(final String path, final T target)
     {
         return addRoute(null, path, target);
     }
 
     //--------------------------------------------------------------------------
 
-    public Router<T> CONNECT_FIRST(String path, T target)
+    public Router<T> CONNECT_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.CONNECT, path, target);
     }
 
-    public Router<T> DELETE_FIRST(String path, T target)
+    public Router<T> DELETE_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.DELETE, path, target);
     }
 
-    public Router<T> GET_FIRST(String path, T target)
+    public Router<T> GET_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.GET, path, target);
     }
 
-    public Router<T> HEAD_FIRST(String path, T target)
+    public Router<T> HEAD_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.HEAD, path, target);
     }
 
-    public Router<T> OPTIONS_FIRST(String path, T target)
+    public Router<T> OPTIONS_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.OPTIONS, path, target);
     }
 
-    public Router<T> PATCH_FIRST(String path, T target)
+    public Router<T> PATCH_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.PATCH, path, target);
     }
 
-    public Router<T> POST_FIRST(String path, T target)
+    public Router<T> POST_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.POST, path, target);
     }
 
-    public Router<T> PUT_FIRST(String path, T target)
+    public Router<T> PUT_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.PUT, path, target);
     }
 
-    public Router<T> TRACE_FIRST(String path, T target)
+    public Router<T> TRACE_FIRST(final String path, final T target)
     {
         return addRouteFirst(HttpMethod.TRACE, path, target);
     }
 
-    public Router<T> ANY_FIRST(String path, T target)
+    public Router<T> ANY_FIRST(final String path, final T target)
     {
         return addRouteFirst(null, path, target);
     }
 
     //--------------------------------------------------------------------------
 
-    public Router<T> CONNECT_LAST(String path, T target)
+    public Router<T> CONNECT_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.CONNECT, path, target);
     }
 
-    public Router<T> DELETE_LAST(String path, T target)
+    public Router<T> DELETE_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.DELETE, path, target);
     }
 
-    public Router<T> GET_LAST(String path, T target)
+    public Router<T> GET_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.GET, path, target);
     }
 
-    public Router<T> HEAD_LAST(String path, T target)
+    public Router<T> HEAD_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.HEAD, path, target);
     }
 
-    public Router<T> OPTIONS_LAST(String path, T target)
+    public Router<T> OPTIONS_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.OPTIONS, path, target);
     }
 
-    public Router<T> PATCH_LAST(String path, T target)
+    public Router<T> PATCH_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.PATCH, path, target);
     }
 
-    public Router<T> POST_LAST(String path, T target)
+    public Router<T> POST_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.POST, path, target);
     }
 
-    public Router<T> PUT_LAST(String path, T target)
+    public Router<T> PUT_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.PUT, path, target);
     }
 
-    public Router<T> TRACE_LAST(String path, T target)
+    public Router<T> TRACE_LAST(final String path, final T target)
     {
         return addRouteLast(HttpMethod.TRACE, path, target);
     }
 
-    public Router<T> ANY_LAST(String path, T target)
+    public Router<T> ANY_LAST(final String path, final T target)
     {
         return addRouteLast(null, path, target);
     }

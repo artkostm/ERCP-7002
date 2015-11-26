@@ -17,7 +17,7 @@ public class RouteResult<T>
     private final Map<String, List<String>> queryParams;
 
     /** The maps will be wrapped in Collections.unmodifiableMap. */
-    public RouteResult(T target, Map<String, String> pathParams, Map<String, List<String>> queryParams)
+    public RouteResult(final T target, final Map<String, String> pathParams, final Map<String, List<String>> queryParams)
     {
         this.target = ObjectUtil.checkNotNull(target, "target");
         this.pathParams = Collections.unmodifiableMap(ObjectUtil.checkNotNull(pathParams, "pathParams"));
@@ -49,9 +49,9 @@ public class RouteResult<T>
      *
      * @return {@code null} if there's no match
      */
-    public String queryParam(String name)
+    public String queryParam(final String name)
     {
-        List<String> values = queryParams.get(name);
+        final List<String> values = queryParams.get(name);
         return (values == null) ? null : values.get(0);
     }
 
@@ -61,9 +61,9 @@ public class RouteResult<T>
      *
      * @return {@code null} if there's no match
      */
-    public String param(String name)
+    public String param(final String name)
     {
-        String pathValue = pathParams.get(name);
+        final String pathValue = pathParams.get(name);
         return (pathValue == null) ? queryParam(name) : pathValue;
     }
 
@@ -72,10 +72,10 @@ public class RouteResult<T>
      *
      * @return Unmodifiable list; the list is empty if there's no match
      */
-    public List<String> params(String name)
+    public List<String> params(final String name)
     {
-        List<String> values = queryParams.get(name);
-        String value = pathParams.get(name);
+        final List<String> values = queryParams.get(name);
+        final String value = pathParams.get(name);
 
         if (values == null)
         {
@@ -88,7 +88,7 @@ public class RouteResult<T>
         }
         else
         {
-            List<String> aggregated = new ArrayList<String>(values.size() + 1);
+            final List<String> aggregated = new ArrayList<String>(values.size() + 1);
             aggregated.addAll(values);
             aggregated.add(value);
             return Collections.unmodifiableList(aggregated);

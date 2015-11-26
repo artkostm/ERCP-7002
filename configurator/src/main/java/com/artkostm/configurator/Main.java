@@ -37,47 +37,8 @@ public class Main
         System.out.println(repo.getRepository());
     }
     
-    public static class Route
+    public static void index()
     {
-        private String method;
-        private String url;
-        private String controller;
         
-        public Route(String method, String url, String controller)
-        {
-            this.method = method;
-            this.url = url;
-            this.controller = controller;
-        }
-
-        public String method() {
-            return method;
-        }
-
-        public void method(String method) {
-            this.method = method;
-        }
-
-        public String url() {
-            return url;
-        }
-
-        public void url(String url) {
-            this.url = url;
-        }
-
-        public String controller() {
-            return controller;
-        }
-
-        public void controller(String controller) {
-            this.controller = controller;
-        }
-
-        @Override
-        public String toString() {
-            return "Route [method=" + method + ", url=" + url + ", controller="
-                    + controller + "]";
-        }
     }
 }

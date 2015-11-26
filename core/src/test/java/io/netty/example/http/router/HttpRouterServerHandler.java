@@ -18,6 +18,7 @@ package io.netty.example.http.router;
 import com.artkostm.core.network.router.RouteResult;
 import com.artkostm.core.network.router.Router;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -26,30 +27,62 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
+import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder.ErrorDataDecoderException;
 import io.netty.util.CharsetUtil;
 
 @ChannelHandler.Sharable
-public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
+public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     private final Router<String> router;
 
     public HttpRouterServerHandler(Router<String> router) {
         this.router = router;
     }
+    
+    private HttpRequest req;
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, HttpRequest req) {
-        if (HttpHeaders.is100ContinueExpected(req)) {
-            ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
-            return;
+    public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
+        int i = 0;
+        if (msg instanceof HttpRequest)
+        {
+            System.out.println("HTTPREQUEST " + i); i++;
+            req = (HttpRequest) msg;
+            if (HttpHeaders.is100ContinueExpected(req)) {
+                ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
+                return;
+            }
+            
+            HttpResponse res = createResponse(req, router);
+            flushResponse(ctx, req, res);
         }
+        if (msg instanceof HttpContent)
+        {
+            HttpContent content = (HttpContent) msg;
+            HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(req);
 
-        HttpResponse res = createResponse(req, router);
-        flushResponse(ctx, req, res);
+            try {
+                postDecoder.offer(content);
+            } catch (ErrorDataDecoderException ex) {
+            }
+            ByteBuf buf = content.content();
+            
+            System.out.println("NOT HTTPREQUEST " + i);
+            System.out.println(new String(buf.array()));
+            if (content instanceof LastHttpContent) {
+                ctx.writeAndFlush(DefaultFullHttpResponse.EMPTY_LAST_CONTENT).addListener(ChannelFutureListener.CLOSE);
+            }
+        }
+        
     }
 
     private static HttpResponse createResponse(HttpRequest req, Router<String> router) {
