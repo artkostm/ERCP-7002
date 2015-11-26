@@ -55,7 +55,7 @@ public class RoutingRepository extends Closure<Object> implements HiddenCall
             final String className = methodPath.substring(0, ind);
             final String methodName = methodPath.substring(ind+1);
             System.out.println("class: " + className + "| method: " + methodName);
-            repository.add(new RouteConfig(name(), (String)args[0], (Method)args[1]));
+            repository.add(new RouteConfig(name(), (String)args[0], get(className, methodName)));
         }
 
         return Closure.DONE;
@@ -72,5 +72,22 @@ public class RoutingRepository extends Closure<Object> implements HiddenCall
         return Collections.unmodifiableList(repository);//TODO: check this: unmodifiable or modifiable
     }
     
-    private Me
+    private Method get(String clname, String mtname)
+    {
+        try {
+            Class<?> cl = Class.forName(clname);
+            Method m = cl.getMethod(mtname, new Class<?>[]{});
+            return m;
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
