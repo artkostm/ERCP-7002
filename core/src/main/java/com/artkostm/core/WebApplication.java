@@ -1,8 +1,10 @@
 package com.artkostm.core;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import com.artkostm.configurator.model.Metadata;
+import com.artkostm.configurator.model.RouteConfig;
 import com.artkostm.core.network.HttpServer;
 
 public abstract class WebApplication implements Application
@@ -14,9 +16,9 @@ public abstract class WebApplication implements Application
         final Metadata config = new Metadata()
         {
             @Override
-            public Object getData()
+            public List<RouteConfig> getRouteConfigList() 
             {
-                return Thread.currentThread().getName()+"HelloData";
+                return null;
             }
         };
         final HttpServer server = new HttpServer(new InetSocketAddress("localhost", 8080));

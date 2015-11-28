@@ -1,6 +1,8 @@
 package com.artkostm.configurator.model;
 
+import java.util.List;
+
 public interface Metadata
 {
-    Object getData();
+    List<RouteConfig> getRouteConfigList();
 }

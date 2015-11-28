@@ -26,6 +26,7 @@ public class HttpRouterServer
             .POST("/",             "POST REQUEST1")
             .POST("/",             "POST REQUEST2")
             .GET("/articles/:id", "Article show page")
+            .GET("/articles/:id/show", "Article show page2")
             .GET("/articles/:id/:format", "Format is SHOW")
             .notFound("404 Not Found");
         System.out.println(router);

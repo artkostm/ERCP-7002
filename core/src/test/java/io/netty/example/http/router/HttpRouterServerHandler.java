@@ -15,6 +15,16 @@
  */
 package io.netty.example.http.router;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.artkostm.core.network.handler.content.ContentTypeResolver;
+import com.artkostm.core.network.handler.content.SimpleContentTypeResolver;
+import com.artkostm.core.network.handler.method.processor.HttpMethodProcessor;
+import com.artkostm.core.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.core.network.router.RouteResult;
 import com.artkostm.core.network.router.Router;
 
@@ -36,58 +46,108 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder.ErrorDataDecoderException;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData.HttpDataType;
 import io.netty.util.CharsetUtil;
 
 @ChannelHandler.Sharable
-public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObject> {
+public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObject> 
+{
     private final Router<String> router;
+    private final HttpMethodProcessor processor;
 
     public HttpRouterServerHandler(Router<String> router) {
         this.router = router;
+        processor = new HttpMethodProcessorFacade();
+        contentBuf = Unpooled.buffer();
     }
     
     private HttpRequest req;
+    private ByteBuf contentBuf;
+    private Map<String, List<String>> postmap;
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
-        int i = 0;
+        
         if (msg instanceof HttpRequest)
         {
-            System.out.println("HTTPREQUEST " + i); i++;
+            postmap = new TreeMap<String, List<String>>();
             req = (HttpRequest) msg;
+            RouteResult<String> routeResult = router.route(req.getMethod(), req.getUri());
+            if (routeResult.target() == "404 Not Found")
+            {
+                FullHttpResponse res = new DefaultFullHttpResponse(
+                        HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND,
+                        Unpooled.copiedBuffer("<h1>404 Not Found<h1>", CharsetUtil.UTF_8)
+                );
+                ctx.writeAndFlush(res).addListener(ChannelFutureListener.CLOSE);
+            }
+            
             if (HttpHeaders.is100ContinueExpected(req)) {
                 ctx.writeAndFlush(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
                 return;
             }
-            
-            HttpResponse res = createResponse(req, router);
-            flushResponse(ctx, req, res);
         }
         if (msg instanceof HttpContent)
         {
-            HttpContent content = (HttpContent) msg;
-            HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(req);
-
-            try {
-                postDecoder.offer(content);
-            } catch (ErrorDataDecoderException ex) {
-            }
-            ByteBuf buf = content.content();
-            
-            System.out.println("NOT HTTPREQUEST " + i);
-            System.out.println(new String(buf.array()));
-            if (content instanceof LastHttpContent) {
-                ctx.writeAndFlush(DefaultFullHttpResponse.EMPTY_LAST_CONTENT).addListener(ChannelFutureListener.CLOSE);
+            HttpContent httpContent = (HttpContent) msg;
+            read(httpContent);
+            if (httpContent instanceof LastHttpContent) 
+            {
+                HttpResponse res = createResponse(req, router);
+                flushResponse(ctx, req, res);
             }
         }
         
     }
+    
+    
+    private void read(HttpContent httpContent)
+    {
+        HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
+        ContentTypeResolver typeResolver = new SimpleContentTypeResolver();
+        if (typeResolver.resolveType(req.headers().get("Content-Type"), HttpHeaders.Values.MULTIPART_FORM_DATA))
+        {
+            try 
+            {
+                decoder.offer(httpContent);
+                while (decoder.hasNext()) 
+                {
+                    InterfaceHttpData data = decoder.next();
+                    if (data != null) {
+                        if (data.getHttpDataType() == HttpDataType.Attribute) {
+                            try {
+                                Attribute attribute = (Attribute) data;
+                                List<String> list = new ArrayList<String>();
+                                list.add(attribute.getValue());
+                                postmap.put(attribute.getName(), list);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            } finally {
+                                data.release();
+                            }
+                        }
+                    }
+                }
+            } 
+            catch (ErrorDataDecoderException ex) 
+            {
+                return;
+            }
+        }
+        else
+        {
+            contentBuf.writeBytes(httpContent.content());
+        }
+        
+    }
 
-    private static HttpResponse createResponse(HttpRequest req, Router<String> router) {
+    private HttpResponse createResponse(HttpRequest req, Router<String> router) {
         RouteResult<String> routeResult = router.route(req.getMethod(), req.getUri());
-
+        
         // Display debug info.
         //
         // For simplicity of this example, route targets are just simple strings.
@@ -101,6 +161,9 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
         content.append("pathParams: " + routeResult.pathParams() + "\n");
         content.append("queryParams: " + routeResult.queryParams() + "\n\n");
         content.append("allowedMethods: " + router.allowedMethods(req.getUri()));
+        byte[] bytes = new byte[contentBuf.readableBytes()];
+        contentBuf.readBytes(bytes);
+        content.append("content: \n\tpost params: " + postmap + "\n\tbinary:\n" + new String(bytes));//TODO: add content from HttpRouterServerHandler.content
 
         FullHttpResponse res = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, HttpResponseStatus.OK,

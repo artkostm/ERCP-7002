@@ -1,0 +1,3 @@
+log 'Config creating...'
+post 'some/url/path', 'com.artkostm.configurator.Main.index'
+

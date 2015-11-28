@@ -3,8 +3,15 @@ package by.artkostm.reflection;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+/**
+ * The Utility class for the reflections
+ * @author Artsiom
+ *
+ */
 public final class ReflectionUtils
 {
+    
+    
     public static boolean isStatic(final Method method)
     {
         return Modifier.isStatic(method.getModifiers());

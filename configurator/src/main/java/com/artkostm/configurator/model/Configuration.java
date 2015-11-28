@@ -1,10 +1,20 @@
 package com.artkostm.configurator.model;
 
+import java.util.List;
+
 public class Configuration implements Metadata
 {
-    @Override
-    public Object getData()
+    private final List<RouteConfig> routeConfigList;
+    
+    public Configuration(final List<RouteConfig> routeConfigList) 
     {
-        return null;
+        this.routeConfigList = routeConfigList;
     }
+    
+    @Override
+    public List<RouteConfig> getRouteConfigList() 
+    {
+        return routeConfigList;
+    }
+    
 }

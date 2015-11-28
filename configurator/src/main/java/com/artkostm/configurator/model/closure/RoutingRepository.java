@@ -2,11 +2,13 @@ package com.artkostm.configurator.model.closure;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.artkostm.configurator.HiddenCall;
 import com.artkostm.configurator.model.RouteConfig;
+import com.artkostm.configurator.util.ConfigurationUtils;
 
 import groovy.lang.Closure;
 
@@ -16,6 +18,7 @@ public class RoutingRepository extends Closure<Object> implements HiddenCall
      * 
      */
     private static final long serialVersionUID = 1L;
+    //TODO: add more http methods
     public static final String POST = "post";
     public static final String GET = "get";
     public static final String PUT = "put";
@@ -37,25 +40,19 @@ public class RoutingRepository extends Closure<Object> implements HiddenCall
     {
         if (args == null || args.length != 2)
         {
-            throw new RuntimeException(":(");
+            throw new RuntimeException(":(");//TODO: add description
         }
         
         if (args[1] instanceof List<?>)
         {
-            final List<Method> controllers = (List<Method>) args[1];
-            for (Method controller : controllers)
-            {
-                repository.add(new RouteConfig(name(), (String)args[0], controller));
-            }
+            final List<Method> controllers 
+                    = ConfigurationUtils.tryToGetListOfMethodsByNames((List<String>) args[1]);
+            repository.add(new RouteConfig(name(), (String)args[0], controllers));
         }
         else
         {
-            final String methodPath = (String) args[1];
-            int ind = methodPath.lastIndexOf('.');
-            final String className = methodPath.substring(0, ind);
-            final String methodName = methodPath.substring(ind+1);
-            System.out.println("class: " + className + "| method: " + methodName);
-            repository.add(new RouteConfig(name(), (String)args[0], get(className, methodName)));
+            final Method controller = ConfigurationUtils.tryToGetMethodByName((String) args[1]);
+            repository.add(new RouteConfig(name(), (String)args[0], Arrays.asList(controller)));
         }
 
         return Closure.DONE;
@@ -70,24 +67,5 @@ public class RoutingRepository extends Closure<Object> implements HiddenCall
     public List<RouteConfig> getRepository()
     {
         return Collections.unmodifiableList(repository);//TODO: check this: unmodifiable or modifiable
-    }
-    
-    private Method get(String clname, String mtname)
-    {
-        try {
-            Class<?> cl = Class.forName(clname);
-            Method m = cl.getMethod(mtname, new Class<?>[]{});
-            return m;
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
     }
 }

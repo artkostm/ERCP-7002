@@ -1,18 +1,19 @@
 package com.artkostm.configurator.model;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class RouteConfig
 {
     private String method;
     private String url;
-    private Method controller;
+    private List<Method> controllers;
     
-    public RouteConfig(final String method, final String url, final Method controller)
+    public RouteConfig(final String method, final String url, final List<Method> controllers)
     {
         this.method = method;
         this.url = url;
-        this.controller = controller;
+        this.controllers = controllers;
     }
 
     public String method()
@@ -20,7 +21,7 @@ public class RouteConfig
         return method;
     }
 
-    public void method(String method)
+    public void method(final String method)
     {
         this.method = method;
     }
@@ -30,25 +31,25 @@ public class RouteConfig
         return url;
     }
 
-    public void url(String url)
+    public void url(final String url)
     {
         this.url = url;
     }
 
-    public Method controller()
+    public List<Method> controllers()
     {
-        return controller;
+        return controllers;
     }
 
-    public void controller(Method controller)
+    public void controllers(final List<Method> controllers)
     {
-        this.controller = controller;
+        this.controllers = controllers;
     }
 
     @Override
     public String toString()
     {
-        return "RouteConfig [method=" + method + ", url=" + url + ", controller="
-            + controller + "]";
+        return "RouteConfig [method=" + method + ", url=" + url + ", controllers="
+            + controllers + "]";
     }
 }

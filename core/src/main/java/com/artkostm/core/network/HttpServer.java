@@ -11,11 +11,15 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.net.SocketAddress;
 
 public class HttpServer implements Runnable
 {
+    private static final InternalLogger LOG = InternalLoggerFactory.getInstance(HttpServer.class);
+    
     static final boolean SSL = System.getProperty("ssl") != null;
     
     private final SocketAddress address;
@@ -38,7 +42,7 @@ public class HttpServer implements Runnable
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                LOG.warn("Cannot instantient SSL context", e);
             }
             
         } else 
@@ -61,7 +65,7 @@ public class HttpServer implements Runnable
         }
         catch (InterruptedException e)
         {
-            
+            LOG.warn("Cannot create server bootstrap or new channel", e);
         } 
         finally 
         {

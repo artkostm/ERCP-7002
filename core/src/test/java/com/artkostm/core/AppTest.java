@@ -15,7 +15,7 @@ public class AppTest extends WebApplication
     @Override
     public void configure(Metadata config)
     {
-        System.out.println(Thread.currentThread().getName()+":Metadata.getData()->"+config.getData());
+        System.out.println(Thread.currentThread().getName()+":Metadata.getData()->"+config.getRouteConfigList());
         try
         {
             System.out.println(Modifier.isStatic(AppTest.class.getDeclaredMethod("main", new Class<?>[]{String[].class}).getModifiers()));
