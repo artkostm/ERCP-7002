@@ -15,6 +15,8 @@ public class BaseTest
     {
         final Configurator configurator = new Configurator();
         final Metadata configuration = configurator.createConfiguration("classpath:testconfiguration.gr");
+        assertNotNull(configurator.getDirectoryForTemplateLoading());
+        assertTrue(configurator.getPort() == 8080);
         assertNotNull(configuration);
         assertNotNull(configuration.getRouteConfigList());
         assertTrue(!configuration.getRouteConfigList().isEmpty());

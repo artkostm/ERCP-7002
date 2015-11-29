@@ -19,6 +19,9 @@ import com.artkostm.configurator.util.ConfigLogger;
 
 public class Configurator 
 {
+    private String directoryForTemplateLoading;
+    private int port;
+    
     /**
      * 
      * @param configFilePath - configuration file path 
@@ -67,5 +70,15 @@ public class Configurator
         sharedData.setProperty(repoDELETE.name(), repoDELETE);
         sharedData.setProperty(repoPUT.name(), repoPUT);
         return sharedData;
+    }
+    
+    public String getDirectoryForTemplateLoading()
+    {
+        return directoryForTemplateLoading;
+    }
+    
+    public int getPort()
+    {
+        return port;
     }
 }
