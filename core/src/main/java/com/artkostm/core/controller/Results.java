@@ -8,27 +8,27 @@ public class Results
 {
     public static Result ok() 
     {
-        return new Result();
+        return new Result().status(200);
     }
 
     public static Result ok(final InputStream is) 
     {
-        return new Result(is);
+        return new Result(is).status(200);
     }
 
     public static Result ok(final byte[] bytes) 
     {
-        return new Result(bytes);
+        return new Result(bytes).status(200);
     }
 
     public static Result ok(final String s) 
     {
-        return new Result(s);
+        return new Result(s).status(200);
     }
 
     public static Result ok(final File f) throws IOException 
     {
-        return new Result(f);
+        return new Result(f).status(200);
     }
 
     public static Result badRequest() 
