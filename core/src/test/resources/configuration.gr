@@ -1,0 +1,6 @@
+log 'Config creating...'
+directoryForTemplateLoading = 'src/main/resources'
+port = 8080
+post '/some/url/path', 'com.artkostm.configurator.Main.index'
+get '/', 'com.artkostm.configurator.Main.index'
+
