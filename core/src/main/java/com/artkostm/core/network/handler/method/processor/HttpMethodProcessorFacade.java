@@ -6,6 +6,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.artkostm.core.controller.Context;
+
 public class HttpMethodProcessorFacade implements HttpMethodProcessor
 {
     private static final Map<HttpMethod, HttpMethodProcessor> processors;
@@ -13,14 +15,12 @@ public class HttpMethodProcessorFacade implements HttpMethodProcessor
     static
     {
         processors = new HashMap<HttpMethod, HttpMethodProcessor>();
-        processors.put(HttpMethod.GET, new GETMethodProcessor());
-        processors.put(HttpMethod.POST, new POSTMethodProcessor());
-        processors.put(HttpMethod.PUT, new PUTMethodProcessor());
-        processors.put(HttpMethod.DELETE, new DELETEMethodProcessor());
+        processors.put(HttpMethod.GET, new NoBodyRepresentedMethodProcessor());
+        processors.put(HttpMethod.POST, new BodyRepresentedMethodProcessor());
     }
 
     @Override
-    public void process(Object request)
+    public Context process(Object request)
     {
         if (request instanceof HttpRequest)
         {
@@ -31,5 +31,6 @@ public class HttpMethodProcessorFacade implements HttpMethodProcessor
                 processor.process(httpRequest);
             }
         }
+        return null;
     }
 }

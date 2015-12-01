@@ -13,4 +13,9 @@ public abstract class Controller extends Results
         //TODO:add template compilation 
         return null;
     }
+    
+    public static Context context()
+    {
+        return Context.current();
+    }
 }

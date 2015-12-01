@@ -39,7 +39,6 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -57,6 +56,7 @@ import io.netty.util.CharsetUtil;
 public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObject> 
 {
     private final Router<String> router;
+    @SuppressWarnings("unused")
     private final HttpMethodProcessor processor;
 
     public HttpRouterServerHandler(Router<String> router) {

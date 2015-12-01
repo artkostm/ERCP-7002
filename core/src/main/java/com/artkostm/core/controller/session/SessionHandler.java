@@ -1,7 +1,5 @@
 package com.artkostm.core.controller.session;
 
-import io.netty.handler.codec.http.cookie.DefaultCookie;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
