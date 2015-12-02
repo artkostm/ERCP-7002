@@ -10,7 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class HttpRouterServer 
 {
-    public static final int PORT = 8000;
+    public static final int PORT = 8080;
 
     public static void main(String[] args) throws Exception 
     {

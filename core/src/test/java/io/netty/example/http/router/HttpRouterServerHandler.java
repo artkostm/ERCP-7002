@@ -39,6 +39,7 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -58,6 +59,7 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
     private final Router<String> router;
     @SuppressWarnings("unused")
     private final HttpMethodProcessor processor;
+    private boolean flag;
 
     public HttpRouterServerHandler(Router<String> router) {
         this.router = router;
@@ -79,6 +81,10 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
             postmap = new TreeMap<String, List<String>>();
             req = (HttpRequest) msg;
             RouteResult<String> routeResult = router.route(req.getMethod(), req.getUri());
+            if (req.getMethod() == HttpMethod.GET)
+            {
+                flag = true;
+            }
             if (routeResult.target() == "404 Not Found")
             {
                 FullHttpResponse res = new DefaultFullHttpResponse(
@@ -93,22 +99,23 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
                 return;
             }
         }
+        
+        if (msg instanceof LastHttpContent) 
+        {
+            HttpResponse res = createResponse(req, router);
+            if (contentBuf != null)
+            {
+                contentBuf.clear();
+                contentBuf = null;
+            }
+            flushResponse(ctx, req, res);
+            return;
+        }
         if (msg instanceof HttpContent)
         {
             HttpContent httpContent = (HttpContent) msg;
-            read(httpContent);
-            if (httpContent instanceof LastHttpContent) 
-            {
-                HttpResponse res = createResponse(req, router);
-                if (contentBuf != null)
-                {
-                    contentBuf.clear();
-                    contentBuf = null;
-                }
-                flushResponse(ctx, req, res);
-            }
+            if (flag) {read(httpContent); flag = false;}
         }
-        
     }
     
     
