@@ -5,6 +5,6 @@ import io.netty.handler.codec.http.HttpContent;
 public interface BodyConsumer 
 {
     void chunk(final HttpContent content);
-    void finished();
+    Object finished();
     void handleError(final Throwable t);
 }

@@ -22,7 +22,7 @@ public class SecondHttpServerHandler extends SimpleChannelInboundHandler<HttpObj
     {
         if (msg instanceof HttpRequest)
         {
-            methodFacade.process(msg);
+            //methodFacade.process(msg);
         }
     }
     

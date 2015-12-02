@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13 r1665067">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">30</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1449068770000</longProp>
+        <longProp name="ThreadGroup.end_time">1449068770000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">127.0.0.1</stringProp>
+          <stringProp name="HTTPSampler.port">8000</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout">5000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/articles/2</stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="name" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">Artsiom</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">name</stringProp>
+              </elementProp>
+              <elementProp name="hello" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">World</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">hello</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">127.0.0.1</stringProp>
+          <stringProp name="HTTPSampler.port">8000</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/articles/43</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request POST" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;_id&quot;: &quot;-231116455&quot;,&#xd;
+  &quot;version&quot;: &quot;1.2&quot;,&#xd;
+  &quot;ftid&quot;: 8480555041471974442,&#xd;
+  &quot;purchaseDate&quot;: &quot;2015-11-11T16:10:37.364Z&quot;,&#xd;
+  &quot;eventStartDate&quot;: &quot;2015-11-12T16:10:37.364Z&quot;,&#xd;
+  &quot;trl&quot;: 1567229439,&#xd;
+  &quot;itineraryNumber&quot;: 1456622430,&#xd;
+  &quot;corc&quot;: 0,&#xd;
+  &quot;orderId&quot;: 988811111,&#xd;
+  &quot;orderNumber&quot;: 1736515768,&#xd;
+  &quot;orderStatus&quot;: &quot;InProgress&quot;,&#xd;
+  &quot;totalPrice&quot;: {&#xd;
+    &quot;currencyCode&quot;: &quot;USD&quot;,&#xd;
+    &quot;amount&quot;: &quot;1&quot;,&#xd;
+    &quot;usdValue&quot;: &quot;1&quot;&#xd;
+  },&#xd;
+  &quot;isAgentAssistedBooking&quot;: false,&#xd;
+  &quot;agentId&quot;: 0,&#xd;
+  &quot;customerAccount&quot;: {&#xd;
+    &quot;tuid&quot;: 2068120141,&#xd;
+    &quot;dossierId&quot;: 3,&#xd;
+    &quot;accountType&quot;: &quot;GUEST&quot;,&#xd;
+    &quot;emailAddress&quot;: &quot;test_mxPYp@gmail.com&quot;,&#xd;
+    &quot;loyaltyMemberId&quot;: -1921574519,&#xd;
+    &quot;loyaltyProgramId&quot;: -1211213808,&#xd;
+    &quot;customerName&quot;: {&#xd;
+      &quot;givenName&quot;: &quot;nbddn&quot;,&#xd;
+      &quot;surname&quot;: &quot;TOFIj&quot;,&#xd;
+      &quot;middleName&quot;: &quot;BSXqu&quot;&#xd;
+    },&#xd;
+    &quot;telephones&quot;: [&#xd;
+      {&#xd;
+        &quot;countryAccessCode&quot;: &quot;6&quot;,&#xd;
+        &quot;phoneCategoryCode&quot;: &quot;184&quot;,&#xd;
+        &quot;areaCode&quot;: &quot;755&quot;,&#xd;
+        &quot;phoneNumber&quot;: &quot;2576829&quot;,&#xd;
+        &quot;phoneCountryCode&quot;: &quot;871&quot;,&#xd;
+        &quot;isHomePhone&quot;: true,&#xd;
+        &quot;isBusinessPhone&quot;: false,&#xd;
+        &quot;isMobilePhone&quot;: false&#xd;
+      },&#xd;
+      {&#xd;
+        &quot;countryAccessCode&quot;: &quot;7&quot;,&#xd;
+        &quot;phoneCategoryCode&quot;: &quot;514&quot;,&#xd;
+        &quot;areaCode&quot;: &quot;662&quot;,&#xd;
+        &quot;phoneNumber&quot;: &quot;6308441&quot;,&#xd;
+        &quot;phoneCountryCode&quot;: &quot;903&quot;,&#xd;
+        &quot;isHomePhone&quot;: true,&#xd;
+        &quot;isBusinessPhone&quot;: false,&#xd;
+        &quot;isMobilePhone&quot;: false&#xd;
+      }&#xd;
+    ],&#xd;
+    &quot;travelerCount&quot;: 1,&#xd;
+    &quot;accountCreateDate&quot;: &quot;2014-07-18T13:32:00.000Z&quot;,&#xd;
+    &quot;logonName&quot;: &quot;KFxbL&quot;,&#xd;
+    &quot;password&quot;: &quot;IZBXm&quot;,&#xd;
+    &quot;purchaseCount&quot;: 0,&#xd;
+    &quot;firstPurchaseDate&quot;: &quot;2014-07-18T15:57:18.881Z&quot;,&#xd;
+    &quot;lastPurchaseDate&quot;: &quot;2014-07-18T15:57:18.881Z&quot;,&#xd;
+    &quot;accountNumber&quot;: &quot;1:5628597&quot;,&#xd;
+    &quot;userANICLI&quot;: 3213213,&#xd;
+    &quot;userANICLIJurisdictionCode&quot;: &quot;jhsdf&quot;&#xd;
+  },&#xd;
+  &quot;sourceSystem&quot;: {&#xd;
+    &quot;ipAddress&quot;: &quot;10.184.4.5&quot;,&#xd;
+    &quot;machineInfoId&quot;: &quot;95528cbc-dbc6-4117-b529-a15e5ee9cc62&quot;,&#xd;
+    &quot;blackBox&quot;: &quot;0400l1oURA1kJHkNf94lis1ztgVAHQ3teOksuKl0pJwZGD3fH2RmqzaSN9tq8oX665cOF9v3sFPnT1KEWDFJtOYYR4JUAYR+XskRYVvwW+d7GhDodxGBlo66YuixLXGBICA18sQyiQagYnHhUgAyemihT1vWqbU3/b1iYDvethm0ixXKgDzSlcJpdrkeCA3h0+o50LVQmADUFBlDgm50c6V/UsE25KpZgUeT1mvvyKbz4Krk0B48ux+V4SxwhwBmNydI6S6la0lc7CNSwejOX5dhKDBAKBIrRLbRVKNQ0ZFLTxhr4Cw4SnIDuCi40taIzPd6eFUoW2PhFQQ+rqTLMfHvuGtGMuSZx2KTva1Ws4IiclrWYTiOIi1CTDAlIRJYRd6tNtc51/JOjj2Q980lwFe6kEhaF8gmN1Pyd8QXzT4BxAe0rH6CoU9iaxVvl6HHHDOeVSAtwKrASLjJUjipngnW3GT6IAM3TSIvyK8K07I4xA0eKqBV88oL6UtezWwdrLOsKoxk0tBb1QUEeANBFJDADeowfmZjGrzu0rdKBra3m4YkWV9lzjyKP7VtYcGUTz3Bh8sEu5ZnJjPHvJpxYj49Iuq9zrw3NxZME6VR9ZL8Y715NDe7U0RC8KLE8yqMVQun0jxRYAmjKb1P4ehBV15lxGaDony4BFTsxSCB+dkoOYoKuIPyhP/+tXnDO6DxAGL7sj69LfM7VRZuo0u0oUX4SPehTqT3rw1rqdIvLYXsenu8VDdLGBfK9PH/LgnAtMTg/gz07uVSINCCCzeqH4yrtbsCyzUxPaqcTd6nZB2RVjv/YVgLOL3ChvU0rkcIRBbtCahb65FrEcad0ignMd/EtNVotidj5ll9K/zPbVzWnHegzcRl/6XsY2qCxf0G3UAhBQhNV0Xzfh2dtRE+K4Wh2DeGG4xIicZN/KBkLYSMo3JRDnSn/CeUNkVFqsi4LpFJxVmKhsea3EcrfqLz9IzQ4pkViW8B68yYEOVzmJtDqilN8/cjBQDJfePUqUXOcbgqcaO9qi9+MHqQjhPqNVPU3mUfxH8KCkfmSaN99HcT0ezcbXMC1DUoiYy7tjlqVqxpEVvTcInAnicbsimjsvsegmGzypuKub7ud58N4bbST47JjK04lQ9Zugsmmx9bqOcfSozg2W0Uoa+pbi/OGiw0DbEFSFh1Ho6qxCt5ad5da37a1Xb02ogGI8UWNovw1Sntu/N8SDqC29MJvale2x6Et9/YCXyR/BEWvww4zyNxkwVerAA8ZOtvtJ686zJhwwJz7BEJqzBneyRVJUiLP0GDKrLsil66k4Stq9k9B0nV3aYZUBchKGX2eFKPWH2foBGq1I5ju8GdXzn6kmz3bG2wyqhIJ2ufVWrooWA1c8zwYlPuAw1E96x/AeRFtiM5cvHuuwulFxqdGW9Pyg1MgWfCq3p4OQ5eMgadiXljqfLe338KwZvwSg4ZfQ2uEqnedMvCtRf9r8Cf4S1y0R/QDA37JlwhxvfwkZZd4NpHpr5kIEzBV+QClvoFrjW/nRMjPprsb+FiUIk93ydyhrVrTt42Pz85vpbNj8u8c7xcg4Reu+rrrDUfD4FxkEDZ8XRitvP/1SbIcDdGejblqjLnJ8JokXFi6bGLSdenKKu6TeCKeSTEx7fAOB1w1fF3M4PFz2xuf70g/aUD0xNNLRX9eiRJ+ZVPfVKB9sZJACLiwD4lDIVkaYdN6NBtLOmYabgxXyt7wBdh6ooeHgenYGQmYTaY9VX0O5VcEXHa5ml7UpdlJpprzSD+qejohn_lennon@gmail.comgjHGrQhRFSOhcD6T1dGUjL/Fb06GXB2+d2d4Gsrq2C3v1mHHRDPinwVgSFTP+9pt5Rea+oE063iGP40h5Z8B5PXjK9GFecOQi72tVrOCInJa1mE4jiItQkwwJSESWEXerTbXOdfyTo49kPfNJcBXupBIWhfIJjdT8nxf9i9QO+0RmhW6BfBEu9/bdD5d3JW2p72tVrOCInJa1mE4jiItQkwwJSESWEXerTbXOdfyTo49kPfNJcBXupBIWhfIJjdT8g7oveq104BLz0zkEatGqABSYr5b+lOoComMCZ2MDU/QKyUea5BuGu+sgF0T4hYUXqFDhwXgI8bZ5BCcde7dl0o3PiP0yqyjG9wcXvLnUMt21/5xQdPKWt0vGfSMG4zqSbgIV9kUxjmPtc8IrN0Cu2CKe/pKTUIixDHZ2Tny8hRUTO/yWcK4BaEXTzZy3KKGjkvCsRCl98vy6jQdapTNdMmWO/x+mEUwojT7TowN86syHO/T/PqmVzOKSi0zsWmPZlVgF1ZaN8B1/TyrD20TzRWEeDpIl7lDfFRZlekgzKbo5JanVzjlqK5Gyn3kZm671OSYgkwbOw9dl8+HqxQw7wBp7Syxg1RFTINtOExM7eSUGfmzQn1Uz1X0ENRTcg3ubLsBhwfMLWqLRp5qPKAMnnIq57FrcJBCkzKV0bjfnOq3&quot;&#xd;
+  },&#xd;
+  &quot;ipAddressInfo&quot;: {&#xd;
+    &quot;geoData&quot;: {&#xd;
+      &quot;city&quot;: &quot;16.100.500.100&quot;,&#xd;
+      &quot;country&quot;: &quot;16.101.501.101&quot;&#xd;
+    }&#xd;
+  },&#xd;
+  &quot;deviceDetail&quot;: {&#xd;
+    &quot;deviceDetail&quot;: {&#xd;
+      &quot;isDeviceFlashInstalled&quot;: &quot;0&quot;,&#xd;
+      &quot;realIpAddress&quot;: &quot;10.184.4.8&quot;,&#xd;
+      &quot;ipAddressProxy&quot;: &quot;10.184.4.666&quot;,&#xd;
+      &quot;realIpAddressIsp&quot;: &quot;16.132.254.555&quot;,&#xd;
+      &quot;score&quot;: &quot;123&quot;,&#xd;
+      &quot;deviceBrowserCharset&quot;: &quot;qq&quot;,&#xd;
+      &quot;isDeviceFlashEnabled&quot;: &quot;1&quot;,&#xd;
+      &quot;realIpAddressOrganization&quot;: &quot;16.132.254.557&quot;,&#xd;
+      &quot;isDeviceJsEnabled&quot;: &quot;1&quot;,&#xd;
+      &quot;deviceBrowserLanguage&quot;: &quot;EN&quot;,&#xd;
+      &quot;realIpAddressLatitude&quot;: &quot;3321&quot;,&#xd;
+      &quot;isNewDevice&quot;: &quot;1&quot;,&#xd;
+      &quot;realIpAddressCountry&quot;: &quot;10.184.4.123&quot;,&#xd;
+      &quot;realIpAddressSource&quot;: &quot;subscriber&quot;,&#xd;
+      &quot;deviceFirstSeenDate&quot;: &quot;8327465&quot;,&#xd;
+      &quot;deviceType&quot;: &quot;LOH&quot;,&#xd;
+      &quot;deviceOs&quot;: &quot;Android&quot;,&#xd;
+      &quot;ipAddressCountry&quot;: &quot;16.132.254.501&quot;,&#xd;
+      &quot;realIpAddressLongitude&quot;: &quot;3321666&quot;,&#xd;
+      &quot;deviceId&quot;: &quot;efuhgfhoiu54&quot;,&#xd;
+      &quot;ipAddress&quot;: &quot;10.184.4.5&quot;,&#xd;
+      &quot;isDeviceCookieEnabled&quot;: &quot;1&quot;,&#xd;
+      &quot;deviceBrowserType&quot;: &quot;Mobile&quot;,&#xd;
+      &quot;deviceFlashVersion&quot;: &quot;1.2345.1&quot;,&#xd;
+      &quot;recommendation&quot;: &quot;A&quot;,&#xd;
+      &quot;realIpAddressCity&quot;: &quot;16.132.254.68&quot;,&#xd;
+      &quot;ipAddressCity&quot;: &quot;16.132.254.96&quot;,&#xd;
+      &quot;realIpAddressCountryCode&quot;: &quot;16.132.254.556&quot;,&#xd;
+      &quot;trackingNumber&quot;: &quot;280727132641315180&quot;,&#xd;
+      &quot;ipAddressRegion&quot;: &quot;hzhzhzhz&quot;,&#xd;
+      &quot;deviceBrowserVersion&quot;: &quot;39.9&quot;,&#xd;
+      &quot;isDeviceFlashStorageEnabled&quot;: &quot;0&quot;,&#xd;
+      &quot;deviceTimeZone&quot;: &quot;GMT&quot;,&#xd;
+      &quot;realIpAddressRegion&quot;: &quot;16.132.254.558&quot;,&#xd;
+      &quot;ipAddressCountryCode&quot;: &quot;16.132.254.559&quot;&#xd;
+    }&#xd;
+  },&#xd;
+  &quot;itineraries&quot;: [&#xd;
+    {&#xd;
+      &quot;type&quot;: &quot;Hotel&quot;,&#xd;
+      &quot;name&quot;: &quot;Quality Hotel Augustin&quot;,&#xd;
+      &quot;rating&quot;: 0,&#xd;
+      &quot;isOpaqueHotel&quot;: false,&#xd;
+      &quot;isSyncBooking&quot;: false,&#xd;
+      &quot;hotelId&quot;: &quot;28328&quot;,&#xd;
+      &quot;city&quot;: &quot;Trondheim&quot;,&#xd;
+      &quot;country&quot;: &quot;NOR&quot;,&#xd;
+      &quot;postalCode&quot;: &quot;7011&quot;,&#xd;
+      &quot;contactPhoneNumber&quot;: &quot;47--73547000&quot;,&#xd;
+      &quot;contactFaxNumber&quot;: &quot;--4773547001&quot;,&#xd;
+      &quot;rooms&quot;: [&#xd;
+        {&#xd;
+          &quot;checkIn&quot;: &quot;2014-07-18T13:32:00.000Z&quot;,&#xd;
+          &quot;checkOut&quot;: &quot;2014-07-18T13:32:00.000Z&quot;,&#xd;
+          &quot;hotelBookingId&quot;: &quot;11896362&quot;,&#xd;
+          &quot;primaryGuest&quot;: {&#xd;
+            &quot;travelerName&quot;: {&#xd;
+              &quot;givenName&quot;: &quot;IXzIz&quot;,&#xd;
+              &quot;surname&quot;: &quot;sIOmb&quot;&#xd;
+            },&#xd;
+            &quot;telephones&quot;: [&#xd;
+              {&#xd;
+                &quot;countryAccessCode&quot;: &quot;2&quot;,&#xd;
+                &quot;phoneCategoryCode&quot;: &quot;300&quot;,&#xd;
+                &quot;areaCode&quot;: &quot;52&quot;,&#xd;
+                &quot;phoneNumber&quot;: &quot;5464459&quot;,&#xd;
+                &quot;phoneCountryCode&quot;: &quot;440&quot;,&#xd;
+                &quot;isHomePhone&quot;: true&#xd;
+              },&#xd;
+              {&#xd;
+                &quot;countryAccessCode&quot;: &quot;3&quot;,&#xd;
+                &quot;phoneCategoryCode&quot;: &quot;140&quot;,&#xd;
+                &quot;areaCode&quot;: &quot;362&quot;,&#xd;
+                &quot;phoneNumber&quot;: &quot;5389296&quot;,&#xd;
+                &quot;phoneCountryCode&quot;: &quot;979&quot;,&#xd;
+                &quot;isHomePhone&quot;: true&#xd;
+              }&#xd;
+            ],&#xd;
+            &quot;isPrimary&quot;: true,&#xd;
+            &quot;birthDate&quot;: &quot;2014-07-18T13:32:00.000Z&quot;&#xd;
+          }&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;isDirectAgency&quot;: false,&#xd;
+      &quot;price&quot;: {&#xd;
+        &quot;currencyCode&quot;: &quot;BYR&quot;,&#xd;
+        &quot;amount&quot;: 891,&#xd;
+        &quot;usdValue&quot;: 460&#xd;
+      },&#xd;
+      &quot;isRefundable&quot;: true,&#xd;
+      &quot;id&quot;: 1,&#xd;
+      &quot;productType&quot;: &quot;Hotel&quot;,&#xd;
+      &quot;bookingRecordLocator&quot;: &quot;11024727&quot;,&#xd;
+      &quot;expediaScoreDetails&quot;: {&#xd;
+        &quot;score&quot;: 14.397551502418816,&#xd;
+        &quot;percentile&quot;: 99,&#xd;
+        &quot;overThreshold&quot;: true&#xd;
+      },&#xd;
+      &quot;modelAttributes&quot;: {&#xd;
+        &quot;modelHighestIsPayAreaCodeAccountLookupValue&quot;: &quot;1&quot;,&#xd;
+        &quot;modelHighestIsPayAreaCodePrimTravLookupValue&quot;: &quot;1&quot;,&#xd;
+        &quot;modelHighestIsPayGivenNamePrimTravLookupValue&quot;: &quot;1&quot;,&#xd;
+        &quot;modelHighestIsPayStateProvIpLookupValue&quot;: &quot;0&quot;,&#xd;
+        &quot;modelHighestIsPaySurnameEmailNameLookupValue&quot;: &quot;1&quot;,&#xd;
+        &quot;modelPrimTravPhoneRepeatingNbrPctLookupValue&quot;: &quot;0.2&quot;,&#xd;
+        &quot;isAccountEmailTopLevelDomainSameAsModel&quot;: &quot;com&quot;&#xd;
+      },&#xd;
+      &quot;isChange&quot;: false,&#xd;
+      &quot;inventorySourceType&quot;: &quot;Merchant&quot;&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;nudataBehaviorDetails&quot;: {&#xd;
+    &quot;deviceID&quot;: &quot;12345&quot;,&#xd;
+    &quot;accountID&quot;: &quot;1:5628597&quot;,&#xd;
+    &quot;sessionID&quot;: &quot;cb49cc5e-22db-48a0-8dd5-7d02a1e10ab6&quot;,&#xd;
+    &quot;flowId&quot;: &quot;fc-DJQXhr4lTrYSnqlmVKcdWExsnzIx&quot;,&#xd;
+    &quot;placement&quot;: &quot;PURCHASE&quot;,&#xd;
+    &quot;score&quot;: 156,&#xd;
+    &quot;scoreBand&quot;: &quot;YELLOW&quot;,&#xd;
+    &quot;requiredAction&quot;: &quot;PROCEED&quot;,&#xd;
+    &quot;numberOfInterdictionAttempts&quot;: 1&#xd;
+  },&#xd;
+  &quot;orderOperationCorrelationId&quot;: &quot;c0ae69e6-87db-4600-a7d2-37ee025999ab&quot;,&#xd;
+  &quot;payments&quot;: [&#xd;
+    {&#xd;
+      &quot;type&quot;: &quot;Card&quot;,&#xd;
+      &quot;cardType&quot;: &quot;DEBIT&quot;,&#xd;
+      &quot;cardLevel&quot;: &quot;PREPAID&quot;,&#xd;
+      &quot;totalFailureCount&quot;: 0,&#xd;
+      &quot;paymentType&quot;: &quot;CreditCard&quot;,&#xd;
+      &quot;authorizedAmount&quot;: {&#xd;
+        &quot;currencyCode&quot;: &quot;USD&quot;,&#xd;
+        &quot;amount&quot;: &quot;1&quot;,&#xd;
+        &quot;usdValue&quot;: &quot;1&quot;&#xd;
+      },&#xd;
+      &quot;billingName&quot;: {&#xd;
+        &quot;givenName&quot;: &quot;mZweZ&quot;,&#xd;
+        &quot;surname&quot;: &quot;VphQh&quot;&#xd;
+      },&#xd;
+      &quot;billingAddress&quot;: {&#xd;
+        &quot;addressLine1&quot;: &quot;Walley ave 1&quot;,&#xd;
+        &quot;addressLine2&quot;: &quot;12&quot;,&#xd;
+        &quot;city&quot;: &quot;Boston&quot;,&#xd;
+        &quot;stateProv&quot;: &quot;WA&quot;,&#xd;
+        &quot;postalCode&quot;: &quot;61059&quot;,&#xd;
+        &quot;country&quot;: &quot;Uganda&quot;&#xd;
+      },&#xd;
+      &quot;billingTelephones&quot;: [&#xd;
+        {&#xd;
+          &quot;countryAccessCode&quot;: &quot;7&quot;,&#xd;
+          &quot;areaCode&quot;: &quot;860&quot;,&#xd;
+          &quot;phoneNumber&quot;: &quot;5085950&quot;,&#xd;
+          &quot;isHomePhone&quot;: false,&#xd;
+          &quot;isBusinessPhone&quot;: false,&#xd;
+          &quot;isMobilePhone&quot;: false&#xd;
+        },&#xd;
+        {&#xd;
+          &quot;countryAccessCode&quot;: &quot;1&quot;,&#xd;
+          &quot;areaCode&quot;: &quot;264&quot;,&#xd;
+          &quot;phoneNumber&quot;: &quot;2587779&quot;,&#xd;
+          &quot;isHomePhone&quot;: false,&#xd;
+          &quot;isBusinessPhone&quot;: false,&#xd;
+          &quot;isMobilePhone&quot;: false&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;emailAddress&quot;: &quot;user@expedia.com&quot;,&#xd;
+      &quot;brandName&quot;: &quot;Visa&quot;,&#xd;
+      &quot;expirationDate&quot;: &quot;2015-11-12T16:10:37.364Z&quot;,&#xd;
+      &quot;paymentInstrumentId&quot;: &quot;3af004b8-4549-40e0-881d-7bfd94c02a3b&quot;,&#xd;
+      &quot;paymentToken&quot;: &quot;2dd0d7ad-f1db-4647-a102-6414628e523e&quot;,&#xd;
+      &quot;binNumber&quot;: 940024,&#xd;
+      &quot;last4Digits&quot;: 3932&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;scoringId&quot;: 1908511111,&#xd;
+  &quot;scoringIsPotentialFraud&quot;: true,&#xd;
+  &quot;scoringIsDerog&quot;: false,&#xd;
+  &quot;siteInfo&quot;: {&#xd;
+    &quot;tpid&quot;: &quot;99&quot;,&#xd;
+    &quot;clientInputStreamId&quot;: &quot;Expedia:TPID\u003d1&quot;,&#xd;
+    &quot;eapid&quot;: 4,&#xd;
+    &quot;affiliateID&quot;: 4,&#xd;
+    &quot;companyCode&quot;: &quot;10111&quot;,&#xd;
+    &quot;brandName&quot;: &quot;Expedia&quot;,&#xd;
+    &quot;jurisdictionCode&quot;: &quot;USA&quot;,&#xd;
+    &quot;managementUnitCode&quot;: &quot;1010&quot;,&#xd;
+    &quot;bookingSystemId&quot;: &quot;OrbitzAPI&quot;,&#xd;
+    &quot;salesChannel&quot;: &quot;Traditional Browser&quot;,&#xd;
+    &quot;referringPartnerId&quot;: 1,&#xd;
+    &quot;externalClientId&quot;: &quot;3&quot;,&#xd;
+    &quot;platformCode&quot;: &quot;orYhW&quot;&#xd;
+  },&#xd;
+  &quot;slaExpiration&quot;: null,&#xd;
+  &quot;creditCardAuthFailureCnt&quot;: 0,&#xd;
+  &quot;chargebackOutcome&quot;: &quot;CUSTOMER_SERVICE_ISSUES&quot;,&#xd;
+  &quot;decisionDate&quot;: &quot;2014-05-15T02:23:52.000Z&quot;,&#xd;
+  &quot;evidence&quot;: &quot;CARDHOLDER_CONFIRMED&quot;,&#xd;
+  &quot;fraudDecisionSource&quot;: &quot;Accertify&quot;,&#xd;
+  &quot;fraudStatus&quot;: &quot;Fraud&quot;,&#xd;
+  &quot;isChargeBack&quot;: true,&#xd;
+  &quot;recoveryPrice&quot;: {&#xd;
+    &quot;currencyCode&quot;: &quot;USD&quot;,&#xd;
+    &quot;amount&quot;: &quot;0&quot;,&#xd;
+    &quot;usdValue&quot;: &quot;0&quot;&#xd;
+  },&#xd;
+  &quot;resolution&quot;: &quot;FRAUD_TRUE&quot;,&#xd;
+  &quot;sla&quot;: 45,&#xd;
+  &quot;timeInQueue&quot;: 30,&#xd;
+  &quot;failedMoRules&quot;: [&#xd;
+    {&#xd;
+      &quot;id&quot;: &quot;249690794&quot;,&#xd;
+      &quot;name&quot;: &quot;ehjxE&quot;&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;derogs&quot;: [&#xd;
+    {&#xd;
+      &quot;derogType&quot;: &quot;ACID&quot;,&#xd;
+      &quot;indicator&quot;: false,&#xd;
+      &quot;derogDetails&quot;: [&#xd;
+        {&#xd;
+          &quot;type&quot;: &quot;ACID&quot;,&#xd;
+          &quot;value&quot;: &quot;cd7e54d2-def6-4216-b796-861ce62ba63e&quot;&#xd;
+        },&#xd;
+        {&#xd;
+          &quot;type&quot;: &quot;CID&quot;,&#xd;
+          &quot;value&quot;: &quot;964667&quot;&#xd;
+        }&#xd;
+      ]&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;byPasses&quot;: [&#xd;
+    {&#xd;
+      &quot;result&quot;: &quot;ovZxB&quot;,&#xd;
+      &quot;type&quot;: &quot;cc/cid pair - bypass&quot;,&#xd;
+      &quot;byPassDetails&quot;: [&#xd;
+        {&#xd;
+          &quot;type&quot;: &quot;CID&quot;,&#xd;
+          &quot;values&quot;: [&#xd;
+            &quot;4&quot;&#xd;
+          ]&#xd;
+        }&#xd;
+      ]&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;transactionResults&quot;: {&#xd;
+    &quot;ftid&quot;: 5252702521209806339,&#xd;
+    &quot;rulesTripped&quot;: [],&#xd;
+    &quot;totalScore&quot;: 0,&#xd;
+    &quot;recommendation&quot;: &quot;ACCEPT&quot;,&#xd;
+    &quot;remarks&quot;: &quot;&quot;,&#xd;
+    &quot;errors&quot;: [],&#xd;
+    &quot;attributes&quot;: {&#xd;
+      &quot;Expedia_Negative Update Flag&quot;: &quot;yes&quot;&#xd;
+    },&#xd;
+    &quot;iovationAttributes&quot;: {&#xd;
+      &quot;Iovation Real IP Address ISP&quot;: &quot;16.132.254.555&quot;,&#xd;
+      &quot;Iovation Result&quot;: &quot;A&quot;,&#xd;
+      &quot;Iovation Ruleset Score&quot;: &quot;123&quot;,&#xd;
+      &quot;score&quot;: &quot;111&quot;,&#xd;
+      &quot;Iovation Device OS&quot;: &quot;Android&quot;,&#xd;
+      &quot;Iovation Device JavaScript Enabled&quot;: &quot;1&quot;,&#xd;
+      &quot;Iovation Real IP Address Country Code&quot;: &quot;16.132.254.556&quot;,&#xd;
+      &quot;Iovation Real IP Address Organization&quot;: &quot;16.132.254.557&quot;,&#xd;
+      &quot;Iovation Real IP Address Region&quot;: &quot;16.132.254.558&quot;,&#xd;
+      &quot;Iovation Device Type&quot;: &quot;LOH&quot;,&#xd;
+      &quot;Iovation Transaction ID&quot;: &quot;1:5628597&quot;,&#xd;
+      &quot;Iovation Real IP Address Source&quot;: &quot;subscriber&quot;,&#xd;
+      &quot;IP Address&quot;: &quot;10.184.4.5&quot;,&#xd;
+      &quot;IP Country Code&quot;: &quot;16.132.254.559&quot;,&#xd;
+      &quot;Iovation Device Browser Charset&quot;: &quot;qq&quot;,&#xd;
+      &quot;IP Country&quot;: &quot;16.132.254.501&quot;,&#xd;
+      &quot;Iovation Device New&quot;: &quot;1&quot;,&#xd;
+      &quot;Iovation Device Flash Enabled&quot;: &quot;1&quot;,&#xd;
+      &quot;Is Account Email Top Level Domain Same As Model&quot;: &quot;&quot;,&#xd;
+      &quot;Iovation Device First Seen&quot;: &quot;8327465&quot;,&#xd;
+      &quot;Iovation Tracking Number&quot;: &quot;280727132641315180&quot;,&#xd;
+      &quot;Iovation Real IP Address Country&quot;: &quot;10.184.4.123&quot;,&#xd;
+      &quot;Iovation Real IP Address Latitude&quot;: &quot;3321&quot;,&#xd;
+      &quot;Iovation Device Flash Installed&quot;: &quot;0&quot;,&#xd;
+      &quot;recommendation_code&quot;: &quot;ACCEPT&quot;,&#xd;
+      &quot;Iovation Device Browser Version&quot;: &quot;39.9&quot;,&#xd;
+      &quot;Iovation Risk Type 4&quot;: &quot;type3&quot;,&#xd;
+      &quot;Iovation Risk Type 5&quot;: &quot;type4&quot;,&#xd;
+      &quot;Iovation Device Time Zone&quot;: &quot;GMT&quot;,&#xd;
+      &quot;Iovation Risk Type 1&quot;: &quot;type0&quot;,&#xd;
+      &quot;Iovation Risk Type 2&quot;: &quot;type1&quot;,&#xd;
+      &quot;Iovation Risk Type 3&quot;: &quot;type2&quot;,&#xd;
+      &quot;IP City&quot;: &quot;16.132.254.96&quot;,&#xd;
+      &quot;Iovation Real IP Address&quot;: &quot;10.184.4.8&quot;,&#xd;
+      &quot;Iovation Device Cookie Enabled&quot;: &quot;1&quot;,&#xd;
+      &quot;Iovation Device ID&quot;: &quot;efuhgfhoiu54&quot;,&#xd;
+      &quot;Iovation Real IP Address Longitude&quot;: &quot;3321666&quot;,&#xd;
+      &quot;Iovation Device Flash Storage Enabled&quot;: &quot;0&quot;,&#xd;
+      &quot;Iovation Device Browser Lang&quot;: &quot;EN&quot;,&#xd;
+      &quot;IP Proxy&quot;: &quot;10.184.4.666&quot;,&#xd;
+      &quot;Iovation Device Flash Version&quot;: &quot;1.2345.1&quot;,&#xd;
+      &quot;IP Region&quot;: &quot;hzhzhzhz&quot;,&#xd;
+      &quot;Iovation Type 2&quot;: &quot;reason1&quot;,&#xd;
+      &quot;Iovation Type 1&quot;: &quot;reason0&quot;,&#xd;
+      &quot;Iovation Type 4&quot;: &quot;reason3&quot;,&#xd;
+      &quot;Iovation Type 3&quot;: &quot;reason2&quot;,&#xd;
+      &quot;Iovation Type 5&quot;: &quot;reason4&quot;,&#xd;
+      &quot;True Probability Score&quot;: &quot;.12474&quot;,&#xd;
+      &quot;Iovation Device Browser Type&quot;: &quot;Mobile&quot;,&#xd;
+      &quot;Iovation Real IP Address City&quot;: &quot;16.132.254.68&quot;&#xd;
+    }&#xd;
+  },&#xd;
+  &quot;transactionHistory&quot;: [&#xd;
+    {&#xd;
+      &quot;decisionType&quot;: &quot;REAL_TIME_DECISION&quot;,&#xd;
+      &quot;agentId&quot;: 0,&#xd;
+      &quot;decisionDate&quot;: &quot;2014-10-06T15:04:56.594Z&quot;,&#xd;
+      &quot;resolution&quot;: &quot;AUTO_ACCEPT&quot;,&#xd;
+      &quot;chargeback&quot;: true,&#xd;
+      &quot;fraudStatus&quot;: &quot;NonFraud&quot;,&#xd;
+      &quot;createDate&quot;: &quot;2014-10-06T15:04:56.596Z&quot;&#xd;
+    },&#xd;
+    {&#xd;
+      &quot;decisionType&quot;: &quot;ANALYST_DECISION&quot;,&#xd;
+      &quot;agentLogon&quot;: &quot;vrao&quot;,&#xd;
+      &quot;agentId&quot;: 0,&#xd;
+      &quot;decisionDate&quot;: &quot;2014-05-15T02:23:52.000Z&quot;,&#xd;
+      &quot;resolution&quot;: &quot;FRAUD_TRUE&quot;,&#xd;
+      &quot;evidence&quot;: &quot;CARDHOLDER_CONFIRMED&quot;,&#xd;
+      &quot;chargeback&quot;: true,&#xd;
+      &quot;chargebackOutcome&quot;: &quot;CUSTOMER_SERVICE_ISSUES&quot;,&#xd;
+      &quot;fraudStatus&quot;: &quot;Fraud&quot;,&#xd;
+      &quot;createDate&quot;: &quot;2014-10-06T15:05:01.191Z&quot;&#xd;
+    }&#xd;
+  ],&#xd;
+  &quot;queueToAccertify&quot;: false&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">127.0.0.1</stringProp>
+          <stringProp name="HTTPSampler.port">8000</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -74,6 +74,8 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
         
         if (msg instanceof HttpRequest)
         {
+            if (contentBuf == null)
+                contentBuf = Unpooled.buffer();
             postmap = new TreeMap<String, List<String>>();
             req = (HttpRequest) msg;
             RouteResult<String> routeResult = router.route(req.getMethod(), req.getUri());
@@ -98,6 +100,11 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
             if (httpContent instanceof LastHttpContent) 
             {
                 HttpResponse res = createResponse(req, router);
+                if (contentBuf != null)
+                {
+                    contentBuf.clear();
+                    contentBuf = null;
+                }
                 flushResponse(ctx, req, res);
             }
         }
@@ -160,11 +167,16 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
         content.append("target: " + routeResult.target() + "\n");
         content.append("pathParams: " + routeResult.pathParams() + "\n");
         content.append("queryParams: " + routeResult.queryParams() + "\n\n");
-        content.append("allowedMethods: " + router.allowedMethods(req.getUri()));
-        byte[] bytes = new byte[contentBuf.readableBytes()];
-        contentBuf.readBytes(bytes);
-        content.append("content: \n\tpost params: " + postmap + "\n\tbinary:\n" + new String(bytes));//TODO: add content from HttpRouterServerHandler.content
-
+        //content.append("allowedMethods: " + router.allowedMethods(req.getUri()));
+        if (contentBuf != null)
+        {
+//            System.out.println(contentBuf.readableBytes());
+//            byte[] bytes = new byte[contentBuf.readableBytes()];//TODO: fail
+//            contentBuf.readBytes(bytes);
+//            content.append("content: \n\tpost params: " + postmap + "\n\tbinary:\n" + new String(bytes));//TODO: add content from HttpRouterServerHandler.content
+//            bytes = null;
+        }
+        
         FullHttpResponse res = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
                 Unpooled.copiedBuffer(content.toString(), CharsetUtil.UTF_8)

@@ -58,7 +58,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
         {
             final HttpRequest req = (HttpRequest) msg;
             
-            methodFacade.process(req);
+            //methodFacade.process(req);
 
             if (HttpHeaders.is100ContinueExpected(req)) 
             {

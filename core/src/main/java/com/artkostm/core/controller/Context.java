@@ -1,6 +1,9 @@
 package com.artkostm.core.controller;
 
+import io.netty.handler.codec.http.cookie.Cookie;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.artkostm.core.controller.session.Session;
@@ -28,16 +31,16 @@ public class Context
     //example: /books/:id = /books/23 -> pathParams = ["id":"23"]
     private Map<String, Object> pathParams;
     //example: /books/23?format=pdf&edition=2 -> ["format":"pdf", "edition":"2"]
-    private Map<String, Object> queryParams;
-    private Map<String, Object> cookies;
+    private Map<String, List<String>> queryParams;
+    private Map<String, List<Cookie>> cookies;
     private Map<String, Object> cookiesForClient;
     
     
     public Context()
     {
         pathParams = new HashMap<String, Object>();
-        queryParams = new HashMap<String, Object>();
-        cookies = new HashMap<String, Object>();
+        queryParams = new HashMap<String, List<String>>();
+        cookies = new HashMap<String, List<Cookie>>();
         cookiesForClient = new HashMap<String, Object>();
         current.set(this);
     }
@@ -81,22 +84,22 @@ public class Context
         this.pathParams = pathParams;
     }
 
-    public Map<String, Object> getQueryParams()
+    public Map<String, List<String>> getQueryParams()
     {
         return queryParams;
     }
 
-    public void setQueryParams(final Map<String, Object> queryParams)
+    public void setQueryParams(final Map<String, List<String>> queryParams)
     {
         this.queryParams = queryParams;
     }
 
-    public Map<String, Object> getCookies()
+    public Map<String, List<Cookie>> getCookies()
     {
         return cookies;
     }
 
-    public void setCookies(final Map<String, Object> cookies)
+    public void setCookies(final Map<String, List<Cookie>> cookies)
     {
         this.cookies = cookies;
     }
