@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
+import com.artkostm.core.controller.Context;
 import com.artkostm.core.network.handler.content.ContentTypeResolver;
 import com.artkostm.core.network.handler.content.SimpleContentTypeResolver;
 import com.artkostm.core.network.handler.method.processor.HttpMethodProcessor;
@@ -78,9 +80,12 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
         {
             if (contentBuf == null)
                 contentBuf = Unpooled.buffer();
+            Context context = new Context();
             postmap = new TreeMap<String, List<String>>();
             req = (HttpRequest) msg;
             RouteResult<String> routeResult = router.route(req.getMethod(), req.getUri());
+            context.addCookie("id", routeResult.param("id"));
+            context.addCookie(UUID.randomUUID().toString(), routeResult.queryParam("name"));
             if (req.getMethod() == HttpMethod.GET)
             {
                 flag = true;
@@ -108,6 +113,7 @@ public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObj
                 contentBuf.clear();
                 contentBuf = null;
             }
+            System.out.println(Context.current());
             flushResponse(ctx, req, res);
             return;
         }

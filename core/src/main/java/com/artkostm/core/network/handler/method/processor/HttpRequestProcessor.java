@@ -20,14 +20,14 @@ public class HttpRequestProcessor implements HttpMethodProcessor<Context>
     @Override
     public Context process(final HttpObject request, final Context context)
     {
-        if (!(request instanceof HttpRequest))
+        if (request instanceof HttpRequest)
         {
-            return context;
+            final HttpRequest httpRequest = (HttpRequest) request;
+            final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(httpRequest.getUri());
+            context.getQueryParams().putAll(queryStringDecoder.parameters());
+            context.getCookies().putAll(readCookie(httpRequest));
         }
-        final HttpRequest httpRequest = (HttpRequest) request;
-        final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(httpRequest.getUri());
-        context.getQueryParams().putAll(queryStringDecoder.parameters());
-        context.getCookies().putAll(readCookie(httpRequest));
+        
         return context;
     }
     

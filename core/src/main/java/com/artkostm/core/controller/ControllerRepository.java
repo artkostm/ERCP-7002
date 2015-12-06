@@ -28,7 +28,7 @@ public class ControllerRepository
         {
             try
             {
-                final Controller newController = Controller.class.getConstructor().newInstance();
+                final Controller newController = (Controller) controllerClass.getConstructor().newInstance();
                 repository.put((Class<? extends Controller>)controllerClass, newController);
                 return true;
             }

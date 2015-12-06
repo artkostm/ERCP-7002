@@ -23,4 +23,9 @@ public class SessionService implements Service
     {
         return ServiceManager.SESSION_SERVICE;
     }
+
+    public SessionHandler getSessionHandler() 
+    {
+        return sessionHandler;
+    }
 }

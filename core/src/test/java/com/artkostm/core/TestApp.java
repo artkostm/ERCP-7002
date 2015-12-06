@@ -1,17 +1,14 @@
 package com.artkostm.core;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
-
 import com.artkostm.configurator.model.Metadata;
 
-public class TestApp extends WebApplicationAdaptor
+public class TestApp extends WebApplication
 {
     @Override
     public Metadata configure()
     {
-        router().GET("/", Collections.<Method>emptyList());
-        return super.configure();
+        //router().GET("/", Collections.<Method>emptyList());
+        return configurator().createConfiguration("classpath:configuration.gr");
     }
     
     public static void main(String[] args)

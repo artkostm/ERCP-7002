@@ -14,7 +14,12 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
+import java.lang.reflect.Method;
 import java.net.SocketAddress;
+import java.util.List;
+
+import com.artkostm.core.controller.session.SessionService;
+import com.artkostm.core.network.router.Router;
 
 public class HttpServer implements Runnable
 {
@@ -23,10 +28,15 @@ public class HttpServer implements Runnable
     static final boolean SSL = System.getProperty("ssl") != null;
     
     private final SocketAddress address;
+    private final Router<List<Method>> router;
+    private final SessionService sessionService;
     
-    public HttpServer(final SocketAddress addr)
+    public HttpServer(final SocketAddress addr, final Router<List<Method>> router, final SessionService sessionService)
     {
         address = addr;
+        this.router = router;
+        this.sessionService = sessionService;
+        LOG.info("\n" + router.toString());
     }
     
     @Override
@@ -45,9 +55,6 @@ public class HttpServer implements Runnable
                 LOG.warn("Cannot instantient SSL context", e);
             }
             
-        } else 
-        {
-            sslCtx = null;
         }
         
         final EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -58,8 +65,8 @@ public class HttpServer implements Runnable
             b.option(ChannelOption.SO_BACKLOG, 1024);
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpServerInitializer(sslCtx));
+                    //.handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new HttpServerInitializer(sslCtx, router, sessionService));
             final Channel ch = b.bind(address).sync().channel();
             ch.closeFuture().sync();
         }

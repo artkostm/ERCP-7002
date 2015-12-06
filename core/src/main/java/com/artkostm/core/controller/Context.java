@@ -1,5 +1,6 @@
 package com.artkostm.core.controller;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.cookie.Cookie;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.artkostm.core.controller.session.Session;
+import com.artkostm.core.controller.session.SessionHandler;
 
 public class Context 
 {
@@ -29,19 +31,31 @@ public class Context
     
     private Session session;
     //example: /books/:id = /books/23 -> pathParams = ["id":"23"]
-    private Map<String, Object> pathParams;
+    private Map<String, String> pathParams;
     //example: /books/23?format=pdf&edition=2 -> ["format":"pdf", "edition":"2"]
     private Map<String, List<String>> queryParams;
     private Map<String, List<Cookie>> cookies;
     private Map<String, Object> cookiesForClient;
+    private ByteBuf content;
+    private SessionHandler handler;
     
     
     public Context()
     {
-        pathParams = new HashMap<String, Object>();
+        pathParams = new HashMap<String, String>();
         queryParams = new HashMap<String, List<String>>();
         cookies = new HashMap<String, List<Cookie>>();
         cookiesForClient = new HashMap<String, Object>();
+        current.set(this);
+    }
+    
+    public Context(final SessionHandler sessionHandler)
+    {
+        pathParams = new HashMap<String, String>();
+        queryParams = new HashMap<String, List<String>>();
+        cookies = new HashMap<String, List<Cookie>>();
+        cookiesForClient = new HashMap<String, Object>();
+        handler = sessionHandler;
         current.set(this);
     }
     
@@ -62,9 +76,9 @@ public class Context
 
     public Session getSession()
     {
-        if (session == null) 
+        if (handler!= null && session == null) 
         {
-            //getSessionManager().process(this);
+            handler.process(this);
         }
         return session;
     }
@@ -74,12 +88,12 @@ public class Context
         this.session = session;
     }
 
-    public Map<String, Object> getPathParams()
+    public Map<String, String> getPathParams()
     {
         return pathParams;
     }
 
-    public void setPathParams(final Map<String, Object> pathParams)
+    public void setPathParams(final Map<String, String> pathParams)
     {
         this.pathParams = pathParams;
     }
@@ -112,5 +126,23 @@ public class Context
     public void setCookiesForClient(final Map<String, Object> cookiesForClient)
     {
         this.cookiesForClient = cookiesForClient;
+    }
+    
+    public ByteBuf getContent() 
+    {
+        return content;
+    }
+
+    public void setContent(final ByteBuf content) 
+    {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() 
+    {
+        return "Context [session=" + session + ", pathParams=" + pathParams
+                + ", queryParams=" + queryParams + ", cookies=" + cookies
+                + ", cookiesForClient=" + cookiesForClient + "]";
     }
 }
