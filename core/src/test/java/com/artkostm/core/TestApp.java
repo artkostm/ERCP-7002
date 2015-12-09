@@ -7,7 +7,6 @@ public class TestApp extends WebApplication
     @Override
     public Metadata configure()
     {
-        //router().GET("/", Collections.<Method>emptyList());
         return configurator().createConfiguration("classpath:configuration.gr");
     }
     

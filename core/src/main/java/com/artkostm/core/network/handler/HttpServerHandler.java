@@ -35,7 +35,6 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
-import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.netty.handler.stream.ChunkedStream;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
@@ -173,7 +172,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
         response.headers().set(HttpHeaders.Names.EXPIRES, "0");
         response.headers().set(HttpHeaders.Names.SERVER, "My Web Server/0.0.1");
         //TODO: set cookies
-        response.headers().set(HttpHeaders.Names.SET_COOKIE, ServerCookieEncoder.STRICT.encode(Context.current().getCookies().get("MYSESSIONID")));
+        //response.headers().set(HttpHeaders.Names.SET_COOKIE, ServerCookieEncoder.STRICT.encode(Context.current().getCookies().get("MYSESSIONID")));
         if (result.getContentLength() >= 0) 
         {
             response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, result.getContentLength());

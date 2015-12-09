@@ -1,14 +1,17 @@
 package com.artkostm.core.controller;
 
+import java.util.Map;
+
 import com.artkostm.core.controller.session.Session;
 import com.artkostm.template.TemplateCompiller;
 
 public abstract class Controller extends Results
 {
-    protected static String view(final String viewName, final Object data)
+    protected static String view(final String viewName, final Map<String, Object> data)
     {
-        //TODO:add template compilation 
-        return null;
+        data.put("context", context());
+        final String page = TemplateCompiller.compileTemplate(viewName, data);
+        return page;
     }
     
     public static String view(final String viewName)

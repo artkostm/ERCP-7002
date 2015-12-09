@@ -3,6 +3,6 @@ directoryForTemplateLoading = 'src/test/resources/pages'
 log "Directory for template loading: $directoryForTemplateLoading"
 port = 8080
 log "Port: $port"
-post '/some/url/path', 'com.artkostm.core.controller.ControllerForTest.index'
-get '/', 'com.artkostm.core.controller.ControllerForTest.index'
+post '/some/url/path', 'com.artkostm.core.controller.ControllerForTest.post'
+get '/:name', 'com.artkostm.core.controller.ControllerForTest.index'
 
