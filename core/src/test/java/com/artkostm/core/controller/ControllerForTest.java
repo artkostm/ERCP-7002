@@ -3,6 +3,8 @@ package com.artkostm.core.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.artkostm.core.controller.converter.Json;
+
 public class ControllerForTest extends Controller
 {
     public static Result index()
@@ -15,7 +17,8 @@ public class ControllerForTest extends Controller
     }
     
     public static Result post()
-    {        
+    {
+        System.out.println(Json.parse(context().getContent()));
         return ok("{\"message\":\"hello\"}").asJson();
     }
 }

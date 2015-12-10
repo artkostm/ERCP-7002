@@ -19,6 +19,7 @@ import io.netty.handler.codec.http.HttpVersion;
 public class BasicAuthenticationHandler extends SimpleChannelInboundHandler<HttpObject> implements Authenticator
 {
     private final Authenticator authenticator;
+    private boolean authenticated;
     
     public BasicAuthenticationHandler(final Authenticator authenticator)
     {
@@ -35,14 +36,14 @@ public class BasicAuthenticationHandler extends SimpleChannelInboundHandler<Http
             final Credentials credentials = new Credentials(auth);
             if (authenticator == null)
             {
-                return !authentificate(credentials);
+                authenticated = authenticate(credentials);
             }
             else
             {
-                authenticator.authentificate(credentials);
+                authenticated = authenticator.authenticate(credentials);
             }
         }
-        return true;
+        return !authenticated;
     }
     
     @Override
@@ -54,8 +55,13 @@ public class BasicAuthenticationHandler extends SimpleChannelInboundHandler<Http
     }
 
     @Override
-    public boolean authentificate(final Credentials cr)
+    public boolean authenticate(final Credentials cr)
     {
+        if (cr == null || cr.getAuth() == null || cr.getAuth().isEmpty())
+        {
+            return false;
+        }
+        
         return true;
     }
 }

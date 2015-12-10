@@ -42,6 +42,26 @@ public class HttpContentReader
         return true;
     }
     
+    public static byte[] read(final ByteBuf buf)
+    {
+        byte[] bytes;
+        @SuppressWarnings("unused")
+        int offset;
+        final int length = buf.readableBytes();
+
+        if (buf.hasArray()) 
+        {
+            bytes = buf.array();
+            offset = buf.arrayOffset();
+        } else 
+        {
+            bytes = new byte[length];
+            buf.getBytes(buf.readerIndex(), bytes);
+            offset = 0;
+        }
+        return bytes;
+    }
+    
     private static void readHttpDataChunkByChunk(final HttpPostRequestDecoder decoder, 
             final Map<String, List<String>> attributesMap) 
     {

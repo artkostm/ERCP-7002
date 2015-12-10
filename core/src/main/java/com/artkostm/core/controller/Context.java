@@ -1,8 +1,8 @@
 package com.artkostm.core.controller;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.cookie.Cookie;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class Context
     private Map<String, List<String>> queryParams;
     private Map<String, List<Cookie>> cookies;
     private Map<String, Object> cookiesForClient;
-    private ByteBuf content;
+    private InputStream content;
     private SessionHandler handler;
     
     
@@ -128,12 +128,12 @@ public class Context
         this.cookiesForClient = cookiesForClient;
     }
     
-    public ByteBuf getContent() 
+    public InputStream getContent() 
     {
         return content;
     }
 
-    public void setContent(final ByteBuf content) 
+    public void setContent(final InputStream content) 
     {
         this.content = content;
     }
@@ -141,7 +141,7 @@ public class Context
     @Override
     public String toString() 
     {
-        return "Context [session=" + session + ", pathParams=" + pathParams
+        return "Context [pathParams=" + pathParams
                 + ", queryParams=" + queryParams + ", cookies=" + cookies
                 + ", cookiesForClient=" + cookiesForClient + "]";
     }

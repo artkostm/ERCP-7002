@@ -18,6 +18,7 @@ import com.artkostm.core.network.router.RouteResult;
 import com.artkostm.core.network.router.Router;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -159,6 +160,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
         routeResult = router.route(req.getMethod(), req.getUri());
         Context.current().setPathParams(routeResult.pathParams());
         //TODO: set content
+        //Context.current().setContent(new ByteBufInputStream(contentBuffer));
         final Result result = ControllerMethodInvoker.invoke(routeResult.target());
         final HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, 
                 result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.OK, true);

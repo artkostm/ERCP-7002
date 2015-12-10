@@ -23,6 +23,7 @@ public class RoutingFilterHandler extends SimpleChannelInboundHandler<HttpObject
     private final Router<List<Method>> router;
     public static final AttributeKey<RouteResult<?>> routeResult = AttributeKey.valueOf("routeresult");
     private RouteResult<List<Method>> result;
+    private boolean not_found;
     
     public RoutingFilterHandler(final Router<List<Method>> router)
     {
@@ -46,10 +47,10 @@ public class RoutingFilterHandler extends SimpleChannelInboundHandler<HttpObject
             result = router.route(request.getMethod(), request.getUri());
             if (result == null || result.target() == null)
             {
-                return true;//not found
+                not_found = true;//not found
             }
         }
-        return false;//message will be passed to the next Handler from the pipeline
+        return not_found;//message will be passed to the next Handler from the pipeline
     }
 
     @Override
