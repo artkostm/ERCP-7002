@@ -44,20 +44,12 @@ public class HttpContentReader
     
     public static byte[] read(final ByteBuf buf)
     {
-        byte[] bytes;
-        @SuppressWarnings("unused")
-        int offset;
-        final int length = buf.readableBytes();
-
-        if (buf.hasArray()) 
+        final byte[] bytes = new byte[buf.readableBytes() > 0 ? buf.readableBytes() : 0];
+        int i = 0;
+        while (buf.isReadable()) 
         {
-            bytes = buf.array();
-            offset = buf.arrayOffset();
-        } else 
-        {
-            bytes = new byte[length];
-            buf.getBytes(buf.readerIndex(), bytes);
-            offset = 0;
+            bytes[i] = buf.readByte();
+            i++;
         }
         return bytes;
     }

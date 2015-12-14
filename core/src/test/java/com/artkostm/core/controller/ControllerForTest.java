@@ -18,7 +18,9 @@ public class ControllerForTest extends Controller
     
     public static Result post()
     {
-        System.out.println(Json.parse(context().getContent()));
-        return ok("{\"message\":\"hello\"}").asJson();
+        final TestObject object = new TestObject();
+        object.setMessage("[From server]" + new String(context().getContent()));
+        object.setNum(10);
+        return ok(Json.toJson(object).toString()).asJson();
     }
 }

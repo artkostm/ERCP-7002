@@ -7,13 +7,20 @@
 			function sendData()
 			{
 				var postData = $("#postData").val();
-				$.post("/some/url/path",
-					postData,
-					onAjaxSuccess);
+				$.ajax(
+				{
+			        type: "POST",
+			        url: '/some/url/path',
+			        dataType: 'json',
+			        async: false,
+			        contentType: 'application/json',
+			        data: postData,
+			        success: onAjaxSuccess
+			    });
 			}
 		    function onAjaxSuccess(data)
 		    {
-		    	$("#result").text('json ' + data + ' : {"message":"' + data.message + '"}');
+		    	$("#result").text(data + ' : ' + data.message);
 			}
 		</script>
 	</head>
@@ -44,7 +51,6 @@
 			  		<div class="panel-body" id="result">
 			  		</div>
 			  </div>
-			  <p><a class="btn btn-primary btn-lg" role="button">Next</a></p>
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

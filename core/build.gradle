@@ -24,5 +24,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.2'
     compile 'io.netty:netty-all:4.0.32.Final'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    compile 'org.elasticsearch:elasticsearch:2.1.0'
+    compile 'org.apache.lucene:lucene-core:5.3.1'
     testCompile 'junit:junit:4.12'
 }
