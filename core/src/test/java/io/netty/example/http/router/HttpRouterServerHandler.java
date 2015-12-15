@@ -25,8 +25,6 @@ import java.util.UUID;
 import com.artkostm.core.controller.Context;
 import com.artkostm.core.network.handler.content.ContentTypeResolver;
 import com.artkostm.core.network.handler.content.SimpleContentTypeResolver;
-import com.artkostm.core.network.handler.method.processor.HttpMethodProcessor;
-import com.artkostm.core.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.core.network.router.RouteResult;
 import com.artkostm.core.network.router.Router;
 
@@ -59,13 +57,11 @@ import io.netty.util.CharsetUtil;
 public class HttpRouterServerHandler extends SimpleChannelInboundHandler<HttpObject> 
 {
     private final Router<String> router;
-    @SuppressWarnings("unused")
-    private final HttpMethodProcessor processor;
+
     private boolean flag;
 
     public HttpRouterServerHandler(Router<String> router) {
         this.router = router;
-        processor = new HttpMethodProcessorFacade();
         contentBuf = Unpooled.buffer();
     }
     
