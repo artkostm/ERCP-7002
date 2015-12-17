@@ -79,7 +79,7 @@ public class Indexer
         {
             analyzer = new StandardAnalyzer();
             final IndexWriterConfig config = new IndexWriterConfig(analyzer);
-            directory = FSDirectory.open(new File("C:\\Users\\Artsiom_Chuiko\\Desktop\\index").toPath());
+            directory = FSDirectory.open(new File("src/test/resources/index").toPath());
             final IndexWriter writer = new IndexWriter(directory, config);
             return writer;
         }
