@@ -28,12 +28,18 @@ public abstract class WebApplication implements Application
     @Inject
     private HttpServer server;
     
+    private boolean running;
+    
     @Override
     public void run()
     {
-        TemplateCompiller.configure(configurator.getDirectoryForTemplateLoading());
-        RequestMapper.map(routerProvider.get(), metadata);
-        server.run();
+        if (!running)
+        {
+            TemplateCompiller.configure(configurator.getDirectoryForTemplateLoading());
+            RequestMapper.map(routerProvider.get(), metadata);
+            server.run();
+            running = true;
+        }
     }
     
     @Override
