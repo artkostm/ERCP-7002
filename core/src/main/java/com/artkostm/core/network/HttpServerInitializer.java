@@ -1,12 +1,10 @@
 package com.artkostm.core.network;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import com.artkostm.core.controller.session.SessionService;
 import com.artkostm.core.network.handler.HttpServerHandler;
 import com.artkostm.core.network.handler.RoutingFilterHandler;
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.network.router.MethodRouterProvider;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -16,18 +14,14 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+@Singleton
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
 {
-    private final SslContext sslCtx;
-    private final Router<List<Method>> router;
-    private final SessionService sessionService;
-
-    public HttpServerInitializer(final SslContext sslCtx, final Router<List<Method>> router, final SessionService sessionService) 
-    {
-        this.sslCtx = sslCtx;
-        this.router = router;
-        this.sessionService = sessionService;
-    }
+    @Inject
+    private SslContext sslCtx;
+    
+    @Inject
+    private MethodRouterProvider routerProvider;
     
     @Override
     protected void initChannel(SocketChannel ch) throws Exception
@@ -42,8 +36,13 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
         p.addLast(new HttpResponseEncoder());
         p.addLast(new ChunkedWriteHandler());
         //p.addLast("authentication", null);
-        p.addLast("routingfilter", new RoutingFilterHandler(router));
-        p.addLast("basic", new HttpServerHandler(router, sessionService));
+        p.addLast("routingfilter", new RoutingFilterHandler(routerProvider.get()));
+        p.addLast("basic", new HttpServerHandler(routerProvider.get()));
         //p.addLast(new SecondHttpServerHandler());
+    }
+    
+    public void setSslContext(final SslContext sslCtx)
+    {
+        this.sslCtx = sslCtx;
     }
 }

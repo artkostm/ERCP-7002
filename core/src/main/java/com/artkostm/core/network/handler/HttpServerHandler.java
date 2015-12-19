@@ -8,7 +8,6 @@ import java.util.Map;
 import com.artkostm.core.controller.Context;
 import com.artkostm.core.controller.ControllerMethodInvoker;
 import com.artkostm.core.controller.Result;
-import com.artkostm.core.controller.session.SessionService;
 import com.artkostm.core.network.handler.content.BodyConsumer;
 import com.artkostm.core.network.handler.content.SimpleContentTypeResolver;
 import com.artkostm.core.network.handler.method.processor.HttpMethodProcessor;
@@ -48,15 +47,15 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
     private final Router<List<Method>> router;
     private RouteResult<List<Method>> routeResult;
     private boolean decoded;
-    private final SessionService sessionService;
+//    private final SessionService sessionService;
     
-    public HttpServerHandler(final Router<List<Method>> router, final SessionService sessionService)
+    public HttpServerHandler(final Router<List<Method>> router)
     {
         methodFacade = new HttpMethodProcessorFacade();
         contentBuffer = Unpooled.buffer();
         contentTypeResolver = new SimpleContentTypeResolver();
         this.router = router;
-        this.sessionService = sessionService;
+//        this.sessionService = sessionService;
     }
     
     @Override
@@ -64,7 +63,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
     {
         if (msg instanceof HttpRequest) 
         {
-            final Context context = new Context(sessionService.getSessionHandler());
+            final Context context = new Context();
             attributesMap = new HashMap<String, List<String>>();
             req = (HttpRequest) msg;
             methodFacade.process(msg, context);
