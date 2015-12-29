@@ -1,6 +1,5 @@
 package com.artkostm.configurator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,8 @@ import com.artkostm.configurator.util.ConfigLogger;
 
 public class Configurator 
 {
+    public static final String EMPTY_CONFIGURATION = "";
+    
     private String directoryForTemplateLoading;
     private int port;
     
@@ -34,14 +35,15 @@ public class Configurator
         cc.setScriptBaseClass(DelegatingScript.class.getName());
         final GroovyShell shell = new GroovyShell(Configurator.class.getClassLoader(), sharedData, cc);
         String script = null;
-        try 
+        try
         {
             script = ScriptUtils.getScript(configFilePath);
-        } catch (IOException e) 
+        } 
+        catch (Exception e) 
         {
             e.printStackTrace();//TODO: add logging here
         }
-        DelegatingScript delegating = (DelegatingScript) shell.parse(script);
+        DelegatingScript delegating = (DelegatingScript) shell.parse(script == null ? EMPTY_CONFIGURATION : script);
         delegating.setDelegate(this);
         delegating.run();
         final List<RouteConfig> configs = new ArrayList<RouteConfig>();

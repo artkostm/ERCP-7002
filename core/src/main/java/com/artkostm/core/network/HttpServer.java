@@ -16,6 +16,7 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.net.SocketAddress;
 
+import com.artkostm.core.guice.annotation.Config.Ssl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -24,7 +25,8 @@ public class HttpServer implements Runnable
 {
     private static final InternalLogger LOG = InternalLoggerFactory.getInstance(HttpServer.class);
     
-    static final boolean SSL = System.getProperty("ssl") != null;
+    @Ssl
+    private boolean SSL;
     
     @Inject
     private SocketAddress address;

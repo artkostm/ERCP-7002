@@ -1,19 +1,14 @@
 package com.artkostm.core.lucene;
 
-import com.artkostm.configurator.model.Metadata;
-import com.artkostm.core.WebApplication;
+import com.artkostm.core.ApplicationBootstrap;
+import com.artkostm.core.WebApplicationAdapter;
 
-public class LuceneApp extends WebApplication
+public class LuceneApp extends WebApplicationAdapter
 {
-
-    @Override
-    public Metadata configure() 
-    {
-        return configurator().createConfiguration("classpath:luceneapp.gr");
-    }
-
+    private static final String CONFIG_PATH = "classpath:luceneapp.gr";
+    
     public static void main(String[] args)
     {
-        new LuceneApp().run();
+        ApplicationBootstrap.run(LuceneApp.class, CONFIG_PATH);
     }
 }

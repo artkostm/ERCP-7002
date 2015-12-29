@@ -33,7 +33,7 @@ public class Main
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
             System.out.println(d.get("filename") + "----------------------------" + d.get("filepath"));
-            printContent(d.get("filepath"));
+            //printContent(d.get("filepath"));
         }
     }
     

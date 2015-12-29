@@ -1,17 +1,11 @@
 package com.artkostm.core;
 
-import com.artkostm.configurator.model.Metadata;
-
-public class TestApp extends WebApplication
-{
-    @Override
-    public Metadata configure()
-    {
-        return configurator().createConfiguration("classpath:configuration.gr");
-    }
+public class TestApp extends WebApplicationAdapter
+{     
+    private static final String CONFIG_PATH = "classpath:configuration.gr";
     
     public static void main(String[] args)
     {
-        new TestApp().run();
+        ApplicationBootstrap.run(TestApp.class, CONFIG_PATH);
     }
 }

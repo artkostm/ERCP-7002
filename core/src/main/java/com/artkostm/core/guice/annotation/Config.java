@@ -26,4 +26,10 @@ public @interface Config
     @BindingAnnotation
     public static @interface Host
     {}
+    
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.PARAMETER})
+    @BindingAnnotation
+    public static @interface Ssl
+    {}
 }

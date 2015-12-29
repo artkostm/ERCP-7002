@@ -18,6 +18,12 @@ public class Configuration extends ConfigurationModule
         metadata = configurator.createConfiguration(configFilePath);
     }
     
+    public Configuration()
+    {
+        configurator = new Configurator();
+        metadata = configurator.createConfiguration(null);
+    }
+    
     @Override
     protected Integer port()
     {

@@ -17,14 +17,13 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 @Singleton
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
 {
-    @Inject
     private SslContext sslCtx;
     
     @Inject
     private MethodRouterProvider routerProvider;
     
     @Override
-    protected void initChannel(SocketChannel ch) throws Exception
+    protected void initChannel(final SocketChannel ch) throws Exception
     {
         final ChannelPipeline p = ch.pipeline();
         if (sslCtx != null) 
