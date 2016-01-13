@@ -11,7 +11,7 @@ import com.artkostm.core.network.router.Router;
 
 public interface Application extends Runnable, ApplicationConstants
 {
-    Metadata configure();
+    void configure();
     Router<List<Method>> router();
     Configurator configurator();
     

@@ -23,6 +23,5 @@ public class Main
         final TestCl c2 = injector.getInstance(TestCl.class);
         System.out.println(c2);
         System.out.println("Metadata: " + c2.Metadata());
-        
     }
 }
