@@ -18,14 +18,16 @@ public class StringProcessor implements Processor<String>
     {
         if (router == null)
         {
-            router = actor.context().actorOf(new SmallestMailboxPool(100).props(Props.create(Worker.class)), "workers");
+            router = actor.context().actorOf(new SmallestMailboxPool(5).props(Props.create(Worker.class)), "workers");
         }
         
         final long number = Long.parseLong(obj);
         System.out.println("Number is " + number);
-        for (long i = 2; i <= number/2; i++)
+        final long step = number / 100;
+        for (long i = 2; i <= number/2; i = i + step)
         {
-            router.tell(new Job(number, i, i+1, Main.counter()), actor.self());
+            router.tell(new Job(number, i, i+step, Main.counter()), actor.self());
         }
+        actor.sender().tell("Good!", actor.self());
     }
 }

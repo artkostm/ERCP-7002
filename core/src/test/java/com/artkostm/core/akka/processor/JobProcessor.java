@@ -1,7 +1,6 @@
 package com.artkostm.core.akka.processor;
 
 import akka.actor.Actor;
-import akka.event.Logging;
 
 import com.artkostm.core.akka.model.Job;
 import com.artkostm.core.akka.model.JobResult;
