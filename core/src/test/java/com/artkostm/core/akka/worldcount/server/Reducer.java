@@ -16,7 +16,8 @@ public class Reducer extends AbstractActor
     @SuppressWarnings("unchecked")
     public Reducer(final ActorRef aggregator)
     {
-        receive(ReceiveBuilder.match(List.class, list -> aggregator.tell(reduce(list), self())).build());
+        receive(ReceiveBuilder.match(List.class, list -> aggregator.tell(reduce(list), self()))
+            .matchAny(this::unhandled).build());
     }
     
     private NavigableMap<String, Integer> reduce(List<Word> list) 

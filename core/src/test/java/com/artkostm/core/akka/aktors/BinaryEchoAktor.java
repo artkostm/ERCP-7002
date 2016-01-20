@@ -8,7 +8,7 @@ public class BinaryEchoAktor extends AbstractActor
     public BinaryEchoAktor()
     {
         receive(
-            ReceiveBuilder.match(String.class, System.out::println)
+            ReceiveBuilder.match(String.class, msg -> System.out.println("Actor: " + msg))
                 .match(Long.class, this::process)
                 .match(Integer.class, this::process)
                 .build()

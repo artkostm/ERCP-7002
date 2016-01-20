@@ -20,8 +20,10 @@ public class Aggregator extends AbstractActor
                 {
                     //getSender().tell(finalReducedMap.toString());
                     System.out.println(finalReducedMap.toString());
+                    finalReducedMap.clear();
                 }
-            }).build());
+            })
+            .matchAny(this::unhandled).build());
     }
     
     private void aggregateInMemoryReduce(final Map<String, Integer> reducedList) 

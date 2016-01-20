@@ -23,6 +23,6 @@ public class ServerApp
     
     public static void main(String[] args)
     {
-        new ServerApp(5, 5);
+        new ServerApp(15, 15);
     }
 }

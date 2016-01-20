@@ -2,7 +2,7 @@ package com.artkostm.core.akka.worldcount.server;
 
 import com.typesafe.config.Config;
 
-import akka.actor.ActorSystem;
+import akka.actor.ActorSystem.Settings;
 import akka.actor.PoisonPill;
 import akka.dispatch.PriorityGenerator;
 import akka.dispatch.UnboundedPriorityMailbox;
@@ -10,7 +10,7 @@ import akka.dispatch.UnboundedPriorityMailbox;
 public class WCPriorityMailbox extends UnboundedPriorityMailbox
 {
 
-    public WCPriorityMailbox(final ActorSystem.Settings settings, final Config config)
+    public WCPriorityMailbox(final Settings s, final Config c)
     {
         super(generator);
     }

@@ -24,12 +24,12 @@ public class TextUtil
         return list;
     }
     
-    public static boolean isAlpha(String s) 
+    public static boolean isAlpha(final String s) 
     {
-        s = s.toUpperCase();
-        for (int i = 0; i < s.length(); i++) 
+        final String str = s.toUpperCase();
+        for (int i = 0; i < str.length(); i++) 
         {
-            final int c = (int) s.charAt(i);
+            final int c = (int) str.charAt(i);
             if (c < 65 || c > 90)
                 return false;
         }

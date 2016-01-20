@@ -18,6 +18,7 @@ public class ReduceMediator extends AbstractActor
             {
                 mapRouter.tell(msg, self());
             }
-        }).build());
+        })
+        .matchAny(this::unhandled).build());
     }
 }
