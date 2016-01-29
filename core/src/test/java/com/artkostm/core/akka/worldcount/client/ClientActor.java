@@ -16,7 +16,10 @@ public class ClientActor extends AbstractActor
             {
                 server.tell("DISPLAY_LIST", self());
             }
-            server.tell(msg, self());
+            else
+            {
+                server.tell(msg, self());
+            }
         }).build());
     }
     

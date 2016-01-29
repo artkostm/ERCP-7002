@@ -1,5 +1,6 @@
 package com.artkostm.core.akka.processor;
 
+
 import com.artkostm.core.akka.Main;
 import com.artkostm.core.akka.Worker;
 import com.artkostm.core.akka.model.Job;
@@ -7,7 +8,7 @@ import com.artkostm.core.akka.model.Job;
 import akka.actor.Actor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.routing.SmallestMailboxPool;
+import akka.routing.RoundRobinPool;
 
 public class StringProcessor implements Processor<String>
 {
@@ -18,16 +19,15 @@ public class StringProcessor implements Processor<String>
     {
         if (router == null)
         {
-            router = actor.context().actorOf(new SmallestMailboxPool(100000).props(Props.create(Worker.class)), "workers");
+            router = actor.context().actorOf(new RoundRobinPool(100).props(Props.create(Worker.class)), "workers");
         }
         
         final long number = Long.parseLong(obj);
         System.out.println("Number is " + number);
-        final long step = number / 1000000000;
+        final long step = number / 1000000;
         for (long i = 2; i <= number/2; i = i + step)
         {
             router.tell(new Job(number, i, i+step, Main.counter()), actor.self());
         }
-        actor.sender().tell("Good!", actor.self());
     }
 }
