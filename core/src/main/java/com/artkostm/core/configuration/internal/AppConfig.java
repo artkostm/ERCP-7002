@@ -6,7 +6,10 @@ public class AppConfig
 {
     private TemplateConfig template;
     private NettyConfig netty;
-    private List<Rout> GET;
+    private List<RouteConfig> GET;
+    private List<RouteConfig> POST;
+    private List<RouteConfig> DELETE;
+    private List<RouteConfig> PUT;
     
     public TemplateConfig getTemplate()
     {
@@ -28,53 +31,43 @@ public class AppConfig
         this.netty = netty;
     }
     
-    public List<Rout> getGET()
+    public List<RouteConfig> getGET()
     {
         return GET;
     }
 
-    public void setGET(List<Rout> gET)
+    public void setGET(List<RouteConfig> gET)
     {
         GET = gET;
     }
 
-    @Override
-    public String toString()
+    public List<RouteConfig> getPOST()
     {
-        return "AppConfig [template=" + template + ", netty=" + netty + ", GET=" + GET + "]";
+        return POST;
     }
 
-
-
-    public static class Rout
+    public void setPOST(List<RouteConfig> pOST)
     {
-        private String url;
-        private String controller;
-        
-        public String getUrl()
-        {
-            return url;
-        }
-        
-        public void setUrl(String url)
-        {
-            this.url = url;
-        }
-        
-        public String getController()
-        {
-            return controller;
-        }
-        
-        public void setController(String controller)
-        {
-            this.controller = controller;
-        }
+        POST = pOST;
+    }
 
-        @Override
-        public String toString()
-        {
-            return "Rout [url=" + url + ", controller=" + controller + "]";
-        }
+    public List<RouteConfig> getDELETE()
+    {
+        return DELETE;
+    }
+
+    public void setDELETE(List<RouteConfig> dELETE)
+    {
+        DELETE = dELETE;
+    }
+
+    public List<RouteConfig> getPUT()
+    {
+        return PUT;
+    }
+
+    public void setPUT(List<RouteConfig> pUT)
+    {
+        PUT = pUT;
     }
 }

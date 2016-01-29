@@ -1,6 +1,7 @@
 package com.artkostm.core.configuration;
 
 import com.artkostm.core.ApplicationConstants;
+import com.artkostm.core.configuration.internal.AppConfig;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -46,15 +47,29 @@ public final class ConfigAggregator implements ApplicationConstants
             aggregator.main.getString("app.template.directory") : DEFAULT_DIRECTORY_FOR_TEMPLATE_LOADING;
     }
     
+    public static String host()
+    {
+        return aggregator.main.hasPath("app.netty.host") ? 
+            aggregator.main.getString("app.netty.host") : LOCAL_HOST;
+    }
+    
     public static Config configuration()
     {
         return aggregator.main;
     }
     
+    public static AppConfig app()
+    {
+        if (aggregator.main.hasPath("app"))
+        {
+            return BeanFactory.create(aggregator.main.getConfig("app"), AppConfig.class);
+        }
+        return new AppConfig();
+    }
+    
     public static void routees()
     {
-        if (aggregator.main.hasPath("app.POST"))
-            System.out.println(aggregator.main.getAnyRefList("app.POST"));
+        
     }
     
     private ConfigAggregator()

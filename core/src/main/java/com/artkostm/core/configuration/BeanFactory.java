@@ -12,9 +12,18 @@ public class BeanFactory
     private static final String FIELD_PATH_DELIM = ".";
     private static final String EMPTY_STRING = "";
     
-    public static <T> T create(final Config config, final Class<T> clazz) throws Exception
+    public static <T> T create(final Config config, final Class<T> clazz)
     {
-        return create(config, clazz, EMPTY_STRING);
+        try
+        {
+            return create(config, clazz, EMPTY_STRING);
+        }
+        catch (Exception e)
+        {
+            // TODO Add logging here
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
