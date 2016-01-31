@@ -22,7 +22,7 @@ public class BeanFactory
         {
             // TODO Add logging here
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
     
@@ -51,17 +51,14 @@ public class BeanFactory
                     }
                     field.set(obj, list);
                 } 
-                else
+                else if (isPrimitive || fieldClass == String.class) 
                 {
-                    if (isPrimitive || fieldClass == String.class)
-                    {
-                        final Object primitive = config.getAnyRef(fullPath);
-                        field.set(obj, primitive);
-                    } 
-                    else 
-                    {
-                        field.set(obj, create(config, fieldClass, fullPath));
-                    }
+                    final Object primitive = config.getAnyRef(fullPath);
+                    field.set(obj, primitive);
+                } 
+                else 
+                {
+                    field.set(obj, create(config, fieldClass, fullPath));
                 }
             }
         }

@@ -70,4 +70,10 @@ public class AppConfig
     {
         PUT = pUT;
     }
+
+    @Override
+    public String toString() {
+        return "AppConfig [template=" + template + ", netty=" + netty + ", GET=" + GET + ", POST=" + POST + ", DELETE="
+                + DELETE + ", PUT=" + PUT + "]";
+    }
 }

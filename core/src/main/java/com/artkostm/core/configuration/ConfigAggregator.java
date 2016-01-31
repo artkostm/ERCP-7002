@@ -4,72 +4,69 @@ import com.artkostm.core.ApplicationConstants;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigResolveOptions;
 
 public final class ConfigAggregator implements ApplicationConstants
 {
     private Config main;
     private static final ConfigAggregator aggregator = new ConfigAggregator();
     
-    public static ConfigAggregator load(final String path)
+    public static synchronized ConfigAggregator load(final String path)
     {
-        aggregator.main = ConfigFactory.load(path);
+        aggregator.main = ConfigFactory.parseResources(ConfigAggregator.class, path)
+                .resolve(ConfigResolveOptions.defaults().setUseSystemEnvironment(true));;
         return aggregator;
     }
     
-    public static ConfigAggregator load()
+    public static synchronized ConfigAggregator load()
     {
         aggregator.main = ConfigFactory.defaultApplication();
         return aggregator;
     }
     
-    public static ConfigAggregator aggregate(final String path)
+    public static synchronized ConfigAggregator aggregate(final String path)
     {
         final Config cnfg = ConfigFactory.load(path);
         aggregator.main = aggregator.main.withFallback(cnfg);
         return aggregator;
     }
     
-    public static ConfigAggregator aggregate(final Config conf)
+    public static synchronized ConfigAggregator aggregate(final Config conf)
     {
         aggregator.main = aggregator.main.withFallback(conf);
         return aggregator;
     }
     
-    public static int port()
+    public int port()
     {
-        return aggregator.main.hasPath("app.netty.port") ? 
-            aggregator.main.getInt("app.netty.port") : DEFAULT_PORT;
+        return main.hasPath("app.netty.port") ? 
+            main.getInt("app.netty.port") : DEFAULT_PORT;
     }
     
-    public static String template()
+    public String template()
     {
-        return aggregator.main.hasPath("app.template.directory") ? 
-            aggregator.main.getString("app.template.directory") : DEFAULT_DIRECTORY_FOR_TEMPLATE_LOADING;
+        return main.hasPath("app.template.directory") ? 
+            main.getString("app.template.directory") : DEFAULT_DIRECTORY_FOR_TEMPLATE_LOADING;
     }
     
-    public static String host()
+    public String host()
     {
-        return aggregator.main.hasPath("app.netty.host") ? 
-            aggregator.main.getString("app.netty.host") : LOCAL_HOST;
+        return main.hasPath("app.netty.host") ? 
+            main.getString("app.netty.host") : LOCAL_HOST;
     }
     
-    public static Config configuration()
+    public Config configuration()
     {
-        return aggregator.main;
+        return main;
     }
     
-    public static AppConfig app()
+    public AppConfig app()
     {
-        if (aggregator.main.hasPath("app"))
+        if (main.hasPath("app"))
         {
-            return BeanFactory.create(aggregator.main.getConfig("app"), AppConfig.class);
+            return BeanFactory.create(main.getConfig("app"), AppConfig.class);
         }
         return new AppConfig();
-    }
-    
-    public static void routees()
-    {
-        
     }
     
     private ConfigAggregator()
