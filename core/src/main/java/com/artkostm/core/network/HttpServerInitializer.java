@@ -38,6 +38,7 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
         p.addLast("routingfilter", new RoutingFilterHandler(routerProvider.get()));
         p.addLast("basic", new HttpServerHandler(routerProvider.get()));
         //p.addLast(new SecondHttpServerHandler());
+        System.out.println(routerProvider.get());
     }
     
     public void setSslContext(final SslContext sslCtx)

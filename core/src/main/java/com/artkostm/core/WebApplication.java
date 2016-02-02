@@ -3,8 +3,7 @@ package com.artkostm.core;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.artkostm.configurator.Configurator;
-import com.artkostm.configurator.model.Metadata;
+import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.network.HttpServer;
 import com.artkostm.core.network.handler.util.RequestMapper;
 import com.artkostm.core.network.router.MethodRouterProvider;
@@ -20,32 +19,21 @@ public abstract class WebApplication implements Application
     private MethodRouterProvider routerProvider;
     
     @Inject
-    private Metadata metadata;
-    
-    @Inject
-    private Configurator configurator;
+    private AppConfig metadata;
     
     @Inject
     private HttpServer server;
     
-    private boolean running;
-    
     @Override
     public void run()
     {
-        if (!running)
+        if (metadata != null && metadata.getTemplate() != null)
         {
-            TemplateCompiller.configure(configurator.getDirectoryForTemplateLoading());
-            RequestMapper.map(routerProvider.get(), metadata);
-            server.run();
-            running = true;
+            TemplateCompiller.configure(metadata.getTemplate().getDirectory());
         }
-    }
-    
-    @Override
-    public Configurator configurator() 
-    {
-        return configurator;
+        
+        RequestMapper.map(routerProvider.get(), metadata);
+        server.run();
     }
     
     @Override

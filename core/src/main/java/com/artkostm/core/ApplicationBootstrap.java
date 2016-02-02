@@ -18,7 +18,7 @@ public class ApplicationBootstrap
     }
     
     /**
-     * <b>DO NOT USE!!!</b>
+     * 
      * @param appClass
      */
     public static void run(final Class<? extends WebApplication> appClass)

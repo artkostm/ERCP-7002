@@ -9,6 +9,5 @@ public class HttpServerModule extends AbstractModule
     protected void configure()
     {
         bindConstant().annotatedWith(Ssl.class).to(System.getProperty("ssl") != null);
-        
     }
 }

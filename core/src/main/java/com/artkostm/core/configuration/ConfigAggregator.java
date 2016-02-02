@@ -14,13 +14,14 @@ public final class ConfigAggregator implements ApplicationConstants
     public static synchronized ConfigAggregator load(final String path)
     {
         aggregator.main = ConfigFactory.parseResources(ConfigAggregator.class, path)
-                .resolve(ConfigResolveOptions.defaults().setUseSystemEnvironment(true));;
+                .resolve(ConfigResolveOptions.defaults().setUseSystemEnvironment(true));
         return aggregator;
     }
     
     public static synchronized ConfigAggregator load()
     {
-        aggregator.main = ConfigFactory.defaultApplication();
+        aggregator.main = ConfigFactory.defaultApplication()
+                .resolve(ConfigResolveOptions.defaults().setUseSystemEnvironment(true));
         return aggregator;
     }
     
@@ -34,6 +35,11 @@ public final class ConfigAggregator implements ApplicationConstants
     public static synchronized ConfigAggregator aggregate(final Config conf)
     {
         aggregator.main = aggregator.main.withFallback(conf);
+        return aggregator;
+    }
+    
+    public static synchronized ConfigAggregator aggregator()
+    {
         return aggregator;
     }
     

@@ -3,9 +3,8 @@ package com.artkostm.core.guice.module;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-import com.artkostm.configurator.Configurator;
-import com.artkostm.configurator.model.Metadata;
 import com.artkostm.core.ApplicationConstants;
+import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.guice.annotation.Config.Host;
 import com.artkostm.core.guice.annotation.Config.Port;
 import com.artkostm.core.guice.annotation.Config.TemplateLoadingDir;
@@ -35,7 +34,5 @@ public abstract class ConfigurationModule extends AbstractModule implements Appl
     
     protected abstract String templateLoadingDir();
     
-    protected abstract Metadata metadata();
-    
-    protected abstract Configurator configurator();
+    protected abstract AppConfig applicationConfiguration();
 }
