@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.artkostm.core.controller.TestObject;
+import com.artkostm.core.web.controller.converter.Json;
 
 public class TestJson 
 {

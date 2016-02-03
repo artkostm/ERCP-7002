@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import com.artkostm.core.controller.Context;
-import com.artkostm.core.network.handler.content.ContentTypeResolver;
-import com.artkostm.core.network.handler.content.SimpleContentTypeResolver;
-import com.artkostm.core.network.router.RouteResult;
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.web.controller.Context;
+import com.artkostm.core.web.network.handler.content.ContentTypeResolver;
+import com.artkostm.core.web.network.handler.content.SimpleContentTypeResolver;
+import com.artkostm.core.web.network.router.RouteResult;
+import com.artkostm.core.web.network.router.Router;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

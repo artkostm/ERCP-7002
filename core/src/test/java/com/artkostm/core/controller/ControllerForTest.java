@@ -3,7 +3,9 @@ package com.artkostm.core.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.artkostm.core.controller.converter.Json;
+import com.artkostm.core.web.controller.Controller;
+import com.artkostm.core.web.controller.Result;
+import com.artkostm.core.web.controller.converter.Json;
 
 public class ControllerForTest extends Controller
 {

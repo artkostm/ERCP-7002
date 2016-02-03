@@ -1,7 +1,7 @@
 package com.artkostm.core.lucene;
 
-import com.artkostm.core.ApplicationBootstrap;
-import com.artkostm.core.WebApplicationAdapter;
+import com.artkostm.core.web.ApplicationBootstrap;
+import com.artkostm.core.web.WebApplicationAdapter;
 
 public class LuceneApp extends WebApplicationAdapter
 {

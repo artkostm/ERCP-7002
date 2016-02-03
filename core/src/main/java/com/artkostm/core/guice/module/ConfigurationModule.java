@@ -3,11 +3,11 @@ package com.artkostm.core.guice.module;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-import com.artkostm.core.ApplicationConstants;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.guice.annotation.Config.Host;
 import com.artkostm.core.guice.annotation.Config.Port;
 import com.artkostm.core.guice.annotation.Config.TemplateLoadingDir;
+import com.artkostm.core.web.ApplicationConstants;
 import com.google.inject.AbstractModule;
 
 public abstract class ConfigurationModule extends AbstractModule implements ApplicationConstants

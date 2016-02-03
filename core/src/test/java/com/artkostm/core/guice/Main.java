@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import io.netty.handler.codec.http.HttpMethod;
 
-import com.artkostm.core.configuration.Configuration;
+import com.artkostm.core.configuration.ConfigurationProvider;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -13,7 +13,7 @@ public class Main
 {
     public static void main(String[] args)
     {
-        final Injector injector = Guice.createInjector(new Configuration("classpath:luceneapp.gr"));
+        final Injector injector = Guice.createInjector(new ConfigurationProvider("classpath:luceneapp.gr"));
         final TestCl cl = injector.getInstance(TestCl.class);
         System.out.println(cl);
         System.out.println("Metadata: " + cl.Metadata());

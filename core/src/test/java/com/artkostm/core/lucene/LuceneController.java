@@ -14,9 +14,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 
-import com.artkostm.core.controller.Controller;
-import com.artkostm.core.controller.Result;
-import com.artkostm.core.controller.converter.Json;
+import com.artkostm.core.web.controller.Controller;
+import com.artkostm.core.web.controller.Result;
+import com.artkostm.core.web.controller.converter.Json;
 
 public class LuceneController extends Controller
 {

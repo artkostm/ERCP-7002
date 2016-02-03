@@ -7,8 +7,8 @@ import com.artkostm.configurator.model.Metadata;
 import com.artkostm.core.guice.annotation.Config.Host;
 import com.artkostm.core.guice.annotation.Config.Port;
 import com.artkostm.core.guice.annotation.Config.TemplateLoadingDir;
-import com.artkostm.core.network.router.MethodRouterProvider;
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.web.network.router.MethodRouterProvider;
+import com.artkostm.core.web.network.router.Router;
 import com.google.inject.Inject;
 
 public class TestCl

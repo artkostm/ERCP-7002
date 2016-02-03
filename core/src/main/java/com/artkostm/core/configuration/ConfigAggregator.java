@@ -1,7 +1,7 @@
 package com.artkostm.core.configuration;
 
-import com.artkostm.core.ApplicationConstants;
 import com.artkostm.core.configuration.internal.AppConfig;
+import com.artkostm.core.web.ApplicationConstants;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigResolveOptions;

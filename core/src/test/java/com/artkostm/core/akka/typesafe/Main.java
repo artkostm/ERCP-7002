@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.artkostm.core.configuration.ConfigAggregator;
-import com.artkostm.core.network.handler.util.RequestMapper;
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.web.network.handler.util.RequestMapper;
+import com.artkostm.core.web.network.router.Router;
 
 public class Main
 {
