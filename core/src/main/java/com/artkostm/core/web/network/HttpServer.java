@@ -48,7 +48,7 @@ public class HttpServer implements Runnable
             }
             catch (Exception e)
             {
-                LOG.warn("Cannot instantient SSL context", e);
+                LOG.warn("Cannot instantiate SSL context", e);
             }
         }
         

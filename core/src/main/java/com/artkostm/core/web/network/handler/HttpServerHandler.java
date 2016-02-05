@@ -13,6 +13,11 @@ import com.artkostm.core.web.network.handler.content.SimpleContentTypeResolver;
 import com.artkostm.core.web.network.handler.method.processor.HttpMethodProcessor;
 import com.artkostm.core.web.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.core.web.network.handler.util.HttpContentReader;
+import com.artkostm.core.web.network.handler.util.responsewriter.WriterPipeline;
+import com.artkostm.core.web.network.handler.util.responsewriter.pipeline.DefaultHeadersSetter;
+import com.artkostm.core.web.network.handler.util.responsewriter.pipeline.LastStageStub;
+import com.artkostm.core.web.network.handler.util.responsewriter.pipeline.ResponseBuilder;
+import com.artkostm.core.web.network.handler.util.responsewriter.pipeline.ResponseWriterPipeline;
 import com.artkostm.core.web.network.router.RouteResult;
 import com.artkostm.core.web.network.router.Router;
 
@@ -47,7 +52,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
     private final Router<List<Method>> router;
     private RouteResult<List<Method>> routeResult;
     private boolean decoded;
-//    private final SessionService sessionService;
+    private final WriterPipeline<Object, HttpResponse> pipeline;
     
     public HttpServerHandler(final Router<List<Method>> router)
     {
@@ -55,7 +60,10 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
         contentBuffer = Unpooled.buffer();
         contentTypeResolver = new SimpleContentTypeResolver();
         this.router = router;
-//        this.sessionService = sessionService;
+        pipeline = new ResponseWriterPipeline()
+            .add(new ResponseBuilder())
+            .add(new DefaultHeadersSetter())
+            .add(new LastStageStub());
     }
     
     @Override
@@ -195,7 +203,6 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
         else
         {
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
-            
             //ctx.write(response).addListener(ChannelFutureListener.CLOSE);
         }
         

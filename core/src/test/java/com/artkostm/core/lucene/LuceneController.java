@@ -22,7 +22,7 @@ public class LuceneController extends Controller
 {
     //HTTP Method: GET
     //To search docs
-    //returns json object with finded docs
+    //returns json object with founded docs
     public static Result index() throws Exception
     {
         final String index = context().getPathParams().get("index");
