@@ -16,6 +16,11 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class BasicAuthenticationHandler extends SimpleChannelInboundHandler<HttpObject> implements Authenticator
 {
     private final Authenticator authenticator;

@@ -4,6 +4,11 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class InjectionListener implements TypeListener
 {
     @Override

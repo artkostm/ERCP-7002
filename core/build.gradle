@@ -36,6 +36,9 @@ dependencies {
     
     compile 'com.typesafe.akka:akka-cluster_2.11:2.4.1'
     compile 'com.typesafe.akka:akka-kernel_2.11:2.4.1'
+    compile 'com.typesafe.akka:akka-camel_2.11:2.4.1'
+    compile 'com.typesafe.akka:akka-cluster-sharding_2.11:2.4.1'
+    compile 'com.typesafe.akka:akka-cluster-tools_2.11:2.4.1'
         
     testCompile 'junit:junit:4.12'
 }

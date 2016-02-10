@@ -3,6 +3,11 @@ package com.artkostm.core.web.controller;
 import java.lang.reflect.Method;
 import java.util.List;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class ControllerMethodInvoker 
 {
     private static final Object[] EMPTY_ARGS = new Object[0];

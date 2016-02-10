@@ -15,8 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpContentReader 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
+public final class HttpContentReader 
 {
+    private HttpContentReader()
+    {}
+    
     public static boolean readAttributes(final Map<String, List<String>> attributesMap, 
             final ByteBuf content, final HttpContent httpContent, final HttpRequest request, final boolean isFormData)
     {

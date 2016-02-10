@@ -18,6 +18,11 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.AttributeKey;
 
+/**
+ *
+ * @author Artsiom_Chuiko
+ *
+ */
 public class RoutingFilterHandler extends SimpleChannelInboundHandler<HttpObject>
 {    
     private final Router<List<Method>> router;

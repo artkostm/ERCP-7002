@@ -6,6 +6,11 @@ import io.netty.handler.codec.http.HttpRequest;
 
 import com.artkostm.core.web.controller.Context;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class HttpMethodProcessorFacade implements HttpMethodProcessor<Object>
 {    
     private final HttpMethodProcessor<?> requestProcessor;

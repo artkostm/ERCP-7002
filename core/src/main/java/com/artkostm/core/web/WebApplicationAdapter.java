@@ -1,5 +1,10 @@
 package com.artkostm.core.web;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class WebApplicationAdapter extends WebApplication
 {
     @Override

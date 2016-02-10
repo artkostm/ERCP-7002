@@ -1,5 +1,10 @@
 package com.artkostm.core.web.network.handler.auth;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class Credentials
 {
     private final String auth;

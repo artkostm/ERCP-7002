@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class ControllerRepository
 {
     private final Map<Class<? extends Controller>, Controller> repository;

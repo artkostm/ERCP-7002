@@ -4,6 +4,11 @@ import io.netty.buffer.ByteBuf;
 
 import com.artkostm.core.web.controller.Context;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public interface HttpMethodCallback 
 {
     void methodGet(final Context context);

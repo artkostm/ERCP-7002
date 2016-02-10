@@ -5,6 +5,11 @@ import com.artkostm.core.guice.module.ConfigurationModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class ConfigurationProvider extends ConfigurationModule
 {
     public ConfigurationProvider(final String configFilePath)

@@ -52,6 +52,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
     private final Router<List<Method>> router;
     private RouteResult<List<Method>> routeResult;
     private boolean decoded;
+    @SuppressWarnings("unused")
     private final WriterPipeline<Object, HttpResponse> pipeline;
     
     public HttpServerHandler(final Router<List<Method>> router)

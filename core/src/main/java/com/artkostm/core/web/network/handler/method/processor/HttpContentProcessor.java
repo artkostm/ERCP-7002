@@ -5,6 +5,11 @@ import io.netty.handler.codec.http.HttpObject;
 
 import com.artkostm.core.web.controller.Context;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class HttpContentProcessor implements HttpMethodProcessor<ByteBuf>
 {
     @SuppressWarnings("unused")

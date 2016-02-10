@@ -15,6 +15,11 @@ import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 
 import com.artkostm.core.web.controller.Context;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class HttpRequestProcessor implements HttpMethodProcessor<Context>
 {
     @Override

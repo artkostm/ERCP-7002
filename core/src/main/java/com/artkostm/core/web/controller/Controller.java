@@ -5,6 +5,11 @@ import java.util.Map;
 import com.artkostm.core.web.controller.session.Session;
 import com.artkostm.template.TemplateCompiller;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public abstract class Controller extends Results
 {
     protected static String view(final String viewName, final Map<String, Object> data)

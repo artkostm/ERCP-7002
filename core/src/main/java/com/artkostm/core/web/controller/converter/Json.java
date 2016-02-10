@@ -8,6 +8,11 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class Json
 {
     private static final ObjectMapper defaultObjectMapper = newDefaultMapper();

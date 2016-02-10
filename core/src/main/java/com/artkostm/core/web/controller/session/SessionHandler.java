@@ -13,6 +13,11 @@ import java.util.UUID;
 
 import com.artkostm.core.web.controller.Context;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class SessionHandler 
 {
     private final Map<UUID, Session> sessions = new HashMap<UUID, Session>();

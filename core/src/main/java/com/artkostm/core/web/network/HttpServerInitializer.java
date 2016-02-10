@@ -14,6 +14,11 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 @Singleton
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
 {

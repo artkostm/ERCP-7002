@@ -5,7 +5,12 @@ import com.artkostm.core.guice.module.HttpServerModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class ApplicationBootstrap
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
+public final class ApplicationBootstrap
 {
     public static void run(final Class<? extends WebApplication> appClass, final String configPath)
     {
@@ -24,4 +29,7 @@ public class ApplicationBootstrap
         final WebApplication application = injector.getInstance(appClass);
         application.run();
     }
+    
+    private ApplicationBootstrap()
+    {}
 }

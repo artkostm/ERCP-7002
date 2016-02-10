@@ -1,5 +1,10 @@
 package com.artkostm.core.configuration.internal;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class RouteConfig
 {
     private String url;

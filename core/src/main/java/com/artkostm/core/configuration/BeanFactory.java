@@ -7,6 +7,11 @@ import java.util.List;
 
 import com.typesafe.config.Config;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class BeanFactory
 {
     private static final String FIELD_PATH_DELIM = ".";

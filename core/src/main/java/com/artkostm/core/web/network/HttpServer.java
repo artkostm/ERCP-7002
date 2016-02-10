@@ -20,6 +20,11 @@ import com.artkostm.core.guice.annotation.Config.Ssl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 @Singleton
 public class HttpServer implements Runnable
 {

@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 
 import com.google.inject.BindingAnnotation;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public @interface Config 
 {
     @Retention(RetentionPolicy.RUNTIME)

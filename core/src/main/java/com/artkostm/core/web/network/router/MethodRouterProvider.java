@@ -7,6 +7,11 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 @Singleton
 public class MethodRouterProvider implements Provider<Router<List<Method>>>
 {

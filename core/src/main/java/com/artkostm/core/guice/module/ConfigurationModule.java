@@ -10,6 +10,11 @@ import com.artkostm.core.guice.annotation.Config.TemplateLoadingDir;
 import com.artkostm.core.web.ApplicationConstants;
 import com.google.inject.AbstractModule;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public abstract class ConfigurationModule extends AbstractModule implements ApplicationConstants
 {   
     @Override

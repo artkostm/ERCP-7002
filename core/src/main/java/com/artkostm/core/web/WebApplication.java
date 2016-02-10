@@ -12,6 +12,11 @@ import com.artkostm.template.TemplateCompiller;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 @Singleton
 public abstract class WebApplication implements Application
 {    

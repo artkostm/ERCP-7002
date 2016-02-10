@@ -2,6 +2,11 @@ package com.artkostm.core.configuration.internal;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class AppConfig
 {
     private TemplateConfig template;

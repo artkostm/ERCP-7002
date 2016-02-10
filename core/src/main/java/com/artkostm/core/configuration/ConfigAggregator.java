@@ -6,6 +6,11 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigResolveOptions;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public final class ConfigAggregator implements ApplicationConstants
 {
     private Config main;

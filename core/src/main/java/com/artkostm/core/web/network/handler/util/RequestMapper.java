@@ -12,8 +12,16 @@ import com.artkostm.core.configuration.ConfigUtils;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.web.network.router.Router;
 
-public class RequestMapper 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
+public final class RequestMapper 
 {
+    private RequestMapper()
+    {}
+    
     public static void map(final Router<List<Method>> router, final Metadata configuration)
     {
         if (configuration == null)

@@ -3,6 +3,11 @@ package com.artkostm.core.web.controller.session;
 import com.artkostm.core.service.Service;
 import com.artkostm.core.service.ServiceManager;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class SessionService implements Service
 {
     private final SessionHandler sessionHandler;

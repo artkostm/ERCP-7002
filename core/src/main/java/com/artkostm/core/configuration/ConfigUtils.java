@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public final class ConfigUtils
 {
     /**

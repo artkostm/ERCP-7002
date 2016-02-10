@@ -9,6 +9,11 @@ import java.util.Map;
 import com.artkostm.core.web.controller.session.Session;
 import com.artkostm.core.web.controller.session.SessionHandler;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class Context 
 {
     private static ThreadLocal<Context> current = new ThreadLocal<Context>();

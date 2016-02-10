@@ -3,6 +3,8 @@ package com.artkostm.core.controller;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.artkostm.core.web.controller.Context;
+
 public class TestContext
 {
     private final Runnable client1 = new Runnable()
