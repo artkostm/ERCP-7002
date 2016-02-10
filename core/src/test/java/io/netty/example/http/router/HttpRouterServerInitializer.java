@@ -1,7 +1,7 @@
 package io.netty.example.http.router;
 
-import com.artkostm.core.network.handler.BadClientSilencer;
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.web.network.handler.BadClientSilencer;
+import com.artkostm.core.web.network.router.Router;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

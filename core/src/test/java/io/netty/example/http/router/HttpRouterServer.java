@@ -1,6 +1,6 @@
 package io.netty.example.http.router;
 
-import com.artkostm.core.network.router.Router;
+import com.artkostm.core.web.network.router.Router;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;

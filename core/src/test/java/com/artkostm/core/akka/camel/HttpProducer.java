@@ -4,28 +4,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.camel.Exchange;
-import org.eclipse.jetty.server.Request;
 
 import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedProducerActor;
 
 public class HttpProducer extends UntypedProducerActor
 {
     private ActorRef transformer;
+    private String uri;
 
-    public HttpProducer(ActorRef transformer)
+    public HttpProducer(ActorRef transformer, String uri)
     {
         this.transformer = transformer;
+        this.uri = String.format("jetty://%s?bridgeEndpoint=true", uri);
     }
     
-    private String proxedUrl = "jetty://http://www.google.by/webhp?hl=en?bridgeEndpoint=true";
+    public static Props props(final ActorRef transformer, final String uri)
+    {
+        return Props.create(HttpProducer.class, transformer, uri);
+    }
 
     public String getEndpointUri()
     {
         // bridgeEndpoint=true makes the producer ignore the Exchange.HTTP_URI header, 
         // and use the endpoint's URI for request
-        return proxedUrl;
+        return uri;
     }
 
     // before producing messages to endpoints, producer actors can pre-process
@@ -36,9 +41,6 @@ public class HttpProducer extends UntypedProducerActor
         if (message instanceof CamelMessage)
         {
             CamelMessage camelMessage = (CamelMessage) message;
-            final Request req = (Request) camelMessage.getHeaders().get("CamelHttpServletRequest");
-            final String url = req.getHeader("proxy-url");
-            proxedUrl = String.format("//jetty://http://%sbridgeEndpoint=true", url);
             Set<String> httpPath = new HashSet<String>();
             httpPath.add(Exchange.HTTP_PATH);
             return camelMessage.withHeaders(camelMessage.getHeaders(httpPath));
@@ -52,7 +54,6 @@ public class HttpProducer extends UntypedProducerActor
     @Override
     public void onRouteResponse(Object message)
     {
-        System.out.println(message);
         transformer.forward(message, getContext());
     }
 }

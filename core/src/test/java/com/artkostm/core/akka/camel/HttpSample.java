@@ -10,11 +10,6 @@ public class HttpSample
     public static void main(String[] args)
     {
         final ActorSystem system = ActorSystem.create("camel-system");
-
-        final ActorRef httpTransformer = system.actorOf(Props.create(HttpTransformer.class));
-
-        final ActorRef httpProducer = system.actorOf(Props.create(HttpProducer.class, httpTransformer));
-
-        final ActorRef httpConsumer = system.actorOf(Props.create(HttpConsumer.class, httpProducer));
+        final ActorRef httpConsumer = system.actorOf(Props.create(HttpConsumer.class));
     }
 }

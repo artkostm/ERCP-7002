@@ -1,5 +1,6 @@
 package com.artkostm.core.akka.camel;
 
+import akka.actor.Props;
 import akka.actor.Status;
 import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
@@ -7,6 +8,11 @@ import akka.dispatch.Mapper;
 
 public class HttpTransformer extends UntypedActor
 {
+    public static Props props()
+    {
+        return Props.create(HttpTransformer.class);
+    }
+    
     public void onReceive(Object message)
     {
         if (message instanceof CamelMessage)
