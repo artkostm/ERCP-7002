@@ -16,14 +16,24 @@ public class AppConfig
     private List<RouteConfig> DELETE;
     private List<RouteConfig> PUT;
     
+    public AppConfig()
+    {}
+    
+    public AppConfig(TemplateConfig template, NettyConfig netty, List<RouteConfig> gET, 
+        List<RouteConfig> pOST, List<RouteConfig> dELETE, List<RouteConfig> pUT)
+    {
+        super();
+        this.template = template;
+        this.netty = netty;
+        GET = gET;
+        POST = pOST;
+        DELETE = dELETE;
+        PUT = pUT;
+    }
+
     public TemplateConfig getTemplate()
     {
         return template;
-    }
-    
-    public void setTemplate(TemplateConfig template)
-    {
-        this.template = template;
     }
     
     public NettyConfig getNetty()
@@ -41,19 +51,9 @@ public class AppConfig
         return GET;
     }
 
-    public void setGET(List<RouteConfig> gET)
-    {
-        GET = gET;
-    }
-
     public List<RouteConfig> getPOST()
     {
         return POST;
-    }
-
-    public void setPOST(List<RouteConfig> pOST)
-    {
-        POST = pOST;
     }
 
     public List<RouteConfig> getDELETE()
@@ -61,19 +61,9 @@ public class AppConfig
         return DELETE;
     }
 
-    public void setDELETE(List<RouteConfig> dELETE)
-    {
-        DELETE = dELETE;
-    }
-
     public List<RouteConfig> getPUT()
     {
         return PUT;
-    }
-
-    public void setPUT(List<RouteConfig> pUT)
-    {
-        PUT = pUT;
     }
 
     @Override

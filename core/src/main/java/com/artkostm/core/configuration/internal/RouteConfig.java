@@ -10,24 +10,24 @@ public class RouteConfig
     private String url;
     private String controller;
     
+    public RouteConfig()
+    {}
+    
+    public RouteConfig(final String url, final String controller)
+    {
+        super();
+        this.url = url;
+        this.controller = controller;
+    }
+
     public String getUrl()
     {
         return url;
     }
     
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
-    
     public String getController()
     {
         return controller;
-    }
-    
-    public void setController(String controller)
-    {
-        this.controller = controller;
     }
 
     @Override
