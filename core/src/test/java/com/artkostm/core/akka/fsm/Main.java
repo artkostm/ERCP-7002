@@ -34,7 +34,7 @@ public class Main extends AbstractLoggingFSM<State, Data>
                 }
         ));
         
-        onTransition(matchState(Active, Idle, 
+        onTransition(matchState(Active, Idle,
             () -> { /*setTimer("timeout", "timeoutStr",  Duration.create(200, TimeUnit.MILLISECONDS), true);*/ System.out.println("Active -> Idle"); })
             //.state(Active, null, (f, t) -> { cancelTimer("timeout"); log().info("from Active to " + t); })
             .state(Idle, null, (f, t) -> { System.out.println("Idle -> " + t); cancelTimer("timeout");}));
