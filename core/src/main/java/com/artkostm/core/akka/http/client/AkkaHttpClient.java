@@ -17,19 +17,26 @@ import akka.util.ByteString;
 
 public class AkkaHttpClient
 {
-    public static void main1(String[] args)
+    static long start = 0;
+    public static void main(String[] args) throws InterruptedException
     {
         final ActorSystem system = ActorSystem.create("akka-http-client");
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, Future<OutgoingConnection>> connectionFlow = 
                 Http.get(system).outgoingConnection("netty.io", 80);
+        start = System.currentTimeMillis();
         final Future<HttpResponse> responseFuture =  Source.single(HttpRequest.create("/wiki/user-guide-for-5.x.html"))
                 .via(connectionFlow)
                 .runWith(Sink.<HttpResponse>head(), materializer);
         
         final OnComplete<HttpResponse> onComplete = new Completing(system, materializer);
         
+        Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
+            .via(connectionFlow)
+            .runWith(Sink.<HttpResponse>head(), materializer).onComplete(onComplete, system.dispatcher());
         responseFuture.onComplete(onComplete, system.dispatcher());
+        Thread.sleep(20000);
+        system.terminate();
     }
     
     static class Completing extends OnComplete<HttpResponse>
@@ -55,13 +62,13 @@ public class AkkaHttpClient
                     }
                 ).runWith(Sink.<ByteString>head(), materializer);
                 
-                final String sb = Await.result(data, Duration.Inf()).decodeString("UTF-8");
+                final String sb = Await.result(data, Duration.Inf()).utf8String();
                 System.out.println(sb);
-                
+                System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
             }
             finally
             {
-                system.terminate();
+                //system.terminate();
             }
         }
      };
