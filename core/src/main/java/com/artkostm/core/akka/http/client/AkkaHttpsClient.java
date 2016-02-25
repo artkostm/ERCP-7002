@@ -16,7 +16,7 @@ import com.artkostm.core.akka.http.client.AkkaHttpClient.Completing;
 
 public class AkkaHttpsClient
 {
-    public static void main(String[] args) throws InterruptedException
+    public static void main(String[] args)
     {
         final ActorSystem system = ActorSystem.create("akka-http-client");
         final ActorMaterializer materializer = ActorMaterializer.create(system);
@@ -30,10 +30,8 @@ public class AkkaHttpsClient
                 .via(connectionFlow)
                 .runWith(Sink.<HttpResponse>head(), materializer);
         
-        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer);
+        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, true);
         
         responseFuture.onComplete(onComplete, system.dispatcher());
-        Thread.sleep(20000);
-        system.terminate();
     }
 }

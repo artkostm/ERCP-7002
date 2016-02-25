@@ -29,7 +29,7 @@ public class AkkaHttpClient
                 .via(connectionFlow)
                 .runWith(Sink.<HttpResponse>head(), materializer);
         
-        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer);
+        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, false);
         
         Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
             .via(connectionFlow)
@@ -43,11 +43,13 @@ public class AkkaHttpClient
     {
         final ActorSystem system;
         final ActorMaterializer materializer;
+        final boolean shouldTerminateSystem;
         
-        public Completing(final ActorSystem system, final ActorMaterializer materializer)
+        public Completing(final ActorSystem system, final ActorMaterializer materializer, final boolean shouldTerminateSystem)
         {
             this.materializer = materializer;
             this.system = system;
+            this.shouldTerminateSystem = shouldTerminateSystem;
         }
         
         @Override
@@ -68,7 +70,7 @@ public class AkkaHttpClient
             }
             finally
             {
-                //system.terminate();
+                if (shouldTerminateSystem) system.terminate();
             }
         }
      };
