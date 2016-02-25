@@ -39,7 +39,7 @@ public class AkkaHttpClient
         system.terminate();
     }
     
-    static class Completing extends OnComplete<HttpResponse>
+    public static class Completing extends OnComplete<HttpResponse>
     {
         final ActorSystem system;
         final ActorMaterializer materializer;
