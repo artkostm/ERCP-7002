@@ -1,5 +1,8 @@
 package com.artkostm.core.akka.http.client;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -65,7 +68,8 @@ public class AkkaHttpClient
                 ).runWith(Sink.<ByteString>head(), materializer);
                 
                 final String sb = Await.result(data, Duration.Inf()).utf8String();
-                System.out.println(sb);
+                final Document doc = Jsoup.parse(sb);
+                System.out.println(doc.select("body").text());
                 System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
             }
             finally
