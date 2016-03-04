@@ -26,17 +26,17 @@ public class AkkaHttpClient
         final ActorSystem system = ActorSystem.create("akka-http-client");
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, Future<OutgoingConnection>> connectionFlow = 
-                Http.get(system).outgoingConnection("netty.io", 80);
+                Http.get(system).outgoingConnection("www.bsuir.by", 80);
         start = System.currentTimeMillis();
-        final Future<HttpResponse> responseFuture =  Source.single(HttpRequest.create("/wiki/user-guide-for-5.x.html"))
+        final Future<HttpResponse> responseFuture =  Source.single(HttpRequest.create("/schedule/schedule.xhtml?id=272301"))
                 .via(connectionFlow)
                 .runWith(Sink.<HttpResponse>head(), materializer);
         
         final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, false);
         
-        Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
-            .via(connectionFlow)
-            .runWith(Sink.<HttpResponse>head(), materializer).onComplete(onComplete, system.dispatcher());
+//        Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
+//            .via(connectionFlow)
+//            .runWith(Sink.<HttpResponse>head(), materializer).onComplete(onComplete, system.dispatcher());
         responseFuture.onComplete(onComplete, system.dispatcher());
         Thread.sleep(20000);
         system.terminate();
@@ -68,8 +68,12 @@ public class AkkaHttpClient
                 ).runWith(Sink.<ByteString>head(), materializer);
                 
                 final String sb = Await.result(data, Duration.Inf()).utf8String();
+//                System.out.println(sb);
                 final Document doc = Jsoup.parse(sb);
-                System.out.println(doc.select("body").text());
+                doc.select("body table[role^=grid]").forEach(element -> 
+                {
+                    System.out.println(element.outerHtml());
+                });
                 System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
             }
             finally

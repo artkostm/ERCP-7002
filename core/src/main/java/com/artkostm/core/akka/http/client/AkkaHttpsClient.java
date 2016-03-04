@@ -2,14 +2,9 @@ package com.artkostm.core.akka.http.client;
 
 import java.util.Arrays;
 
-
-import java.util.concurrent.Callable;
-
 import scala.concurrent.Future;
 import scala.runtime.BoxedUnit;
 import akka.actor.ActorSystem;
-import akka.dispatch.Futures;
-import akka.dispatch.Mapper;
 import akka.dispatch.OnComplete;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.OutgoingConnection;
