@@ -1,14 +1,16 @@
 package com.artkostm.core.akka.http.routing;
 
+import java.util.concurrent.TimeUnit;
+
 import akka.actor.ActorSystem;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
+import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
-import akka.routing.Routee;
 import akka.routing.Router;
 import scala.Option;
-import scala.collection.immutable.IndexedSeq;
+import scala.concurrent.duration.Duration;
 
 public class HttpMethodRoutingPool extends PoolBase
 {
@@ -31,7 +33,17 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public Option<Resizer> resizer() 
     {
-        return Option.apply(new HttpResizer());
+        return Option.apply(new DefaultOptimalSizeExploringResizer(
+                2,                                    //lowerBound: PoolSize = 1,
+                8,                                    //upperBound: PoolSize = 30,
+                0.2,                                  //chanceOfScalingDownWhenFull: Double = 0.2,
+                Duration.create(5, TimeUnit.SECONDS), // actionInterval: Duration = 5.seconds,
+                16,                                   //numOfAdjacentSizesToConsiderDuringOptimization: Int = 16,
+                0.1,                                  //exploreStepSize: Double = 0.1,
+                0.8,                                  //downsizeRatio: Double = 0.8,
+                Duration.create(72, TimeUnit.HOURS),  //downsizeAfterUnderutilizedFor: Duration = 72.hours,
+                0.4,                                  //explorationProbability: Double = 0.4,
+                0.5));                                //weightOfLatestMetric: Double = 0.5
     }
 
     @Override
@@ -44,20 +56,5 @@ public class HttpMethodRoutingPool extends PoolBase
     public String routerDispatcher() 
     {
         return Dispatchers.DefaultDispatcherId();
-    }
-    
-    public static class HttpResizer implements Resizer
-    {
-        @Override
-        public int resize(IndexedSeq<Routee> routees) 
-        {
-            return 0;
-        }
-        
-        @Override
-        public boolean isTimeForResize(long messageCounter) 
-        {
-            return false;
-        }
     }
 }
