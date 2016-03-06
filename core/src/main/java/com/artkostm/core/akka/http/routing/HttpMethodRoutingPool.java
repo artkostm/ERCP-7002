@@ -10,7 +10,7 @@ import akka.routing.Router;
 import scala.Option;
 import scala.collection.immutable.IndexedSeq;
 
-public class HttpMethodRouter extends PoolBase
+public class HttpMethodRoutingPool extends PoolBase
 {
     private static final long serialVersionUID = -8668444273017076975L;
 
