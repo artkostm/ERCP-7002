@@ -15,19 +15,24 @@ import scala.concurrent.duration.Duration;
 public class HttpMethodRoutingPool extends PoolBase
 {
     private static final long serialVersionUID = -8668444273017076975L;
+    
+    private final int nrOfInstances;
+    
+    public HttpMethodRoutingPool(final int nrOfInstances) 
+    {
+        this.nrOfInstances = nrOfInstances;
+    }
 
     @Override
     public Router createRouter(ActorSystem system) 
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new Router(new HttpMethodRoutingLogic());
     }
 
     @Override
-    public int nrOfInstances(ActorSystem arg0) 
+    public int nrOfInstances(ActorSystem system) 
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return nrOfInstances;
     }
 
     @Override
@@ -56,5 +61,11 @@ public class HttpMethodRoutingPool extends PoolBase
     public String routerDispatcher() 
     {
         return Dispatchers.DefaultDispatcherId();
+    }
+    
+    @Override
+    public boolean isManagementMessage(Object msg) 
+    {
+        return super.isManagementMessage(msg) || msg instanceof HttpMessage;
     }
 }
