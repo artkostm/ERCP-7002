@@ -44,7 +44,7 @@ public class HttpMethodRouter extends GroupBase
     public Router createRouter(ActorSystem system)
     {
         
-        return new Router(null);
+        return new Router(new HttpRoutingLogic());
     }
 
     @Override
