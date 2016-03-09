@@ -2,6 +2,8 @@ package com.artkostm.core.akka.http.routing;
 
 import java.util.concurrent.TimeUnit;
 
+import com.artkostm.core.akka.http.message.HttpMessage;
+
 import akka.actor.ActorSystem;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;

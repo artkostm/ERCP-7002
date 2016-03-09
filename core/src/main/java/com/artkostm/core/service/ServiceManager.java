@@ -4,6 +4,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 
+ * @author Artsiom_Chuiko
+ *
+ */
 public class ServiceManager 
 {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

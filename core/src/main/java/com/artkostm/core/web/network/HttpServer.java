@@ -57,8 +57,8 @@ public class HttpServer implements Runnable
             }
         }
         
-        final EventLoopGroup bossGroup = new NioEventLoopGroup();
-        final EventLoopGroup workerGroup = new NioEventLoopGroup();
+        final EventLoopGroup bossGroup = new NioEventLoopGroup(10);
+        final EventLoopGroup workerGroup = new NioEventLoopGroup(20);
         try 
         {
             final ServerBootstrap b = new ServerBootstrap();

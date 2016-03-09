@@ -1,7 +1,9 @@
 package com.artkostm.core.akka.http.routing;
 
+import com.artkostm.core.akka.http.HttpMethods;
+import com.artkostm.core.akka.http.message.HttpMessage;
+
 import akka.routing.BalancingRoutingLogic;
-import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Routee;
 import akka.routing.RoutingLogic;
 import akka.routing.SmallestMailboxRoutingLogic;
@@ -11,13 +13,11 @@ public class HttpMethodRoutingLogic implements RoutingLogic
 {
     private final BalancingRoutingLogic balancingLogic;
     private final SmallestMailboxRoutingLogic smallestMailboxLogic;
-    private final RoundRobinRoutingLogic roundRobinLogic;
     
     public HttpMethodRoutingLogic() 
     {
         balancingLogic = new BalancingRoutingLogic();
         smallestMailboxLogic = new SmallestMailboxRoutingLogic();
-        roundRobinLogic = new RoundRobinRoutingLogic();
     }
     
     @Override
@@ -28,7 +28,8 @@ public class HttpMethodRoutingLogic implements RoutingLogic
             final HttpMessage message = (HttpMessage) msg;
             if (message.method() == HttpMethods.POST || 
                     message.method() == HttpMethods.GET || 
-                    message.method() == HttpMethods.PUT)
+                    message.method() == HttpMethods.PUT ||
+                    message.method() == HttpMethods.DELETE)
             {
                 return balancingLogic.select(message, routees);
             }
@@ -36,11 +37,10 @@ public class HttpMethodRoutingLogic implements RoutingLogic
             {
                 return smallestMailboxLogic.select(message, routees);
             }
-            
         }
-        else 
+        else
         {
-            return roundRobinLogic.select(msg, routees);
+            return smallestMailboxLogic.select(msg, routees);
         }
     }
 

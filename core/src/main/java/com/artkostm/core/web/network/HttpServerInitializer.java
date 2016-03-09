@@ -1,6 +1,6 @@
 package com.artkostm.core.web.network;
 
-import com.artkostm.core.web.network.handler.HttpAkkaHandler;
+//import com.artkostm.core.web.network.handler.HttpAkkaHandler;
 import com.artkostm.core.web.network.handler.HttpServerHandler;
 import com.artkostm.core.web.network.handler.RoutingFilterHandler;
 import com.artkostm.core.web.network.router.MethodRouterProvider;
@@ -38,19 +38,19 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel>
             p.addLast(sslCtx.newHandler(ch.alloc()));
         }
 
-//        p.addLast(new HttpRequestDecoder());
-//        p.addLast(new HttpResponseEncoder());
-//        p.addLast(new ChunkedWriteHandler());
-//        //p.addLast("authentication", null);
-//        p.addLast("routingfilter", new RoutingFilterHandler(routerProvider.get()));
-//        p.addLast("basic", new HttpServerHandler(routerProvider.get()));
+        p.addLast(new HttpRequestDecoder());
+        p.addLast(new HttpResponseEncoder());
+        p.addLast(new ChunkedWriteHandler());
+        //p.addLast("authentication", null);
+        p.addLast("routingfilter", new RoutingFilterHandler(routerProvider.get()));
+        p.addLast("basic", new HttpServerHandler(routerProvider.get()));
         //p.addLast(new SecondHttpServerHandler());
         
-        p.addLast("decoder"       , new HttpRequestDecoder());
-        p.addLast("aggregator"    , new HttpObjectAggregator(Integer.MAX_VALUE));
-        p.addLast("encoder"       , new HttpResponseEncoder());
-        p.addLast("chunkedWriter" , new ChunkedWriteHandler());
-        p.addLast("akka" , new HttpAkkaHandler());
+//        p.addLast("decoder"       , new HttpRequestDecoder());
+//        p.addLast("aggregator"    , new HttpObjectAggregator(Integer.MAX_VALUE));
+//        p.addLast("encoder"       , new HttpResponseEncoder());
+//        p.addLast("chunkedWriter" , new ChunkedWriteHandler());
+//        p.addLast("akka" , new HttpAkkaHandler());
     }
     
     public void setSslContext(final SslContext sslCtx)
