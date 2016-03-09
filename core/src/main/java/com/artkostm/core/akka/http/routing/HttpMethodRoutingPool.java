@@ -7,11 +7,9 @@ import com.artkostm.core.akka.http.message.HttpMessage;
 import akka.actor.ActorSystem;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
-import akka.routing.ActorRefRoutee;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
-import akka.routing.Routee;
 import akka.routing.Router;
 import scala.Option;
 import scala.concurrent.duration.Duration;
@@ -25,13 +23,11 @@ public class HttpMethodRoutingPool extends PoolBase
     public HttpMethodRoutingPool(final int nrOfInstances) 
     {
         this.nrOfInstances = nrOfInstances;
-        
     }
 
     @Override
     public Router createRouter(ActorSystem system) 
     {
-        
         return new Router(new HttpMethodRoutingLogic());
     }
 
@@ -72,6 +68,6 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public boolean isManagementMessage(Object msg) 
     {
-        return true;
+        return super.isManagementMessage(msg) || msg instanceof HttpMessage;
     }
 }
