@@ -22,7 +22,7 @@ public class HttpMethodRoutingLogic implements RoutingLogic
     
     @Override
     public Routee select(Object msg, IndexedSeq<Routee> routees) 
-    {
+    {        
         if (msg instanceof HttpMessage)
         {
             final HttpMessage message = (HttpMessage) msg;
