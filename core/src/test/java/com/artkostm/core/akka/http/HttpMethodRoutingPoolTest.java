@@ -58,9 +58,21 @@ public class HttpMethodRoutingPoolTest
             }
         }).start();
         
-//        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
+        new Thread(new Runnable()
+        { 
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < 6000; i++)
+                {
+                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.PUT, "Hello, World!"), ActorRef.noSender());
+                }
+            }
+        }).start();
         
-        Thread.sleep(6000);
+//        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
+
+        Thread.sleep(15000);
         System.out.println("Start time is " + start);
 //        system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
@@ -71,9 +83,10 @@ public class HttpMethodRoutingPoolTest
         @Override
         public void onReceive(Object arg0) throws Exception
         {
-            System.out.println(Json.toJson(arg0).toString() + System.currentTimeMillis());
+            Json.toJson(arg0).toString();
+            System.out.println(System.currentTimeMillis());
         }
-    }
+    }//7438
     
     public static class HttpMessageImpl implements HttpMessage
     { 
