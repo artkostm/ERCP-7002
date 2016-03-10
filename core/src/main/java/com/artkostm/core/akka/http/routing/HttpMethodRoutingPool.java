@@ -14,6 +14,7 @@ import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
 import akka.routing.Router;
+import akka.routing.SmallestMailboxRoutingLogic;
 import scala.Option;
 import scala.concurrent.duration.Duration;
 
@@ -36,7 +37,7 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public Router createRouter(ActorSystem system)
     {
-        return new Router(new HttpMethodRoutingLogic());
+        return new Router(new SmallestMailboxRoutingLogic());
     }
 
     @Override
@@ -64,7 +65,7 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public SupervisorStrategy supervisorStrategy() 
     {
-        return new OneForOneStrategy(false, DeciderBuilder.match(Throwable.class, e -> SupervisorStrategy.resume()).build());
+        return new OneForOneStrategy(false, DeciderBuilder.match(Throwable.class, e -> SupervisorStrategy.restart()).build());
     }
 
     @Override

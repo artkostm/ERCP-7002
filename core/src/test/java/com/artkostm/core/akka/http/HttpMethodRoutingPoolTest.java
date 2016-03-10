@@ -4,62 +4,74 @@ import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.akka.http.routing.HttpMethodRoutingPool;
 import com.artkostm.core.akka.util.reaper.ProductionReaper;
 import com.artkostm.core.akka.util.reaper.WatchMe;
+import com.artkostm.core.web.controller.converter.Json;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.DeadLetter;
 import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class HttpMethodRoutingPoolTest
 {
     public static void main(String[] args) throws InterruptedException
     {
         final ActorSystem system = ActorSystem.create("test");
-        final ActorRef httpMethodRoutingPool = system.actorOf(new HttpMethodRoutingPool(15).props(Props.create(HttpMethodTestActor.class)));
+        final ActorRef httpMethodRoutingPool = system.actorOf(new HttpMethodRoutingPool(20).props(Props.create(HttpMethodTestActor.class)), "pool");
         
         final ActorRef reaper = system.actorOf(ProductionReaper.props());
         reaper.tell(new WatchMe(httpMethodRoutingPool), ActorRef.noSender());
+        final long start = System.currentTimeMillis();
+        new Thread(new Runnable()
+        { 
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < 6000; i++)
+                {
+                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.GET, "Hello, World!"), ActorRef.noSender());
+                }
+            }
+        }).start();
         
-        httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.CONNECT), ActorRef.noSender());
+        new Thread(new Runnable()
+        { 
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < 6000; i++)
+                {
+                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.POST, "Hello, World!"), ActorRef.noSender());
+                }
+            }
+        }).start();
         
-        system.actorSelection("akka://test/user/$a/$a").tell(new HttpMessageImpl(HttpMethods.OPTIONS), ActorRef.noSender());
-        for (int i = 0; i < 100; i++)
-        {
-            httpMethodRoutingPool.tell(new HttpMessageImpl(i % 2 == 0 ? HttpMethods.GET : HttpMethods.POST), ActorRef.noSender());
-        }
+        new Thread(new Runnable()
+        { 
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < 6000; i++)
+                {
+                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.PUT, "Hello, World!"), ActorRef.noSender());
+                }
+            }
+        }).start();
         
-        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
+//        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
         
-        Thread.sleep(2000);
-        system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
+        Thread.sleep(6000);
+        System.out.println("Start time is " + start);
+//        system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
     
     public static class HttpMethodTestActor extends UntypedActor
-    {
-        LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-        
-        @Override
-        public void preStart() 
-        {
-          log.info("Starting");
-        }
-        
+    {        
         @Override
         public void onReceive(Object arg0) throws Exception
         {
-            System.out.println(this.self().path() + " actor obtain " + arg0);
-            if (arg0 instanceof HttpMessage)
-            {
-                if (((HttpMessage) arg0).method() == HttpMethods.GET)
-                {
-                    throw new RuntimeException("Hello");
-                }
-            }
+            System.out.println(Json.toJson(arg0).toString() + System.currentTimeMillis());
         }
     }
     
@@ -67,9 +79,12 @@ public class HttpMethodRoutingPoolTest
     { 
         private final HttpMethods method;
         
-        public HttpMessageImpl(HttpMethods method)
+        private final String payload;
+        
+        public HttpMessageImpl(HttpMethods method, String payload)
         {
             this.method = method;
+            this.payload = payload;
         }
         
         @Override
@@ -82,11 +97,16 @@ public class HttpMethodRoutingPoolTest
         {
             return method;
         }
+        
+        public String getPayload()
+        {
+            return payload;
+        }
 
         @Override
         public String toString()
         {
-            return "HttpMessage [method=" + method + "]";
+            return "HttpMessage [method=" + method + "]:"+System.currentTimeMillis();
         }
     }
 }
