@@ -3,13 +3,17 @@ package com.artkostm.core.akka.http.routing;
 import java.util.concurrent.TimeUnit;
 
 import com.artkostm.core.akka.http.message.HttpMessage;
+import com.typesafe.config.Config;
 
+import akka.actor.ActorContext;
 import akka.actor.ActorSystem;
+import akka.actor.Props;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
+import akka.routing.Routee;
 import akka.routing.Router;
 import scala.Option;
 import scala.concurrent.duration.Duration;
@@ -24,9 +28,14 @@ public class HttpMethodRoutingPool extends PoolBase
     {
         this.nrOfInstances = nrOfInstances;
     }
+    
+    public HttpMethodRoutingPool(final Config config) 
+    {
+        this.nrOfInstances = config.getInt("nr-of-instances");
+    }
 
     @Override
-    public Router createRouter(ActorSystem system) 
+    public Router createRouter(ActorSystem system)
     {
         return new Router(new HttpMethodRoutingLogic());
     }
@@ -62,12 +71,27 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public String routerDispatcher() 
     {
+        System.out.println(Dispatchers.DefaultDispatcherId());
         return Dispatchers.DefaultDispatcherId();
     }
-    
+
     @Override
     public boolean isManagementMessage(Object msg) 
     {
         return super.isManagementMessage(msg) || msg instanceof HttpMessage;
+    }
+
+    @Override
+    public Props enrichWithPoolDispatcher(Props routeeProps, ActorContext context) 
+    {
+        Props props = super.enrichWithPoolDispatcher(routeeProps, context);
+        return props;
+    }
+
+    @Override
+    public Routee newRoutee(Props routeeProps, ActorContext context) 
+    {
+        Routee routee = super.newRoutee(routeeProps, context); 
+        return routee;
     }
 }

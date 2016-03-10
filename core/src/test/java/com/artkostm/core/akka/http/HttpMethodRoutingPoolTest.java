@@ -18,10 +18,10 @@ public class HttpMethodRoutingPoolTest
 {
     public static void main(String[] args) throws InterruptedException
     {
-        final ActorSystem system = ActorSystem.create();
+        final ActorSystem system = ActorSystem.create("test");
         final ActorRef httpMethodRoutingPool = system.actorOf(Props.create(HttpMethodTestActor.class).withRouter(new HttpMethodRoutingPool(5)));
         
-        final ActorRef testActor = system.actorOf(Props.create(HttpMethodTestActor.class));
+        final ActorRef testActor = system.actorOf(Props.create(HttpMethodTestActor.class), "testActor");
         final ActorRef reaper = system.actorOf(ProductionReaper.props());
         reaper.tell(new WatchMe(httpMethodRoutingPool), ActorRef.noSender());
         
@@ -31,7 +31,7 @@ public class HttpMethodRoutingPoolTest
         }
         
         system.eventStream().subscribe(testActor, DeadLetter.class);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
@@ -43,7 +43,7 @@ public class HttpMethodRoutingPoolTest
         @Override
         public void preStart() 
         {
-          log.debug("Starting");
+          log.info("Starting");
         }
         
         @Override
