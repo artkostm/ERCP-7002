@@ -19,7 +19,7 @@ public class HttpMethodRoutingPoolTest
     public static void main(String[] args) throws InterruptedException
     {
         final ActorSystem system = ActorSystem.create("test");
-        final ActorRef httpMethodRoutingPool = system.actorOf(Props.create(HttpMethodTestActor.class).withRouter(new HttpMethodRoutingPool(5)));
+        final ActorRef httpMethodRoutingPool = system.actorOf(new HttpMethodRoutingPool(15).props(Props.create(HttpMethodTestActor.class)));
         
         final ActorRef reaper = system.actorOf(ProductionReaper.props());
         reaper.tell(new WatchMe(httpMethodRoutingPool), ActorRef.noSender());
@@ -36,10 +36,6 @@ public class HttpMethodRoutingPoolTest
         
         Thread.sleep(2000);
         system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
-        for (int i = 0; i < 100; i++)
-        {
-            system.deadLetters().tell(new HttpMessageImpl(i % 2 == 0 ? HttpMethods.GET : HttpMethods.PATCH), ActorRef.noSender());
-        }
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
     
@@ -57,6 +53,13 @@ public class HttpMethodRoutingPoolTest
         public void onReceive(Object arg0) throws Exception
         {
             System.out.println(this.self().path() + " actor obtain " + arg0);
+            if (arg0 instanceof HttpMessage)
+            {
+                if (((HttpMessage) arg0).method() == HttpMethods.GET)
+                {
+                    throw new RuntimeException("Hello");
+                }
+            }
         }
     }
     

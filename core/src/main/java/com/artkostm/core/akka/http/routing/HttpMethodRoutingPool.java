@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.typesafe.config.Config;
 
-import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.OneForOneStrategy;
 import akka.actor.SupervisorStrategy;
@@ -14,7 +13,6 @@ import akka.japi.pf.DeciderBuilder;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
-import akka.routing.Routee;
 import akka.routing.Router;
 import scala.Option;
 import scala.concurrent.duration.Duration;
@@ -38,16 +36,7 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public Router createRouter(ActorSystem system)
     {
-        Router router = new Router(new HttpMethodRoutingLogic());
-        router.addRoutee(new Routee()
-        {
-            @Override
-            public void send(Object msg, ActorRef actor)
-            {
-                actor.tell(msg, ActorRef.noSender());
-            }
-        });
-        return router;
+        return new Router(new HttpMethodRoutingLogic());
     }
 
     @Override
@@ -75,7 +64,7 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public SupervisorStrategy supervisorStrategy() 
     {
-        return new OneForOneStrategy(true, DeciderBuilder.match(Throwable.class, e->{e.printStackTrace(); return SupervisorStrategy.restart();}).build()); //TODO: create custom strategy
+        return new OneForOneStrategy(false, DeciderBuilder.match(Throwable.class, e -> SupervisorStrategy.resume()).build());
     }
 
     @Override
