@@ -5,11 +5,12 @@ import java.util.concurrent.TimeUnit;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.typesafe.config.Config;
 
-import akka.actor.ActorContext;
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.Props;
+import akka.actor.OneForOneStrategy;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
+import akka.japi.pf.DeciderBuilder;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
@@ -37,7 +38,16 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public Router createRouter(ActorSystem system)
     {
-        return new Router(new HttpMethodRoutingLogic());
+        Router router = new Router(new HttpMethodRoutingLogic());
+        router.addRoutee(new Routee()
+        {
+            @Override
+            public void send(Object msg, ActorRef actor)
+            {
+                actor.tell(msg, ActorRef.noSender());
+            }
+        });
+        return router;
     }
 
     @Override
@@ -65,33 +75,18 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public SupervisorStrategy supervisorStrategy() 
     {
-        return SupervisorStrategy.defaultStrategy(); //TODO: create custom strategy
+        return new OneForOneStrategy(true, DeciderBuilder.match(Throwable.class, e->{e.printStackTrace(); return SupervisorStrategy.restart();}).build()); //TODO: create custom strategy
     }
 
     @Override
     public String routerDispatcher() 
     {
-        System.out.println(Dispatchers.DefaultDispatcherId());
         return Dispatchers.DefaultDispatcherId();
     }
 
     @Override
     public boolean isManagementMessage(Object msg) 
     {
-        return super.isManagementMessage(msg) || msg instanceof HttpMessage;
-    }
-
-    @Override
-    public Props enrichWithPoolDispatcher(Props routeeProps, ActorContext context) 
-    {
-        Props props = super.enrichWithPoolDispatcher(routeeProps, context);
-        return props;
-    }
-
-    @Override
-    public Routee newRoutee(Props routeeProps, ActorContext context) 
-    {
-        Routee routee = super.newRoutee(routeeProps, context); 
-        return routee;
+        return super.isManagementMessage(msg) || !(msg instanceof HttpMessage);
     }
 }

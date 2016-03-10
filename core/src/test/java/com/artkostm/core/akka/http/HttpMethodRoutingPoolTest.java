@@ -21,18 +21,25 @@ public class HttpMethodRoutingPoolTest
         final ActorSystem system = ActorSystem.create("test");
         final ActorRef httpMethodRoutingPool = system.actorOf(Props.create(HttpMethodTestActor.class).withRouter(new HttpMethodRoutingPool(5)));
         
-        final ActorRef testActor = system.actorOf(Props.create(HttpMethodTestActor.class), "testActor");
         final ActorRef reaper = system.actorOf(ProductionReaper.props());
         reaper.tell(new WatchMe(httpMethodRoutingPool), ActorRef.noSender());
         
+        httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.CONNECT), ActorRef.noSender());
+        
+        system.actorSelection("akka://test/user/$a/$a").tell(new HttpMessageImpl(HttpMethods.OPTIONS), ActorRef.noSender());
         for (int i = 0; i < 100; i++)
         {
             httpMethodRoutingPool.tell(new HttpMessageImpl(i % 2 == 0 ? HttpMethods.GET : HttpMethods.POST), ActorRef.noSender());
         }
         
-        system.eventStream().subscribe(testActor, DeadLetter.class);
+        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
+        
         Thread.sleep(2000);
         system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
+        for (int i = 0; i < 100; i++)
+        {
+            system.deadLetters().tell(new HttpMessageImpl(i % 2 == 0 ? HttpMethods.GET : HttpMethods.PATCH), ActorRef.noSender());
+        }
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
     
