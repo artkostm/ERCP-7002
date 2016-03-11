@@ -17,50 +17,26 @@ public class HttpMethodRoutingPoolTest
     public static void main(String[] args) throws InterruptedException
     {
         final ActorSystem system = ActorSystem.create("test");
-        final ActorRef httpMethodRoutingPool = system.actorOf(new HttpMethodRoutingPool(20).props(Props.create(HttpMethodTestActor.class)), "pool");
+        final ActorRef httpMethodRoutingPool = system.actorOf(new HttpMethodRoutingPool(30).props(Props.create(HttpMethodTestActor.class)), "pool");
         
         final ActorRef reaper = system.actorOf(ProductionReaper.props());
         reaper.tell(new WatchMe(httpMethodRoutingPool), ActorRef.noSender());
         final long start = System.currentTimeMillis();
-        new Thread(new Runnable()
-        { 
-            @Override
-            public void run()
-            {
-                for (int i = 0; i < 6000; i++)
-                {
-                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.GET, "Hello, World!"), ActorRef.noSender());
-                }
-            }
-        }).start();
         
-        new Thread(new Runnable()
-        { 
-            @Override
-            public void run()
-            {
-                for (int i = 0; i < 6000; i++)
-                {
-                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.POST, "Hello, World!"), ActorRef.noSender());
-                }
-            }
-        }).start();
+        new Thread(worker(httpMethodRoutingPool)).start();
         
-        new Thread(new Runnable()
-        { 
-            @Override
-            public void run()
-            {
-                for (int i = 0; i < 6000; i++)
-                {
-                    httpMethodRoutingPool.tell(new HttpMessageImpl(HttpMethods.PUT, "Hello, World!"), ActorRef.noSender());
-                }
-            }
-        }).start();
+        new Thread(worker(httpMethodRoutingPool)).start();
+        
+        new Thread(worker(httpMethodRoutingPool)).start();
+        
+        new Thread(worker(httpMethodRoutingPool)).start();
+        
+        new Thread(worker(httpMethodRoutingPool)).start();
+        
         
 //        system.eventStream().subscribe(httpMethodRoutingPool, DeadLetter.class);
         
-        Thread.sleep(6000);
+        Thread.sleep(10000);
         System.out.println("Start time is " + start);
 //        system.deadLetters().tell(new HttpMessageImpl(HttpMethods.DELETE), ActorRef.noSender());
         httpMethodRoutingPool.tell(PoisonPill.getInstance(), ActorRef.noSender());
@@ -108,5 +84,20 @@ public class HttpMethodRoutingPoolTest
         {
             return "HttpMessage [method=" + method + "]:"+System.currentTimeMillis();
         }
+    }
+    
+    private static Runnable worker(final ActorRef pool)
+    {
+        return new Runnable()
+        { 
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < 7000; i++)
+                {
+                    pool.tell(new HttpMessageImpl(HttpMethods.PUT, "Hello, World!"), ActorRef.noSender());
+                }
+            }
+        };
     }
 }

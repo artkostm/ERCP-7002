@@ -51,7 +51,7 @@ public class HttpMethodRoutingPool extends PoolBase
     {
         return Option.apply(new DefaultOptimalSizeExploringResizer(
                 2,                                    //lowerBound: PoolSize = 1,
-                18,                                   //upperBound: PoolSize = 30,
+                40,                                   //upperBound: PoolSize = 30,
                 0.2,                                  //chanceOfScalingDownWhenFull: Double = 0.2,
                 Duration.create(5, TimeUnit.SECONDS), //actionInterval: Duration = 5.seconds,
                 16,                                   //numOfAdjacentSizesToConsiderDuringOptimization: Int = 16,
