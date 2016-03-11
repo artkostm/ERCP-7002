@@ -68,13 +68,13 @@ public class AkkaHttpClient
                 ).runWith(Sink.<ByteString>head(), materializer);
                 
                 final String sb = Await.result(data, Duration.Inf()).utf8String();
-//                System.out.println(sb);
-                final Document doc = Jsoup.parse(sb);
-                doc.select("body table[role^=grid]").forEach(element -> 
-                {
-                    System.out.println(element.outerHtml());
-                });
-                System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
+                System.out.println(sb);
+//                final Document doc = Jsoup.parse(sb);
+//                doc.select("body table[role^=grid]").forEach(element -> 
+//                {
+//                    System.out.println(element.outerHtml());
+//                });
+//                System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
             }
             finally
             {

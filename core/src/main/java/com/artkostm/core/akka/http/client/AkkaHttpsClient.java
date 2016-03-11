@@ -40,13 +40,11 @@ public class AkkaHttpsClient
                 .runWith(Sink.<HttpResponse>head(), materializer);
         
         final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, true);
-        
+
         responseFuture.onComplete(onComplete, system.dispatcher());
-        
-        test1(system, materializer);
-        
+        //test1(system, materializer);
     }
-    
+
     public static void test1(final ActorSystem system, final ActorMaterializer materializer)
     {
         final long start = System.currentTimeMillis();
