@@ -67,4 +67,35 @@ public interface Data
             return target;
         }
     }
+    
+    public static class SetRate implements Data
+    {
+        private final Rate rate;
+        
+        public SetRate(final Rate rate) 
+        {
+            this.rate = rate;
+        }
+        
+        public Rate getRate() 
+        {
+            return rate;
+        }
+    }
+    
+    public static class Message extends SetTarget
+    {
+        private final Object msg;
+        
+        public Message(final Object msg, final ActorRef sender) 
+        {
+            super(sender);
+            this.msg = msg;
+        }
+        
+        public Object getMsg() 
+        {
+            return msg;
+        }
+    }
 }
