@@ -10,9 +10,11 @@ import akka.actor.OneForOneStrategy;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
 import akka.japi.pf.DeciderBuilder;
+import akka.routing.BalancingRoutingLogic;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
+import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Router;
 import akka.routing.SmallestMailboxRoutingLogic;
 import scala.Option;
@@ -37,7 +39,7 @@ public class HttpMethodRoutingPool extends PoolBase
     @Override
     public Router createRouter(ActorSystem system)
     {
-        return new Router(new SmallestMailboxRoutingLogic());
+        return new Router(new RoundRobinRoutingLogic());
     }
 
     @Override
