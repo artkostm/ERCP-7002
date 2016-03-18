@@ -6,8 +6,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
@@ -16,6 +14,9 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.net.SocketAddress;
 
+import akka.actor.ActorSystem;
+
+import com.artkostm.core.akka.extension.ActorSystemAware;
 import com.artkostm.core.guice.annotation.Config.Ssl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -26,9 +27,11 @@ import com.google.inject.Singleton;
  *
  */
 @Singleton
-public class HttpServer implements Runnable
+public class HttpServer implements Runnable, ActorSystemAware
 {
     private static final InternalLogger LOG = InternalLoggerFactory.getInstance(HttpServer.class);
+    
+    private ActorSystem system;
     
     @Ssl
     private boolean SSL;
@@ -57,8 +60,8 @@ public class HttpServer implements Runnable
             }
         }
         
-        final EventLoopGroup bossGroup = new NioEventLoopGroup(10);
-        final EventLoopGroup workerGroup = new NioEventLoopGroup(20);
+        final EventLoopGroup bossGroup = new NioEventLoopGroup(3);
+        final EventLoopGroup workerGroup = new NioEventLoopGroup(30);
         try 
         {
             final ServerBootstrap b = new ServerBootstrap();
@@ -79,5 +82,17 @@ public class HttpServer implements Runnable
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    @Override
+    public void actorSystem(ActorSystem system)
+    {
+        this.system = system;
+    }
+
+    @Override
+    public ActorSystem actorSystem()
+    {
+        return system;
     }
 }

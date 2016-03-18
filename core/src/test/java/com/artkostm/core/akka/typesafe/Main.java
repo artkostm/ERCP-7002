@@ -8,6 +8,6 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         final RouterFactory factory = new RouterFactory();
-        System.out.println(factory.get(ConfigAggregator.load("/application2.conf").configuration()));
+        System.out.println(factory.get(ConfigAggregator.load("/application3.conf").configuration()));
     }
 }
