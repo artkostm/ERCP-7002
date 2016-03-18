@@ -4,7 +4,7 @@ import akka.actor.ActorSystem;
 
 public interface ActorSystemAware
 {
-    void setActorSystem(final ActorSystem system);
+    void actorSystem(final ActorSystem system);
     
-    ActorSystem getActorSystem();
+    ActorSystem actorSystem();
 }
