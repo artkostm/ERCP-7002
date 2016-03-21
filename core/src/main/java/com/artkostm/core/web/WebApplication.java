@@ -1,12 +1,8 @@
 package com.artkostm.core.web;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
+import com.artkostm.core.akka.configuration.RouteObject;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.web.network.HttpServer;
-import com.artkostm.core.web.network.handler.util.RequestMapper;
-import com.artkostm.core.web.network.router.MethodRouterProvider;
 import com.artkostm.core.web.network.router.Router;
 import com.artkostm.template.TemplateCompiller;
 import com.google.inject.Inject;
@@ -20,8 +16,10 @@ import com.google.inject.Singleton;
 @Singleton
 public abstract class WebApplication implements Application
 {    
+//    @Inject
+//    private MethodRouterProvider routerProvider;
     @Inject
-    private MethodRouterProvider routerProvider;
+    private Router<RouteObject> router;
     
     @Inject
     private AppConfig metadata;
@@ -37,15 +35,16 @@ public abstract class WebApplication implements Application
             TemplateCompiller.configure(metadata.getTemplate().getDirectory());
         }
         
-        RequestMapper.map(routerProvider.get(), metadata);
+//        RequestMapper.map(routerProvider.get(), metadata);
+        System.out.println();
         configure();
         
         server.run();
     }
     
     @Override
-    public Router<List<Method>> router() 
+    public Router<RouteObject> router() 
     {
-        return routerProvider.get();
+        return router;
     }
 }

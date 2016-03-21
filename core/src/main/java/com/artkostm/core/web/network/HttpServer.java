@@ -14,9 +14,6 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.net.SocketAddress;
 
-import akka.actor.ActorSystem;
-
-import com.artkostm.core.akka.extension.ActorSystemAware;
 import com.artkostm.core.guice.annotation.Config.Ssl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -27,11 +24,9 @@ import com.google.inject.Singleton;
  *
  */
 @Singleton
-public class HttpServer implements Runnable, ActorSystemAware
+public class HttpServer implements Runnable
 {
     private static final InternalLogger LOG = InternalLoggerFactory.getInstance(HttpServer.class);
-    
-    private ActorSystem system;
     
     @Ssl
     private boolean SSL;
@@ -82,17 +77,5 @@ public class HttpServer implements Runnable, ActorSystemAware
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-    }
-
-    @Override
-    public void actorSystem(ActorSystem system)
-    {
-        this.system = system;
-    }
-
-    @Override
-    public ActorSystem actorSystem()
-    {
-        return system;
     }
 }
