@@ -3,12 +3,19 @@ package com.artkostm.core.guice.module;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import akka.actor.ActorSystem;
+
+import com.artkostm.core.akka.configuration.RouteObject;
+import com.artkostm.core.akka.configuration.RouterFactory;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.guice.annotation.Config.Host;
 import com.artkostm.core.guice.annotation.Config.Port;
 import com.artkostm.core.guice.annotation.Config.TemplateLoadingDir;
 import com.artkostm.core.web.ApplicationConstants;
+import com.artkostm.core.web.network.router.Router;
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
+import com.typesafe.config.Config;
 
 /**
  * 
@@ -31,9 +38,18 @@ public abstract class ConfigurationModule extends AbstractModule implements Appl
         bindConstant().annotatedWith(TemplateLoadingDir.class).to(templateLoadingDir);
         
         bind(SocketAddress.class).toInstance(new InetSocketAddress(host, port));
+        
+        final ActorSystem system = ActorSystem.create("server", config());
+        bind(ActorSystem.class).toInstance(system);
+        
+        final RouterFactory factory = new RouterFactory(system);
+        final Router<RouteObject> router = factory.get(config());
+        bind(new TypeLiteral<Router<RouteObject>>() {}).toInstance(router);
     }
     
     protected abstract Integer port();
+    
+    protected abstract Config config();
     
     protected abstract String host();
     

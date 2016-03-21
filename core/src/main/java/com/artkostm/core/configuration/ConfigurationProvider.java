@@ -4,6 +4,7 @@ import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.guice.module.ConfigurationModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.typesafe.config.Config;
 
 /**
  * 
@@ -46,5 +47,10 @@ public class ConfigurationProvider extends ConfigurationModule
     protected AppConfig applicationConfiguration()
     {
         return ConfigAggregator.aggregator().app();
+    }
+    
+    protected Config config()
+    {
+        return ConfigAggregator.aggregator().configuration();
     }
 }
