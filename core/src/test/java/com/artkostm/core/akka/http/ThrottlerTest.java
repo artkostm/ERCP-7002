@@ -17,6 +17,8 @@ public class ThrottlerTest
         final ActorSystem system = ActorSystem.create();
         final ActorRef throttler = system.actorOf(Props.create(TimerBasedThrottler.class, new Throttler.Rate(6, Duration.create(1, TimeUnit.SECONDS))));
         final ActorRef printer = system.actorOf(Props.create(PrintEndpoint.class));
+        final ActorRef printer2 = system.actorOf(Props.create(PrintEndpoint2.class));
+        system.eventStream().subscribe(printer2, String.class);
         
         throttler.tell(new Throttler.SetTarget(printer), ActorRef.noSender());
         
@@ -41,6 +43,15 @@ public class ThrottlerTest
         public void onReceive(Object msg) throws Exception 
         {
             System.out.println("Printer: [" + msg + "]");
+        }
+    }
+    
+    public static class PrintEndpoint2 extends UntypedActor
+    {
+        @Override
+        public void onReceive(Object msg) throws Exception 
+        {
+            System.out.println("Subscribed: [" + msg + "]");
         }
     }
 }

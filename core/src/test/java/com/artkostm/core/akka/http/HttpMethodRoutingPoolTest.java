@@ -1,5 +1,8 @@
 package com.artkostm.core.akka.http;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpRequest;
+
 import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
@@ -93,6 +96,27 @@ public class HttpMethodRoutingPoolTest
         public String toString()
         {
             return "HttpMessage [method=" + method + "]:"+System.currentTimeMillis();
+        }
+
+        @Override
+        public ChannelHandlerContext context()
+        {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void context(ChannelHandlerContext context)
+        {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public HttpRequest request()
+        {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
     
