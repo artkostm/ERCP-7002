@@ -10,13 +10,11 @@ import akka.actor.OneForOneStrategy;
 import akka.actor.SupervisorStrategy;
 import akka.dispatch.Dispatchers;
 import akka.japi.pf.DeciderBuilder;
-import akka.routing.BalancingRoutingLogic;
 import akka.routing.DefaultOptimalSizeExploringResizer;
 import akka.routing.PoolBase;
 import akka.routing.Resizer;
 import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Router;
-import akka.routing.SmallestMailboxRoutingLogic;
 import scala.Option;
 import scala.concurrent.duration.Duration;
 

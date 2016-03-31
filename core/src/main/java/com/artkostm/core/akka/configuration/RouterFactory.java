@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import akka.routing.RoundRobinPool;
 import akka.routing.SmallestMailboxPool;
 
 import com.artkostm.core.web.network.router.Router;
@@ -48,7 +49,7 @@ public class RouterFactory implements RouterProvider<RouteObject>
     {
         final String actorName = name == null ? clazz.getSimpleName() : name;
         if (spin == 1) return new RouteObject(clazz, system.actorOf(Props.create(clazz), actorName));
-        else return new RouteObject(clazz, system.actorOf(Props.create(clazz).withRouter(new SmallestMailboxPool(spin)), actorName), spin);
+        else return new RouteObject(clazz, system.actorOf(Props.create(clazz).withRouter(new RoundRobinPool(spin)), actorName), spin);
     }
     
     protected Class<?> validateClass(String actorClass) throws Exception 

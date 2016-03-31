@@ -1,14 +1,15 @@
 package com.artkostm.core.akka.http.client.common;
 
-import scala.concurrent.Future;
-import akka.dispatch.OnComplete;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
+
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 
 public interface SingleRequestRunner
 {
-    ResponseHandler create(String url);
-    ResponseHandler create(HttpRequest request);
-    Future<HttpResponse> create(String url, OnComplete<HttpResponse> onComplete);
-    Future<HttpResponse> create(HttpRequest request, OnComplete<HttpResponse> onComplete);
+    ResponseHandler request(String url);
+    ResponseHandler request(HttpRequest request);
+    CompletionStage<HttpResponse> request(String url, BiConsumer<? super HttpResponse, ? super Throwable> action);
+    CompletionStage<HttpResponse> request(HttpRequest request, BiConsumer<? super HttpResponse, ? super Throwable> action);
 }

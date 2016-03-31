@@ -1,13 +1,16 @@
 package com.artkostm.core.akka.http.client.common;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
+
 import com.artkostm.core.akka.extension.ActorSystemAware;
 
-import scala.concurrent.Await;
-import scala.concurrent.Future;
-import scala.concurrent.duration.Duration;
 import akka.actor.ActorSystem;
-import akka.dispatch.OnComplete;
+import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
+import akka.http.javadsl.HttpsConnectionContext;
 import akka.http.javadsl.OutgoingConnection;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
@@ -24,7 +27,7 @@ public class HttpEndpoint implements HttpFlowBuilder, HttpRequestRunner,
     private final ActorSystem system;
     private final ActorMaterializer materializer;
     
-    private Flow<HttpRequest, HttpResponse, Future<OutgoingConnection>> connectionFlow;
+    private Flow<HttpRequest, HttpResponse, CompletionStage<OutgoingConnection>> connectionFlow;
     private HttpResponse response;
     
     public HttpEndpoint(final ActorSystem system)
@@ -34,19 +37,19 @@ public class HttpEndpoint implements HttpFlowBuilder, HttpRequestRunner,
     }
     
     @Override
-    public ResponseHandler create(String url)
+    public ResponseHandler request(String url)
     {
-        return create(HttpRequest.create(url));
+        return request(HttpRequest.create(url));
     }
 
     @Override
-    public ResponseHandler create(HttpRequest request)
+    public ResponseHandler request(HttpRequest request)
     {
         try
         {
-            response = Await.result(Source.single(request)
+            response = ((CompletableFuture<HttpResponse>) Source.single(request)
                 .via(connectionFlow)
-                .runWith(Sink.<HttpResponse>head(), materializer), Duration.Inf());
+                .runWith(Sink.<HttpResponse>head(), materializer)).get();
         }
         catch (Exception e)
         {
@@ -56,25 +59,50 @@ public class HttpEndpoint implements HttpFlowBuilder, HttpRequestRunner,
     }
     
     @Override
-    public Future<HttpResponse> create(String url, OnComplete<HttpResponse> onComplete)
+    public CompletionStage<HttpResponse> request(String url, BiConsumer<? super HttpResponse, ? super Throwable> action)
     {
-        return create(HttpRequest.create(url), onComplete);
+        return request(HttpRequest.create(url), action);
     }
 
     @Override
-    public Future<HttpResponse> create(HttpRequest request, OnComplete<HttpResponse> onComplete)
+    public CompletionStage<HttpResponse> request(HttpRequest request, BiConsumer<? super HttpResponse, ? super Throwable> action)
     {
-        final Future<HttpResponse> future = Source.single(request)
+        final CompletableFuture<HttpResponse> future = (CompletableFuture<HttpResponse>) Source.single(request)
                 .via(connectionFlow)
                 .runWith(Sink.<HttpResponse>head(), materializer);
-        future.onComplete(onComplete, system.dispatcher());
+        future.whenCompleteAsync(action, system.dispatcher());
         return future;
     };
 
     @Override
     public HttpRequestRunner createFlow(String host, int port)
     {
-        connectionFlow = Http.get(system).outgoingConnection(host, port);
+        connectionFlow = Http.get(system).outgoingConnection(new ConnectHttp()
+        {
+            @Override
+            public int port()
+            {
+                return port;
+            }
+            
+            @Override
+            public boolean isHttps()
+            {
+                return false;
+            }
+            
+            @Override
+            public String host()
+            {
+                return host;
+            }
+            
+            @Override
+            public Optional<HttpsConnectionContext> connectionContext()
+            {
+                return null;
+            }
+        });
         return this;
     }
 
@@ -99,47 +127,11 @@ public class HttpEndpoint implements HttpFlowBuilder, HttpRequestRunner,
     @Override
     public String asString() throws Exception
     {
-        final Future<ByteString> data = response.entity().getDataBytes().fold(ByteString.empty(), 
+        return ((CompletableFuture<ByteString>) response.entity().getDataBytes().fold(ByteString.empty(), 
             (z, i) -> 
             {
                 return z.concat(i);
             }
-        ).runWith(Sink.<ByteString>head(), materializer);
-        return Await.result(data, Duration.Inf()).utf8String();
+        ).runWith(Sink.<ByteString>head(), materializer)).get().utf8String();
     }
-    
-    public static class Completing extends OnComplete<HttpResponse>
-    {
-        final ActorSystem system;
-        final ActorMaterializer materializer;
-        final boolean shouldTerminateSystem;
-        
-        public Completing(final ActorSystem system, final ActorMaterializer materializer, final boolean shouldTerminateSystem)
-        {
-            this.materializer = materializer;
-            this.system = system;
-            this.shouldTerminateSystem = shouldTerminateSystem;
-        }
-        
-        @Override
-        public void onComplete(Throwable arg0, HttpResponse response) throws Throwable
-        {
-            try
-            {
-                final Future<ByteString> data = response.entity().getDataBytes().fold(ByteString.empty(), 
-                    (z, i) -> 
-                    {
-                        return z.concat(i);
-                    }
-                ).runWith(Sink.<ByteString>head(), materializer);
-                
-                final String sb = Await.result(data, Duration.Inf()).utf8String();
-                System.out.println(sb);
-            }
-            finally
-            {
-                if (shouldTerminateSystem) system.terminate();
-            }
-        }
-     }
 }

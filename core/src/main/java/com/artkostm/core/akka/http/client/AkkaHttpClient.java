@@ -20,66 +20,66 @@ import akka.util.ByteString;
 
 public class AkkaHttpClient
 {
-    static long start = 0;
-    public static void main(String[] args) throws InterruptedException
-    {
-        final ActorSystem system = ActorSystem.create("akka-http-client");
-        final ActorMaterializer materializer = ActorMaterializer.create(system);
-        final Flow<HttpRequest, HttpResponse, Future<OutgoingConnection>> connectionFlow = 
-                Http.get(system).outgoingConnection("www.bsuir.by", 80);
-        start = System.currentTimeMillis();
-        final Future<HttpResponse> responseFuture =  Source.single(HttpRequest.create("/schedule/schedule.xhtml?id=272301"))
-                .via(connectionFlow)
-                .runWith(Sink.<HttpResponse>head(), materializer);
-        
-        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, false);
-        
-//        Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
-//            .via(connectionFlow)
-//            .runWith(Sink.<HttpResponse>head(), materializer).onComplete(onComplete, system.dispatcher());
-        responseFuture.onComplete(onComplete, system.dispatcher());
-        Thread.sleep(20000);
-        system.terminate();
-    }
-    
-    public static class Completing extends OnComplete<HttpResponse>
-    {
-        final ActorSystem system;
-        final ActorMaterializer materializer;
-        final boolean shouldTerminateSystem;
-        
-        public Completing(final ActorSystem system, final ActorMaterializer materializer, final boolean shouldTerminateSystem)
-        {
-            this.materializer = materializer;
-            this.system = system;
-            this.shouldTerminateSystem = shouldTerminateSystem;
-        }
-        
-        @Override
-        public void onComplete(Throwable arg0, HttpResponse response) throws Throwable
-        {
-            try
-            {
-                final Future<ByteString> data = response.entity().getDataBytes().fold(ByteString.empty(), 
-                    (z, i) -> 
-                    {
-                        return z.concat(i);
-                    }
-                ).runWith(Sink.<ByteString>head(), materializer);
-                
-                final String sb = Await.result(data, Duration.Inf()).utf8String();
-                System.out.println(sb);
-//                final Document doc = Jsoup.parse(sb);
-//                doc.select("body table[role^=grid]").forEach(element -> 
-//                {
-//                    System.out.println(element.outerHtml());
-//                });
-//                System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
-            }
-            finally
-            {
-                if (shouldTerminateSystem) system.terminate();
-            }
-        }
-     };
+//    static long start = 0;
+//    public static void main(String[] args) throws InterruptedException
+//    {
+//        final ActorSystem system = ActorSystem.create("akka-http-client");
+//        final ActorMaterializer materializer = ActorMaterializer.create(system);
+//        final Flow<HttpRequest, HttpResponse, Future<OutgoingConnection>> connectionFlow = 
+//                Http.get(system).outgoingConnection("www.bsuir.by");
+//        start = System.currentTimeMillis();
+//        final Future<HttpResponse> responseFuture =  Source.single(HttpRequest.create("/schedule/schedule.xhtml?id=272301"))
+//                .via(connectionFlow)
+//                .runWith(Sink.<HttpResponse>head(), materializer);
+//        
+//        final OnComplete<HttpResponse> onComplete = new Completing(system, materializer, false);
+//        
+////        Source.single(HttpRequest.create("/news/2016/02/20/4-1-0-CR3.html"))
+////            .via(connectionFlow)
+////            .runWith(Sink.<HttpResponse>head(), materializer).onComplete(onComplete, system.dispatcher());
+//        responseFuture.onComplete(onComplete, system.dispatcher());
+//        Thread.sleep(20000);
+//        system.terminate();
+//    }
+//    
+//    public static class Completing extends OnComplete<HttpResponse>
+//    {
+//        final ActorSystem system;
+//        final ActorMaterializer materializer;
+//        final boolean shouldTerminateSystem;
+//        
+//        public Completing(final ActorSystem system, final ActorMaterializer materializer, final boolean shouldTerminateSystem)
+//        {
+//            this.materializer = materializer;
+//            this.system = system;
+//            this.shouldTerminateSystem = shouldTerminateSystem;
+//        }
+//        
+//        @Override
+//        public void onComplete(Throwable arg0, HttpResponse response) throws Throwable
+//        {
+//            try
+//            {
+//                final Future<ByteString> data = response.entity().getDataBytes().fold(ByteString.empty(), 
+//                    (z, i) -> 
+//                    {
+//                        return z.concat(i);
+//                    }
+//                ).runWith(Sink.<ByteString>head(), materializer);
+//                
+//                final String sb = Await.result(data, Duration.Inf()).utf8String();
+//                System.out.println(sb);
+////                final Document doc = Jsoup.parse(sb);
+////                doc.select("body table[role^=grid]").forEach(element -> 
+////                {
+////                    System.out.println(element.outerHtml());
+////                });
+////                System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
+//            }
+//            finally
+//            {
+//                if (shouldTerminateSystem) system.terminate();
+//            }
+//        }
+//     };
 }
