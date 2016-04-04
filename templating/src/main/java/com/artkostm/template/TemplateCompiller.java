@@ -52,8 +52,7 @@ public class TemplateCompiller
         catch (Exception e) 
         {
             // TODO: add logging here
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(out.toString(), e);
         }
         finally
         {

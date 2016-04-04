@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+import scala.Option;
+
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Context;
 import com.artkostm.core.web.controller.Result;
@@ -35,10 +37,23 @@ import akka.japi.pf.DeciderBuilder;
 
 public abstract class ControllerActor extends UntypedActor
 {
-    public static SupervisorStrategy supervisorStrategy = new OneForOneStrategy(
-        DeciderBuilder.match(RuntimeException.class, ex -> SupervisorStrategy.resume())
+    public final static SupervisorStrategy supervisorStrategy = new OneForOneStrategy(
+        DeciderBuilder.match(freemarker.core.InvalidReferenceException.class, ex -> SupervisorStrategy.restart())
+        .matchAny(ex -> SupervisorStrategy.restart())
         .build());
-
+    
+    @Override
+    public void preRestart(Throwable reason, Option<Object> message) throws Exception
+    {
+        if (message.nonEmpty())
+        {
+            System.out.println("Reason: " + reason.getCause() + ", Msg: " + message.get());
+            final Result result = internalServerError(reason.getMessage());
+            mapResult(result, (HttpMessage) message.get());
+            super.preRestart(reason, message);
+        }
+    }
+    
     @Override
     public void onReceive(Object msg) throws Exception
     {
@@ -242,7 +257,7 @@ public abstract class ControllerActor extends UntypedActor
         return ok(f).status(500);
     }
     
-    protected Result internalServerError(final Exception e) 
+    protected Result internalServerError(final Throwable e) 
     {
         final StackTraceElement[] ste = e.getStackTrace();
 
@@ -252,7 +267,7 @@ public abstract class ControllerActor extends UntypedActor
         {
             sb.append(el.toString()).append("\n");
         }
-        return ok("<code>" + e.toString() + "</code><br><pre>" + sb.toString() + "</pre>").status(500);
+        return ok("<code><b>" + e.toString() + "</b></code><br><pre>" + sb.toString() + "</pre>").status(500);
     }
 
     protected Result notFound() 
@@ -312,7 +327,7 @@ private static final String NOT_FOUND_CONTENT = "<h1>404 - Not found</h1>";
         final ChannelHandlerContext ctx = msg.context();
         final HttpRequest req = msg.request();
         final HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, 
-            result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.OK, true);
+            result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.valueOf(result.getStatus()), true);
         response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
         response.headers().set(HttpHeaders.Names.CONTENT_TYPE, result != null ? result.getContentType() : "text/plain");
 
