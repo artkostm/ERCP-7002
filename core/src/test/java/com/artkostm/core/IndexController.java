@@ -12,8 +12,8 @@ public class IndexController extends ControllerActor
     @Override
     protected Result onRequest(HttpMessage msg) throws Exception
     {
-//        Map<String, Object> root = new HashMap<String, Object>();
-//        root.put("name", "Artsiom");
-        return ok(view("index.html")).asHtml();
+        Map<String, Object> root = new HashMap<String, Object>();
+        root.put("name", "Artsiom");
+        return ok(view("index.html", root)).asHtml();
     }
 }
