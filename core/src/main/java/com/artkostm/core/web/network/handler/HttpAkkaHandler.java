@@ -2,8 +2,6 @@ package com.artkostm.core.web.network.handler;
 
 import java.io.Serializable;
 
-import org.apache.commons.io.IOUtils;
-
 import com.artkostm.core.akka.http.routing.HttpMethodRoutingPool;
 
 import akka.actor.ActorRef;
@@ -16,15 +14,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultHttpResponse;
 import io.netty.handler.codec.http.DefaultLastHttpContent;
-import io.netty.handler.codec.http.HttpChunkedInput;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
-import io.netty.handler.stream.ChunkedStream;
 
+@Deprecated
 public class HttpAkkaHandler extends SimpleChannelInboundHandler<HttpObject>
 {
     private static final ActorSystem system = ActorSystem.create("netty");

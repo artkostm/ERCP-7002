@@ -27,6 +27,7 @@ public class RouterActor extends SystemActor
         {
             final RouteObject route = result.target();
             route.getActor().tell(msg, sender());
+            context().system().eventStream().publish(msg);
         }
     }
 }

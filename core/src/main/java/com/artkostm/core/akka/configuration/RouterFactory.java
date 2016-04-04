@@ -3,14 +3,17 @@ package com.artkostm.core.akka.configuration;
 import io.netty.handler.codec.http.HttpMethod;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import scala.concurrent.duration.FiniteDuration;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import akka.pattern.BackoffSupervisor;
 import akka.routing.RoundRobinPool;
-import akka.routing.SmallestMailboxPool;
 
+import com.artkostm.core.akka.actors.ControllerActor;
 import com.artkostm.core.web.network.router.Router;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigObject;
@@ -48,8 +51,24 @@ public class RouterFactory implements RouterProvider<RouteObject>
     protected RouteObject createRouteObject(Class<?> clazz, String name, int spin)
     {
         final String actorName = name == null ? clazz.getSimpleName() : name;
-        if (spin == 1) return new RouteObject(clazz, system.actorOf(Props.create(clazz), actorName));
-        else return new RouteObject(clazz, system.actorOf(Props.create(clazz).withRouter(new RoundRobinPool(spin)), actorName), spin);
+        if (spin == 1) return new RouteObject(clazz, 
+            system.actorOf(
+                BackoffSupervisor.propsWithSupervisorStrategy(
+                    Props.create(clazz), 
+                    actorName,
+                    FiniteDuration.create(1, TimeUnit.SECONDS), 
+                    FiniteDuration.create(15, TimeUnit.SECONDS), 
+                    0.2, 
+                    ControllerActor.supervisorStrategy)));
+        else return new RouteObject(clazz, 
+            system.actorOf(
+                BackoffSupervisor.propsWithSupervisorStrategy(
+                    Props.create(clazz).withRouter(new RoundRobinPool(spin)), 
+                    actorName,
+                    FiniteDuration.create(1, TimeUnit.SECONDS), 
+                    FiniteDuration.create(20, TimeUnit.SECONDS), 
+                    0.2, 
+                    ControllerActor.supervisorStrategy)), spin);
     }
     
     protected Class<?> validateClass(String actorClass) throws Exception 
