@@ -4,7 +4,8 @@ def subprojectMap = [
     ':configurator'                 : 'configurator',
     ':common'                       : 'common',
 	':core'                         : 'core',
-	':templating'                   : 'templating'
+	':templating'                   : 'templating',
+	':ScalaTests'                   : 'ScalaTests'
 ]
 
 subprojectMap.each() { key, value ->
