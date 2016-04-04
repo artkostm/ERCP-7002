@@ -30,23 +30,15 @@ public class AkkaServer extends HttpApp
     {
         Route helloRoute =
                 handleWith1(name, (ctx, name) -> ctx.complete("Hello " + name + "!"));
-        return
-                // here the complete behavior for this server is defined
-                route(
-                    // only handle GET requests
-                    get(
-                        // matches the empty path
-                        pathSingleSlash().route(
-                            // return a constant string with a certain content type
+        return route(
+                    get(pathSingleSlash().route(
                             complete(ContentTypes.TEXT_HTML_UTF8,
                                     "<html><body>Hello world!</body></html>")
                         ),
                         path("ping").route(
-                            // return a simple `text/plain` response
                             complete("PONG!")
                         ),
                         path("hello").route(
-                            // uses the route defined above
                             helloRoute
                         )
                     )
