@@ -1,8 +1,13 @@
 package com.artkostm.core;
 
+import org.apache.camel.Exchange;
+
 import com.artkostm.core.akka.actors.CamelControllerActor;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Result;
+
+import akka.camel.CamelExtension;
+import akka.camel.CamelMessage;
 
 public class ApachePageController extends CamelControllerActor
 {
@@ -21,6 +26,14 @@ public class ApachePageController extends CamelControllerActor
     @Override
     protected String getConsumerUri()
     {
-        return "direct:start";
+        return "file:D:\\?fileName=transactions.csv&noop=true";
+    }
+    
+    @Override
+    protected Object onTransformMessage(CamelMessage msg)
+    {
+        final String body = msg.getBodyAs(String.class, CamelExtension.get(context().system()).context());
+        msg.getHeaders().put(Exchange.HTTP_METHOD, "POST");
+        return new CamelMessage("[" + body.replace("\r\n", ", ") + "]", msg.getHeaders());
     }
 }

@@ -35,7 +35,7 @@ public abstract class CamelControllerActor extends ControllerActor
     protected abstract String getProducerUri();
     protected abstract String getConsumerUri();
     
-    protected Object onTransforMessage(CamelMessage msg)
+    protected Object onTransformMessage(CamelMessage msg)
     {
         return msg;
     }
@@ -52,7 +52,7 @@ public abstract class CamelControllerActor extends ControllerActor
         @Override
         public Object onTransformOutgoingMessage(Object message)
         {
-            if (message instanceof CamelMessage) return onTransforMessage((CamelMessage) message);
+            if (message instanceof CamelMessage) return onTransformMessage((CamelMessage) message);
             return super.onTransformOutgoingMessage(message);
         }
         
