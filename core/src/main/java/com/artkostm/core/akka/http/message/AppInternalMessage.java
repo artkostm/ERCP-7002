@@ -9,11 +9,19 @@ public class AppInternalMessage implements HttpMessage
 {
     private ChannelHandlerContext context;
     private final HttpRequest request;
+    private Object payload;
     
     public AppInternalMessage(final HttpRequest request, final ChannelHandlerContext context)
     {
         this.context = context;
         this.request = request;
+    }
+    
+    public AppInternalMessage(final HttpRequest request, final ChannelHandlerContext context, final Object payload)
+    {
+        this.context = context;
+        this.request = request;
+        this.payload = payload;
     }
     
     @Override
@@ -38,5 +46,17 @@ public class AppInternalMessage implements HttpMessage
     public HttpRequest request()
     {
         return request;
+    }
+
+    @Override
+    public Object payload()
+    {
+        return payload;
+    }
+
+    @Override
+    public void payload(Object obj)
+    {
+        payload = obj;
     }
 }

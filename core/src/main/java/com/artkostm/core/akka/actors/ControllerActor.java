@@ -320,9 +320,9 @@ public abstract class ControllerActor extends UntypedActor
         return ok(f).status(401);
     }
     
-private static final String NOT_FOUND_CONTENT = "<h1>404 - Not found</h1>";
+    private static final String NOT_FOUND_CONTENT = "<h1>404 - Not found</h1>";
     
-    private void mapResult(final Result result, final HttpMessage msg)
+    protected void mapResult(final Result result, final HttpMessage msg)
     {
         final ChannelHandlerContext ctx = msg.context();
         final HttpRequest req = msg.request();

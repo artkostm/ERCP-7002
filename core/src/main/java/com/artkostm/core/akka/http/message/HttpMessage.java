@@ -9,4 +9,6 @@ public interface HttpMessage extends ChannelHandlerContexAware
 {
     HttpMethods method();
     HttpRequest request();
+    Object payload();
+    void payload(Object obj);
 }
