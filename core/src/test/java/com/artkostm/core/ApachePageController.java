@@ -4,7 +4,7 @@ import com.artkostm.core.akka.actors.CamelControllerActor;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Result;
 
-public class GooglePageController extends CamelControllerActor
+public class ApachePageController extends CamelControllerActor
 {
     @Override
     protected Result onRequest(HttpMessage msg) throws Exception
@@ -15,7 +15,7 @@ public class GooglePageController extends CamelControllerActor
     @Override
     protected String getProducerUri()
     {
-        return "http://camel.apache.org/jetty.html";
+        return "http://localhost:8060/hello";
     }
 
     @Override

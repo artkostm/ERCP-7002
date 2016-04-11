@@ -31,9 +31,14 @@ public abstract class CamelControllerActor extends ControllerActor
         }
     }
     
-    protected abstract Result onRequest(HttpMessage msg) throws Exception;
+    protected abstract Result onRequest(HttpMessage msg) throws Exception;    
     protected abstract String getProducerUri();
     protected abstract String getConsumerUri();
+    
+    protected Object onTransforMessage(CamelMessage msg)
+    {
+        return msg;
+    }
     
     protected final class Producer extends UntypedProducerActor
     {
@@ -42,6 +47,13 @@ public abstract class CamelControllerActor extends ControllerActor
         public Producer(final HttpMessage httpMessage)
         {
             this.httpMessage = httpMessage;
+        }
+        
+        @Override
+        public Object onTransformOutgoingMessage(Object message)
+        {
+            if (message instanceof CamelMessage) return onTransforMessage((CamelMessage) message);
+            return super.onTransformOutgoingMessage(message);
         }
         
         public void onRouteResponse(Object message) 

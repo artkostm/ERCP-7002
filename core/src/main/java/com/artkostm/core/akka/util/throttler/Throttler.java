@@ -49,7 +49,7 @@ public class Throttler extends AbstractFSM<State, Data>
         this.rate = rate;
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     private void deliverMessages(final TimeBasedData d)
     {
         final int nrOfMsgToSend = min(d.getQueue().length(), d.getVouchersLeft());
@@ -80,6 +80,7 @@ public class Throttler extends AbstractFSM<State, Data>
     {
         ActorSystem system = ActorSystem.create();
         ActorRef tActor = system.actorOf(Props.create(HttpMethodTestActor.class));
+        @SuppressWarnings("unused")
         TimeBasedData d = new TimeBasedData(tActor, 4);
     }
 }

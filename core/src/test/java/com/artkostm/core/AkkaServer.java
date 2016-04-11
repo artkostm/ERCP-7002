@@ -1,6 +1,7 @@
 package com.artkostm.core;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 import akka.actor.ActorSystem;
 import akka.http.javadsl.model.ContentTypes;
@@ -8,6 +9,8 @@ import akka.http.javadsl.server.HttpApp;
 import akka.http.javadsl.server.RequestVal;
 import akka.http.javadsl.server.Route;
 import akka.http.javadsl.server.values.Parameters;
+import akka.stream.javadsl.Sink;
+import akka.util.ByteString;
 
 public class AkkaServer extends HttpApp
 {
@@ -16,7 +19,7 @@ public class AkkaServer extends HttpApp
         // boot up server using the route as defined below
         ActorSystem system = ActorSystem.create();
  
-        new AkkaServer().bindRoute("127.0.0.1", 8080, system);
+        new AkkaServer().bindRoute("127.0.0.1", 8060, system);
         System.out.println("Type RETURN to exit");
         System.in.read();
         system.terminate();
@@ -29,9 +32,14 @@ public class AkkaServer extends HttpApp
     public Route createRoute()
     {
         Route helloRoute =
-                handleWith1(name, (ctx, name) -> ctx.complete("Hello " + name + "!"));
+                handleWith1(name, (ctx, name) ->
+                { 
+                    CompletableFuture<ByteString> f = (CompletableFuture<ByteString>) ctx.request().entity().getDataBytes().fold(ByteString.empty(), (z, i) -> z.concat(i)).runWith(Sink.<ByteString>head(), ctx.materializer());
+                    System.out.println(f.get().utf8String());
+                    return ctx.complete("Hello " + name + "!"); 
+                });
         return route(
-                    get(pathSingleSlash().route(
+                    post(pathSingleSlash().route(
                             complete(ContentTypes.TEXT_HTML_UTF8,
                                     "<html><body>Hello world!</body></html>")
                         ),
