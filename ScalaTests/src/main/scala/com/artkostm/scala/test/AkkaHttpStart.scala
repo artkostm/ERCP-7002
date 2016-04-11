@@ -14,7 +14,13 @@ object AkkaHttpStart extends App{
   }
 
   http.start() */
+  List("Sasha", "Masha", "Dasha", "Glasha").map { name => name.length() } foreach println
 }
+
+trait Core{
+  def summarize() : String;
+}
+abstract class DefCore extends Core
 /*
 trait AkkaHttp {
   this: Core =>
