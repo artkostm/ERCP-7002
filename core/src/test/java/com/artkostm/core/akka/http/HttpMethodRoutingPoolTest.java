@@ -118,6 +118,20 @@ public class HttpMethodRoutingPoolTest
             // TODO Auto-generated method stub
             return null;
         }
+
+        @Override
+        public Object payload()
+        {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void payload(Object obj)
+        {
+            // TODO Auto-generated method stub
+            
+        }
     }
     
     private static Runnable worker(final ActorRef pool)
