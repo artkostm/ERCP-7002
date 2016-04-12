@@ -1,5 +1,8 @@
 package com.artkostm.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.camel.Exchange;
 
 import com.artkostm.core.akka.actors.CamelControllerActor;
@@ -33,7 +36,9 @@ public class ApachePageController extends CamelControllerActor
     protected Object onTransformMessage(CamelMessage msg)
     {
         final String body = msg.getBodyAs(String.class, CamelExtension.get(context().system()).context());
-        msg.getHeaders().put(Exchange.HTTP_METHOD, "POST");
-        return new CamelMessage("[" + body.replace("\r\n", ", ") + "]", msg.getHeaders());
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Exchange.HTTP_METHOD, "POST");
+        CamelMessage newMsg = msg.withHeaders(headers);
+        return new CamelMessage("[" + body.replace("\r\n", ", ") + "]", newMsg.getHeaders());
     }
 }

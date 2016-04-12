@@ -59,7 +59,7 @@ public class RouterFactory implements RouterProvider<RouteObject>
                     FiniteDuration.create(1, TimeUnit.SECONDS), 
                     FiniteDuration.create(15, TimeUnit.SECONDS), 
                     0.2, 
-                    ControllerActor.supervisorStrategy)));
+                    ControllerActor.supervisorStrategy), actorName));
         else return new RouteObject(clazz, 
             system.actorOf(
                 BackoffSupervisor.propsWithSupervisorStrategy(
@@ -68,7 +68,7 @@ public class RouterFactory implements RouterProvider<RouteObject>
                     FiniteDuration.create(1, TimeUnit.SECONDS), 
                     FiniteDuration.create(20, TimeUnit.SECONDS), 
                     0.2, 
-                    ControllerActor.supervisorStrategy)), spin);
+                    ControllerActor.supervisorStrategy), actorName), spin);
     }
     
     protected Class<?> validateClass(String actorClass) throws Exception 

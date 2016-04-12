@@ -1,7 +1,5 @@
 package com.artkostm.core.akka.actors;
 
-import java.util.HashMap;
-
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Result;
 
@@ -15,15 +13,15 @@ import akka.camel.javaapi.UntypedProducerActor;
 import akka.japi.Creator;
 
 public abstract class CamelControllerActor extends ControllerActor
-{
+{   
     @Override
     public void onReceive(Object msg) throws Exception
     {
         if (msg instanceof HttpMessage)
         {
-            final ActorRef producer = context().system().actorOf(Props.create(new ProducerCreator(this, (HttpMessage) msg)));
-            context().system().actorOf(Props.create(new ConsumerCreator(this, producer)))
-            .tell(new CamelMessage("", new HashMap<>()), self());
+            final ActorRef producer = context().actorOf(Props.create(new ProducerCreator(this, (HttpMessage) msg)));
+            context().actorOf(Props.create(new ConsumerCreator(this, producer)));
+            //.tell(new CamelMessage("", new HashMap<>()), self());
         }
         else 
         {

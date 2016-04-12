@@ -35,8 +35,7 @@ public class AkkaServer extends HttpApp
                 handleWith1(name, (ctx, name) ->
                 { 
                     CompletableFuture<ByteString> f = (CompletableFuture<ByteString>) ctx.request().entity().getDataBytes().fold(ByteString.empty(), (z, i) -> z.concat(i)).runWith(Sink.<ByteString>head(), ctx.materializer());
-                    System.out.println(f.get().utf8String());
-                    return ctx.complete("Hello " + name + "!"); 
+                    return ctx.complete("Hello " + name + "!" + "\n" + f.get().utf8String()); 
                 });
         return route(
                     post(pathSingleSlash().route(
