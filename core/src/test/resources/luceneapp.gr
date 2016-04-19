@@ -1,7 +1,0 @@
-log 'Config creating...'
-directoryForTemplateLoading = 'src/test/resources/pages'
-log "Directory for template loading: $directoryForTemplateLoading"
-port = 8080
-log "Port: $port"
-post '/', 'com.artkostm.core.lucene.LuceneController.createIndex'
-get '/:index', 'com.artkostm.core.lucene.LuceneController.index'
