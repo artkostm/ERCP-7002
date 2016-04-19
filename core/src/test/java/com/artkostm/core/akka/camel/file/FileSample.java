@@ -11,8 +11,8 @@ public class FileSample
     public static void main(String[] args) throws Exception
     {
         final ActorSystem system = ActorSystem.create("camel-system");
-        final Camel camel = CamelExtension.get(system);
-        camel.context().start();
+//        final Camel camel = CamelExtension.get(system);
+//        camel.context().start();
         final ActorRef producer = system.actorOf(Props.create(FileProducer.class), "file-producer");
         system.actorOf(Props.create(FileConsumer.class, producer), "file-consumer");
     }
