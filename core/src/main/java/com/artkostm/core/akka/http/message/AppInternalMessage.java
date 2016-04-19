@@ -59,4 +59,11 @@ public class AppInternalMessage implements HttpMessage
     {
         payload = obj;
     }
+
+    @Override
+    public String toString()
+    {
+        return "AppInternalMessage [context=" + context + ", request=" + request + ", payload=" + payload + "]";
+    }
+    
 }

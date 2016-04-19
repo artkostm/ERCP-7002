@@ -4,9 +4,13 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import akka.actor.ActorSystem;
+import akka.actor.DeadLetter;
 
+import com.artkostm.core.akka.actors.util.AuditLogActor;
+import com.artkostm.core.akka.actors.util.ConsoleLogActor;
 import com.artkostm.core.akka.configuration.RouteObject;
 import com.artkostm.core.akka.configuration.RouterFactory;
+import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.configuration.internal.AppConfig;
 import com.artkostm.core.guice.annotation.Config.Host;
 import com.artkostm.core.guice.annotation.Config.Port;
@@ -41,6 +45,8 @@ public abstract class ConfigurationModule extends AbstractModule implements Appl
         
         final ActorSystem system = ActorSystem.create("server", config());
         bind(ActorSystem.class).toInstance(system);
+        system.eventStream().subscribe(system.actorOf(AuditLogActor.props()), HttpMessage.class);
+        system.eventStream().subscribe(system.actorOf(ConsoleLogActor.props()), DeadLetter.class);
         
         final RouterFactory factory = new RouterFactory(system);
         final Router<RouteObject> router = factory.get(config());
