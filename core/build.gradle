@@ -45,10 +45,12 @@ dependencies {
     compile 'org.apache.camel:camel-jetty:2.16.1'
     compile 'org.apache.camel:camel-http:2.16.1'
     
-    compile 'com.typesafe.akka:akka-http-experimental_2.11:2.4.+'
     compile 'org.iq80.leveldb:leveldb:0.7'
     compile 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
-    //compile 'com.typesafe.akka:akka-http-core-experimental_2.11:2.4.+'
+    
+    // http://mvnrepository.com/artifact/com.typesafe.akka/akka-http-experimental_2.11
+    compile group: 'com.typesafe.akka', name: 'akka-http-experimental_2.11', version: '2.4.2-RC3'
+    
     
     compile 'org.jsoup:jsoup:1.+'
         
