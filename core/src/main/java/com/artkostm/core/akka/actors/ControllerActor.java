@@ -28,6 +28,7 @@ import scala.Option;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Context;
 import com.artkostm.core.web.controller.Result;
+import com.artkostm.core.web.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.template.TemplateCompiller;
 
 import akka.actor.OneForOneStrategy;
@@ -59,7 +60,12 @@ public abstract class ControllerActor extends UntypedActor
     {
         if (msg instanceof HttpMessage)
         {
+            final HttpMethodProcessorFacade facade = new HttpMethodProcessorFacade();
+            final Context dd = new Context();
+            facade.process(((HttpMessage) msg).request(), dd);
+            createContext((HttpMessage) msg, null);
             final Result result = onRequest((HttpMessage) msg);
+            
             mapResult(result, (HttpMessage) msg);
         }
         else 
@@ -68,6 +74,16 @@ public abstract class ControllerActor extends UntypedActor
         }
     }
     
+    private void createContext(HttpMessage msg, ByteBuf contentBuffer)
+    {
+        Context.current().setPathParams(msg.routeResult().pathParams());
+        if (msg.payload() instanceof String)
+        {
+            String d = (String) msg.payload();
+            Context.current().setContent(d.getBytes());
+        }
+    }
+
     protected abstract Result onRequest(HttpMessage msg) throws Exception;
     
     protected void notFound(HttpMessage msg)
@@ -326,6 +342,7 @@ public abstract class ControllerActor extends UntypedActor
     {
         final ChannelHandlerContext ctx = msg.context();
         final HttpRequest req = msg.request();
+        
         final HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, 
             result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.valueOf(result.getStatus()), true);
         response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
@@ -345,20 +362,20 @@ public abstract class ControllerActor extends UntypedActor
         
         if (HttpHeaders.is100ContinueExpected(req)) 
         {
-            //ctx.write(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
+            ctx.write(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
         }
         final boolean keepAlive = HttpHeaders.isKeepAlive(req);
     
         if (keepAlive) 
         {
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-            //response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-            //ctx.write(response);
+            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+            ctx.write(response);
         } 
         else
         {
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
-            //ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
         }
         
         ctx.write(response);

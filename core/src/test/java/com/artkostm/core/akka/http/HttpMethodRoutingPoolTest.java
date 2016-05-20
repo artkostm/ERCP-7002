@@ -7,11 +7,13 @@ import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
 
+import com.artkostm.core.akka.configuration.RouteObject;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.akka.http.routing.HttpMethodRoutingPool;
 import com.artkostm.core.akka.util.reaper.ProductionReaper;
 import com.artkostm.core.akka.util.reaper.WatchMe;
 import com.artkostm.core.web.controller.converter.Json;
+import com.artkostm.core.web.network.router.RouteResult;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -131,6 +133,13 @@ public class HttpMethodRoutingPoolTest
         {
             // TODO Auto-generated method stub
             
+        }
+
+        @Override
+        public RouteResult<RouteObject> routeResult()
+        {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
     

@@ -10,7 +10,7 @@
 				$.ajax(
 				{
 			        type: "POST",
-			        url: '/some/url/path',
+			        url: '/path1',
 			        dataType: 'json',
 			        async: false,
 			        contentType: 'application/json',
@@ -20,7 +20,7 @@
 			}
 		    function onAjaxSuccess(data)
 		    {
-		    	$("#result").text(data + ' : ' + data.message);
+		    	$("#result").text(data + ' : ' + JSON.stringify(data));
 			}
 		</script>
 	</head>

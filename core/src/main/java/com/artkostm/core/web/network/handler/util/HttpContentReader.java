@@ -96,7 +96,7 @@ public final class HttpContentReader
         } 
         catch (EndOfDataDecoderException e) 
         { 
-            // TODO:it's ok, add ligging
+            // TODO:it's ok, add logging
         }
         
     }

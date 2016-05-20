@@ -11,6 +11,7 @@ public class NettyActor extends ControllerActor
     @Override
     protected Result onRequest(HttpMessage msg) throws Exception
     {
-        return ok(Json.toJson(new Message("Hello, World!")).toString()).asJson();
+        final String data = new String(requestContext().getContent());
+        return ok(Json.toJson(new Message(data)).toString()).asJson();
     }
 }

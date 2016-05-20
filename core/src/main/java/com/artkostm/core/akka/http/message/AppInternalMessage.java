@@ -3,12 +3,15 @@ package com.artkostm.core.akka.http.message;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 
+import com.artkostm.core.akka.configuration.RouteObject;
 import com.artkostm.core.akka.http.HttpMethods;
+import com.artkostm.core.web.network.router.RouteResult;
 
 public class AppInternalMessage implements HttpMessage
 {
     private ChannelHandlerContext context;
     private final HttpRequest request;
+    private RouteResult<RouteObject> routeResult;
     private Object payload;
     
     public AppInternalMessage(final HttpRequest request, final ChannelHandlerContext context)
@@ -65,5 +68,15 @@ public class AppInternalMessage implements HttpMessage
     {
         return "AppInternalMessage [context=" + context + ", request=" + request + ", payload=" + payload + "]";
     }
+
+    @Override
+    public RouteResult<RouteObject> routeResult()
+    {
+        return routeResult;
+    }
     
+    public void setRouteResult(RouteResult<RouteObject> routeResult)
+    {
+        this.routeResult = routeResult;
+    }
 }

@@ -14,6 +14,7 @@ public class IndexController extends ControllerActor
     {
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("name", "Artsiom");
+        System.out.println();
         return ok(view("index.html", root)).asHtml();
     }
 }
