@@ -15,6 +15,7 @@ public class IndexController extends ControllerActor
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("name", "Artsiom");
         System.out.println();
+        context().actorSelection("akka.tcp://my_cluster@127.0.0.1:2552/user/clusterListener").tell("Hello from Server!", self());
         return ok(view("index.html", root)).asHtml();
     }
 }

@@ -50,6 +50,7 @@ public class ClusterListener extends UntypedActor
         }
         else
         {
+            System.out.println("Received external message: " + message);
             unhandled(message);
         }
     }
