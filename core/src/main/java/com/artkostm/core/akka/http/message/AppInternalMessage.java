@@ -9,6 +9,8 @@ import com.artkostm.core.web.network.router.RouteResult;
 
 public class AppInternalMessage implements HttpMessage
 {
+    private static final long serialVersionUID = -2461683137831033776L;
+    
     private ChannelHandlerContext context;
     private final HttpRequest request;
     private RouteResult<RouteObject> routeResult;
