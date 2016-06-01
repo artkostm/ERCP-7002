@@ -17,10 +17,9 @@ public class IndexController extends ControllerActor
     protected Result onRequest(HttpMessage msg) throws Exception
     {
         Map<String, Object> root = new HashMap<String, Object>();
-        root.put("name", "Artsiom");
-        //context().actorSelection("akka.tcp://my_cluster@127.0.0.1:2552/user/clusterListener").tell(, self());       
+        root.put("name", "Man");
         final Try<Object> result = call(context().actorSelection("akka.tcp://server@127.0.0.1:2552/user/second"), 
-            new AppExternalMessage("Hello"), 2, TimeUnit.SECONDS);
+            new AppExternalMessage("Hello from server:2552"), 2, TimeUnit.SECONDS);
         root.put("result", result);
         return ok(view("index.html", root)).asHtml();
     }

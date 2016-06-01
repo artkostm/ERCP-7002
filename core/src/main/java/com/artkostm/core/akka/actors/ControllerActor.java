@@ -1,5 +1,6 @@
 package com.artkostm.core.akka.actors;
 
+import akka.actor.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -39,10 +40,6 @@ import com.artkostm.core.web.controller.Result;
 import com.artkostm.core.web.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.template.TemplateCompiller;
 
-import akka.actor.ActorSelection;
-import akka.actor.OneForOneStrategy;
-import akka.actor.SupervisorStrategy;
-import akka.actor.UntypedActor;
 import akka.japi.pf.DeciderBuilder;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
@@ -111,6 +108,18 @@ public abstract class ControllerActor extends UntypedActor
         try
         {
             return new Success<Object>(Await.result(Patterns.ask(selection, message, Timeout.apply(time, unit)), Duration.Inf()));
+        }
+        catch (Exception e)
+        {
+            return new Failure<>(e);
+        }
+    }
+
+    protected Try<Object> call(ActorRef actor, Object message, long time, TimeUnit unit)
+    {
+        try
+        {
+            return new Success<Object>(Await.result(Patterns.ask(actor, message, Timeout.apply(time, unit)), Duration.Inf()));
         }
         catch (Exception e)
         {

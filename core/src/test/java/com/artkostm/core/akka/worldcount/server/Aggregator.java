@@ -13,17 +13,17 @@ public class Aggregator extends AbstractActor
     
     public Aggregator()
     {
-        receive(ReceiveBuilder.match(Map.class, this::aggregateInMemoryReduce)
-            .match(String.class, msg -> 
-            {
-                if (msg.compareTo("DISPLAY_LIST") == 0) 
-                {
-                    //getSender().tell(finalReducedMap.toString());
-                    System.out.println(finalReducedMap.toString());
-                    finalReducedMap.clear();
-                }
-            })
-            .matchAny(this::unhandled).build());
+//        receive(ReceiveBuilder.match(Map.class, this::aggregateInMemoryReduce)
+//            .match(String.class, msg ->
+//            {
+//                if (msg.compareTo("DISPLAY_LIST") == 0)
+//                {
+//                    //getSender().tell(finalReducedMap.toString());
+//                    System.out.println(finalReducedMap.toString());
+//                    finalReducedMap.clear();
+//                }
+//            })
+//            .matchAny(this::unhandled).build());
     }
     
     private void aggregateInMemoryReduce(final Map<String, Integer> reducedList) 

@@ -46,7 +46,7 @@ public class AkkaServer extends HttpApp
     {
         final ActorSystem system = ActorSystem.create();
  
-        new AkkaServer().bindRoute("127.0.0.1", 8060, system);
+        new AkkaServer().bindRoute("127.0.0.1", 8050, system);
         System.out.println("Type RETURN to exit");
         System.in.read();
         system.terminate();

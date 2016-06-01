@@ -23,13 +23,13 @@ public class ApachePageController extends CamelControllerActor
     @Override
     protected String getProducerUri()
     {
-        return "http://localhost:8060/hello";
+        return "http://localhost:8050/hello";
     }
 
     @Override
     protected String getConsumerUri()
     {
-        return "file:D:\\?fileName=transactions.csv&noop=true";
+        return "file:/Users/arttsiom.chuiko/git/ERCP-7002/core/src/test/resources/?fileName=transactions.csv&noop=true";
     }
     
     @Override
@@ -39,6 +39,6 @@ public class ApachePageController extends CamelControllerActor
         Map<String, String> headers = new HashMap<>();
         headers.put(Exchange.HTTP_METHOD, "POST");
         CamelMessage newMsg = msg.withHeaders(headers);
-        return new CamelMessage("[" + body.replace("\r\n", ", ") + "]", newMsg.getHeaders());
+        return new CamelMessage("[" + body.replace("\n", ", ") + "]", newMsg.getHeaders());
     }
 }
