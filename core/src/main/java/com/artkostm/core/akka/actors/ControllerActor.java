@@ -22,19 +22,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import scala.Option;
+import scala.concurrent.Await;
+import scala.concurrent.duration.Duration;
+import scala.concurrent.impl.Promise;
+import scala.util.Failure;
+import scala.util.Success;
+import scala.util.Try;
 
+import com.artkostm.core.akka.http.message.AppInternalMessage;
 import com.artkostm.core.akka.http.message.HttpMessage;
 import com.artkostm.core.web.controller.Context;
 import com.artkostm.core.web.controller.Result;
 import com.artkostm.core.web.network.handler.method.processor.HttpMethodProcessorFacade;
 import com.artkostm.template.TemplateCompiller;
 
+import akka.actor.ActorSelection;
 import akka.actor.OneForOneStrategy;
 import akka.actor.SupervisorStrategy;
 import akka.actor.UntypedActor;
 import akka.japi.pf.DeciderBuilder;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
 
 public abstract class ControllerActor extends UntypedActor
 {
@@ -76,7 +87,7 @@ public abstract class ControllerActor extends UntypedActor
     
     private void createContext(HttpMessage msg, ByteBuf contentBuffer)
     {
-        Context.current().setPathParams(msg.routeResult().pathParams());
+        if (msg instanceof AppInternalMessage) Context.current().setPathParams(msg.routeResult().pathParams());
         if (msg.payload() instanceof String)
         {
             String d = (String) msg.payload();
@@ -93,6 +104,24 @@ public abstract class ControllerActor extends UntypedActor
         final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, 
             HttpResponseStatus.NOT_FOUND, buf);
         context.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
+    
+    protected Try<Object> call(ActorSelection selection, Object message, long time, TimeUnit unit)
+    {
+        try
+        {
+            return new Success<Object>(Await.result(Patterns.ask(selection, message, Timeout.apply(time, unit)), Duration.Inf()));
+        }
+        catch (Exception e)
+        {
+            return new Failure<>(e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected <T> Promise<T> callReady(ActorSelection selection, T message, long time, TimeUnit unit) throws Exception
+    {
+        return (Promise<T>) Await.ready(Patterns.ask(selection, message, Timeout.apply(time, unit)), Duration.Inf());
     }
     
     protected String view(final String viewName, final Map<String, Object> data)
@@ -342,54 +371,56 @@ public abstract class ControllerActor extends UntypedActor
     {
         final ChannelHandlerContext ctx = msg.context();
         final HttpRequest req = msg.request();
-        
-        final HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, 
-            result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.valueOf(result.getStatus()), true);
-        response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, result != null ? result.getContentType() : "text/plain");
+        if (ctx != null)
+        {
+            final HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, 
+                result == null ? HttpResponseStatus.NO_CONTENT : HttpResponseStatus.valueOf(result.getStatus()), true);
+            response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
+            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, result != null ? result.getContentType() : "text/plain");
 
-        // Disable cache by default
-        response.headers().set(HttpHeaders.Names.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-        response.headers().set(HttpHeaders.Names.PRAGMA, "no-cache");
-        response.headers().set(HttpHeaders.Names.EXPIRES, "0");
-        response.headers().set(HttpHeaders.Names.SERVER, "My Web Server/0.0.1");
-        //TODO: set cookies
-        //response.headers().set(HttpHeaders.Names.SET_COOKIE, ServerCookieEncoder.STRICT.encode(Context.current().getCookies().get("MYSESSIONID")));
-        if (result.getContentLength() >= 0) 
-        {
-            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, result.getContentLength());
-        }
+            // Disable cache by default
+            response.headers().set(HttpHeaders.Names.CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+            response.headers().set(HttpHeaders.Names.PRAGMA, "no-cache");
+            response.headers().set(HttpHeaders.Names.EXPIRES, "0");
+            response.headers().set(HttpHeaders.Names.SERVER, "My Web Server/0.0.1");
+            //TODO: set cookies
+            //response.headers().set(HttpHeaders.Names.SET_COOKIE, ServerCookieEncoder.STRICT.encode(Context.current().getCookies().get("MYSESSIONID")));
+            if (result.getContentLength() >= 0) 
+            {
+                response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, result.getContentLength());
+            }
+            
+            if (HttpHeaders.is100ContinueExpected(req)) 
+            {
+                ctx.write(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
+            }
+            final boolean keepAlive = HttpHeaders.isKeepAlive(req);
         
-        if (HttpHeaders.is100ContinueExpected(req)) 
-        {
-            ctx.write(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
-        }
-        final boolean keepAlive = HttpHeaders.isKeepAlive(req);
-    
-        if (keepAlive) 
-        {
-            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+            if (keepAlive) 
+            {
+                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+                ctx.write(response);
+            } 
+            else
+            {
+                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
+                ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+            }
+            
             ctx.write(response);
-        } 
-        else
-        {
-            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
-            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-        }
-        
-        ctx.write(response);
-        
-        if (result.getStream() != null)
-        {
-            ctx.write(new HttpChunkedInput(new ChunkedStream(result.getStream())));
-        }
-        
-        LastHttpContent fs = new DefaultLastHttpContent();
-        ChannelFuture sendContentFuture = ctx.writeAndFlush(fs);
-        if (!HttpHeaders.isKeepAlive(req)) 
-        {
-            sendContentFuture.addListener(ChannelFutureListener.CLOSE);
+            
+            if (result.getStream() != null)
+            {
+                ctx.write(new HttpChunkedInput(new ChunkedStream(result.getStream())));
+            }
+            
+            LastHttpContent fs = new DefaultLastHttpContent();
+            ChannelFuture sendContentFuture = ctx.writeAndFlush(fs);
+            if (!HttpHeaders.isKeepAlive(req)) 
+            {
+                sendContentFuture.addListener(ChannelFutureListener.CLOSE);
+            }
         }
     }
 }

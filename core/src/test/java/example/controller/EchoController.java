@@ -13,11 +13,19 @@ public class EchoController extends ControllerActor
     @Override
     protected Result onRequest(HttpMessage msg) throws Exception
     {
+        final Object result = doSmth(msg);
+        
         if (msg instanceof AppExternalMessage)
         {
-            sender().tell(msg.toString(), self());
+            sender().tell(msg.payload(), self());
+            return ok();
         }
         
         return ok(msg.toString());
+    }
+    
+    private Object doSmth(Object msg)
+    {
+        return msg;
     }
 }
