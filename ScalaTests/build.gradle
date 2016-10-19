@@ -1,6 +1,17 @@
 apply plugin: 'scala'
 apply plugin: 'eclipse'
 
+repositories {
+    mavenCentral()
+    maven {
+         url "http://repo.akka.io/snapshots/"
+    }
+}
+
+dependencies {
+	compile 'org.scala-lang:scala-library:2.11.8'
+}
+
 sourceSets {
     main {
         scala {
@@ -14,15 +25,11 @@ sourceSets {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {
-         url "http://repo.akka.io/snapshots/"
-    }
+tasks.withType(ScalaCompile) {
+	scalaCompileOptions.useAnt = false
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.1'
     compile 'com.typesafe.akka:akka-cluster_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-http-experimental_2.11:2.4.2'
     compile 'com.typesafe.akka:akka-http-core-experimental_2.11:2.4.2'
@@ -35,27 +42,5 @@ dependencies {
     compile 'com.typesafe.akka:akka-cluster_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-contrib_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-kernel_2.11:2.4.+'
+    compile 'org.scala-lang:scala-library:2.11.8'
 }
-
-
-/*uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri("${buildDir}/repo"))
-
-            addFilter("main") { artifact, file -> artifact.name == project.name }
-            ["api", "impl"].each { type ->
-                addFilter(type) { artifact, file -> artifact.name.endsWith("-$type") }
-                
-                // We now have to map our configurations to the correct maven scope for each pom
-                ["compile", "runtime"].each { scope ->
-                    configuration = configurations[type + scope.capitalize()]
-                    ["main", type].each { pomName ->
-                        pom(pomName).scopeMappings.addMapping 1, configuration, scope
-                    }
-                }
-            }
-
-        }
-    }
-}*/
