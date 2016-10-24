@@ -32,7 +32,7 @@ tasks.withType(ScalaCompile) {
 dependencies {
     compile 'com.typesafe.akka:akka-cluster_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-http-experimental_2.11:2.4.2'
-    compile 'com.typesafe.akka:akka-http-core-experimental_2.11:2.4.2'
+    //compile 'com.typesafe.akka:akka-http-core-experimental_2.11:2.4.2'
     compile 'io.spray:spray-can_2.11:1.3.3'
     compile 'io.spray:spray-http_2.11:1.3.3'
     compile 'io.spray:spray-routing_2.11:1.3.3'
@@ -42,5 +42,6 @@ dependencies {
     compile 'com.typesafe.akka:akka-cluster_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-contrib_2.11:2.4.+'
     compile 'com.typesafe.akka:akka-kernel_2.11:2.4.+'
+    compile 'com.github.kxbmap:configs_2.11:0.4.4'
     compile 'org.scala-lang:scala-library:2.11.8'
 }
