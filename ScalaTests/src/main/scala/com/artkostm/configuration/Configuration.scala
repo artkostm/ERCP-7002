@@ -34,12 +34,19 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
 }
 
 
-class ConfigExtensionImpl(config: Config) extends Extension {
+class ConfigExtensionImpl(val config: Config) extends Extension {
 
   import Configuration.RichConfig
   val template = Template(config.getOptString("app.template.directory"))
   val netty = Netty(config.getOptString("app.netty.host"), config.getOptInt("app.netty.port"))
 
+  def createRoutes()(implicit system: ActorSystem): Unit = {
+
+  }
+
+  private def readRoutes(): Unit = {
+
+  }
 }
 
 case class Template(directory: Option[String])
