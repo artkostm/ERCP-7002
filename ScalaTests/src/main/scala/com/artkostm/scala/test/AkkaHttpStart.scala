@@ -1,6 +1,6 @@
 package com.artkostm.scala.test
 
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{ConfigFactory, ConfigObject}
 import configs.Configs
 import configs.Result.Success
 
@@ -38,11 +38,7 @@ object AkkaHttpStart extends App{
   import configs.syntax._
   val bars = myConfig.get[Any]("routes").fold(error => Vector.empty[Any], v => v.asInstanceOf[Vector[Any]])
   bars.foreach(x => x match {
-    case Tuple2(path, data) => println(s"Path: $path, Data: $data")
+    case Tuple2(path, data) => println(s"Path: $path, Data: ${data.asInstanceOf[ConfigObject]}")
     case _ => println("Fail!")
   })
-//  bars match {
-//    case Success(x) => println(x.getClass)
-//    case _ => println("Fail!")
-//  }
 }
