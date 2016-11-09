@@ -1,7 +1,7 @@
 package com.artkostm.configuration
 
 import akka.actor.{ActorSystem, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
-import com.typesafe.config.Config
+import com.typesafe.config.{Config, ConfigObject}
 
 /**
   * Created by artsiom.chuiko on 24/10/2016.
@@ -19,17 +19,9 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
   override def get(system: ActorSystem): ConfigExtensionImpl = super.get(system)
 
   implicit class RichConfig(val underlying: Config) extends AnyVal {
-    def getOptString(path: String) : Option[String] = if (underlying.hasPath(path)) {
-      Some(underlying.getString(path))
-    } else {
-      None
-    }
+    def getOptString(path: String) : Option[String] = if (underlying.hasPath(path)) Some(underlying.getString(path)) else None
 
-    def getOptInt(path: String) : Option[Int] = if (underlying.hasPath(path)) {
-      Some(underlying.getInt(path))
-    } else {
-      None
-    }
+    def getOptInt(path: String) : Option[Int] = if (underlying.hasPath(path)) Some(underlying.getInt(path)) else None
   }
 }
 
@@ -45,7 +37,12 @@ class ConfigExtensionImpl(val config: Config) extends Extension {
   }
 
   private def readRoutes(): Unit = {
-
+    import configs.syntax._
+    val routes = config.get[Any]("routes").fold(error => Vector.empty[Any], v => v.asInstanceOf[Vector[Any]])
+    routes.foreach(x => x match {
+      case Tuple2(path, data) => println(s"Path: $path, Data: ${data.asInstanceOf[ConfigObject]}")
+      case _ => println("Fail!")
+    })
   }
 }
 
