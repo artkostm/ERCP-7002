@@ -4,7 +4,7 @@ import com.typesafe.config.{ConfigFactory, ConfigObject}
 import configs.Configs
 import configs.Result.Success
 
-object AkkaHttpStart extends App{
+object ConfigsExample extends App{
 
   //List("Sasha", "Masha", "Dasha", "Glasha").map { name => name.length() } foreach println
 
@@ -38,7 +38,7 @@ object AkkaHttpStart extends App{
   import configs.syntax._
   val bars = myConfig.get[Any]("routes").fold(error => Vector.empty[Any], v => v.asInstanceOf[Vector[Any]])
   bars.foreach(x => x match {
-    case Tuple2(path, data) => println(s"Path: $path, Data: ${data.asInstanceOf[ConfigObject]}")
+    case Tuple2(path, data) => println(s"Path: ${path.getClass}, Data: ${data.getClass}")
     case _ => println("Fail!")
   })
 }
