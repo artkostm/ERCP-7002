@@ -1,19 +1,14 @@
-package com.artkostm.configuration
+package com.artkostm.integrator
 
 import akka.actor.{Actor, ActorSystem, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
-import com.artkostm.scala.test.TestClass
 import com.typesafe.config.{Config, ConfigObject}
 
 import scala.reflect.ClassTag
 import scala.util.Try
 
 /**
-  * Created by artsiom.chuiko on 24/10/2016.
+  * Created by artsiom.chuiko on 10/01/2017.
   */
-class Configuration {
-
-}
-
 object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdProvider {
 
   override def lookup = Configuration
@@ -29,7 +24,7 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
   }
 
   implicit class RichConfigObject(val underlying: ConfigObject) extends AnyVal {
-    def getClazz(path: String) : Class[_ <: Config] =  getClassFor[Config](underlying.get(path).render()).get
+    def getClazz(path: String) : Class[_ <: Actor] = getClassFor[Actor](underlying.get(path).unwrapped().toString).get
     def getInt(path: String, default: Option[Int] = None) =
       if (underlying.containsKey(path)) Some(underlying.get(path).render().toInt)
       else default
@@ -37,11 +32,9 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
       if (underlying.containsKey(path)) Some(underlying.get(path).render())
       else default
 
-    def getClassFor[T: ClassTag](fqcn: String): Try[Class[_ <: T]] =
+    private def getClassFor[T: ClassTag](fqcn: String): Try[Class[_ <: T]] =
       Try[Class[_ <: T]]({
-        val name = "scala.util.Try"
-        println(Class.forName(name))
-        val c = Class.forName(fqcn, false, ClassLoader.getSystemClassLoader).asInstanceOf[Class[_ <: T]]
+        val c = Class.forName(fqcn).asInstanceOf[Class[_ <: T]]
         val t = implicitly[ClassTag[T]].runtimeClass
         if (t.isAssignableFrom(c)) c else throw new ClassCastException(t + " is not assignable from " + c)
       })
@@ -54,10 +47,8 @@ class ConfigExtensionImpl(val config: Config) extends Extension {
   val template = Template(config.getOptString("app.template.directory"))
   val netty = Netty(config.getOptString("app.netty.host"), config.getOptInt("app.netty.port"))
 
-  def createRoutes()(implicit system: ActorSystem): Unit = {
-    println(template)
-    println(netty)
-    println(readRoutes())
+  def createRoutes()(implicit system: ActorSystem): Vector[(String, RouteHolder)] = {
+    readRoutes()
   }
 
   private def readRoutes(): Vector[(String, RouteHolder)] = {
@@ -72,5 +63,4 @@ class ConfigExtensionImpl(val config: Config) extends Extension {
 
 case class Template(directory: Option[String])
 case class Netty(host: Option[String], port: Option[Int])
-case class RouteHolder(clazz: Class[_ <:Config], name: Option[String], spin: Option[Int] = Some(1))
-
+case class RouteHolder(clazz: Class[_ <:Actor], name: Option[String], spin: Option[Int] = Some(1))
