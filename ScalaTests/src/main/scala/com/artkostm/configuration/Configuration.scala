@@ -1,6 +1,7 @@
 package com.artkostm.configuration
 
 import akka.actor.{Actor, ActorSystem, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import com.artkostm.scala.test.TestClass
 import com.typesafe.config.{Config, ConfigObject}
 
 import scala.reflect.ClassTag
@@ -28,7 +29,7 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
   }
 
   implicit class RichConfigObject(val underlying: ConfigObject) extends AnyVal {
-    def getClazz(path: String) : Class[_ <: Actor] =  getClassFor[Actor](underlying.get(path).render()).get
+    def getClazz(path: String) : Class[_ <: Config] =  getClassFor[Config](underlying.get(path).render()).get
     def getInt(path: String, default: Option[Int] = None) =
       if (underlying.containsKey(path)) Some(underlying.get(path).render().toInt)
       else default
@@ -38,7 +39,9 @@ object Configuration extends ExtensionId[ConfigExtensionImpl] with ExtensionIdPr
 
     def getClassFor[T: ClassTag](fqcn: String): Try[Class[_ <: T]] =
       Try[Class[_ <: T]]({
-        val c = Class.forName(fqcn, false, getClass.getClassLoader).asInstanceOf[Class[_ <: T]]
+        val name = "scala.util.Try"
+        println(Class.forName(name))
+        val c = Class.forName(fqcn, false, ClassLoader.getSystemClassLoader).asInstanceOf[Class[_ <: T]]
         val t = implicitly[ClassTag[T]].runtimeClass
         if (t.isAssignableFrom(c)) c else throw new ClassCastException(t + " is not assignable from " + c)
       })
@@ -69,5 +72,5 @@ class ConfigExtensionImpl(val config: Config) extends Extension {
 
 case class Template(directory: Option[String])
 case class Netty(host: Option[String], port: Option[Int])
-case class RouteHolder(clazz: Class[_ <:Actor], name: Option[String], spin: Option[Int] = Some(1))
+case class RouteHolder(clazz: Class[_ <:Config], name: Option[String], spin: Option[Int] = Some(1))
 
