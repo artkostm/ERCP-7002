@@ -4,24 +4,21 @@
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 		<title>Hello page</title>
 		<script type="text/javascript">
-			function sendData()
-			{
+			function sendData() {
 				var postData = $("#postData").val();
-				$.ajax(
-				{
-			        type: "POST",
-			        url: '/path1',
-			        dataType: 'json',
-			        async: false,
-			        contentType: 'application/json',
-			        data: postData,
-			        success: onAjaxSuccess
-			    });
+				$.ajax({
+					type: "POST",
+					url: '/path1',
+					dataType: 'json',
+					async: false,
+					contentType: 'application/json',
+					data: postData,
+					success: onAjaxSuccess
+			        });
 			}
-		    function onAjaxSuccess(data)
-		    {
+		    function onAjaxSuccess(data) {
 		    	$("#result").text(data + ' : ' + JSON.stringify(data));
-			}
+		    }
 		</script>
 	</head>
 	<body>
